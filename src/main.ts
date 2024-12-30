@@ -10,8 +10,12 @@ async function bootstrap() {
 
   const PORT = configService.get('app.port');
   const HOST = configService.get('app.host');
+  const globalPrefix = configService.get('app.globalPrefix');
   const SWAGGER_ENABLE = configService.get('swagger.enable');
-  
+
+  // Global prefix, except for bull-mq-board and all the routes in the bull-mq-board
+  app.setGlobalPrefix(globalPrefix);
+
   // Config CORS
   app.enableCors({
     allowedHeaders: configService.get('middleware.cors.allowHeader'),
@@ -20,7 +24,7 @@ async function bootstrap() {
   });
 
   // Setup swagger if swagger.enable = 1
-  if(Boolean(Number(SWAGGER_ENABLE))) {
+  if (Boolean(Number(SWAGGER_ENABLE))) {
     new SwaggerApp(app).initial();
   }
 
