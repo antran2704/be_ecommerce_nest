@@ -27,7 +27,7 @@ async function bootstrap() {
   if (Boolean(Number(SWAGGER_ENABLE))) {
     new SwaggerApp(app).initial();
   }
-
+  
   await app.listen(PORT ?? 3000);
   Logger.log(`App is running on ${HOST}:${PORT}`, 'Init app');
 }

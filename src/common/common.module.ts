@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+
 import configs from 'src/configs';
 import { DatabaseModule } from './database/database.module';
 import { AppRouterModule } from '../router/router.module';
@@ -12,7 +13,7 @@ import { AppRouterModule } from '../router/router.module';
       load: configs,
     }),
     DatabaseModule,
-    AppRouterModule
+    AppRouterModule,
   ],
 })
 export class CommonModule {}

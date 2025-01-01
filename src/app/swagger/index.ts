@@ -21,11 +21,22 @@ class SwaggerApp {
         appConfig.get('swagger.description') || 'API Documentation',
       )
       .setVersion(appConfig.get('swagger.version') || '1.0')
+      .addBearerAuth()
       .build();
     const documentFactory = () =>
       SwaggerModule.createDocument(this.app, swaggerConfig);
 
-    SwaggerModule.setup(PATH, this.app, documentFactory);
+    SwaggerModule.setup(PATH, this.app, documentFactory ,{
+      swaggerOptions: {
+        persistAuthorization: true,
+        displayRequestDuration: true,
+        filter: true,
+        syntaxHighlight: {
+          activate: true,
+          theme: 'arta',
+        },
+      },
+    });
     Logger.log(`Swagger is running on ${HOST}:${PORT}/${PATH}`, 'Swagger');
   }
 }
