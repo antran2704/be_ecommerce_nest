@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 
 @Injectable()
@@ -10,8 +10,25 @@ export class AuthCommonService {
     private configService: ConfigService,
   ) {}
 
-  generateToken(payload: any, options?: JwtSignOptions) {
-    return this.jwtService.sign(payload, options);
+  generateToken<T>(payload: T, options?: JwtSignOptions) {
+    return this.jwtService.sign(payload as any, options);
+  }
+
+  async verifyToken(token: string, options?: JwtVerifyOptions) {
+    try {
+      return await this.jwtService.verifyAsync(token, options);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async isTokenHasExpired(token: string, options?: JwtVerifyOptions) {
+    try {
+      await this.jwtService.verifyAsync(token, options);
+      return false;
+    } catch (error) {
+      return true;
+    }
   }
 
   async hashPassword(password: string) {
@@ -31,7 +48,7 @@ export class AuthCommonService {
       .then(function (result) {
         return result;
       });
-      
+
     return isValid;
   }
 }

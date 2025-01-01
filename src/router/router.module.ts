@@ -10,8 +10,8 @@ import { PublicRouteModule } from './routes/public_route.module';
         module: InternalRouteModule,
       },
     ]),
-    InternalRouteModule,
-    PublicRouteModule
+    PublicRouteModule,
+    InternalRouteModule
   ],
 })
 export class AppRouterModule {}

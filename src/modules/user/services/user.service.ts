@@ -9,6 +9,14 @@ const listUsers = [
     name: 'John Doe',
     email: 'phamtrangiaan27@gmail.com',
     password: '123456',
+    isAdmin: true,
+  },
+  {
+    id: 2,
+    name: 'John Doe 2',
+    email: 'phamtrangiaan28@gmail.com',
+    password: '123456',
+    isAdmin: false,
   },
 ];
 
