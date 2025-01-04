@@ -1,13 +1,10 @@
 import {
   createMap,
-  forMember,
-  mapFrom,
   Mapper,
-  MappingProfile,
 } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
-import { Admin, Repository } from "typeorm";
 import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
+import { Admin } from "../entities/admin";
 
 export class GetAdminReponseProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
