@@ -41,7 +41,6 @@ import {
       if (!(exception instanceof HttpException)) {
         // If not instance of HttpException, then it is a system error
         // Log the error
-        console.log('error', message, logMetadata);
         Logger.fatal(message, { props: logMetadata });
   
         // Return error to client

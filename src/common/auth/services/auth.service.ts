@@ -1,14 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
-import bcrypt from 'bcrypt';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { JwtService, JwtSignOptions, JwtVerifyOptions } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthCommonService {
-  constructor(
-    private jwtService: JwtService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private jwtService: JwtService) {}
 
   generateToken<T>(payload: T, options?: JwtSignOptions) {
     return this.jwtService.sign(payload as any, options);

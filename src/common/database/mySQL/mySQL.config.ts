@@ -11,6 +11,7 @@ const getConfig = (configService: ConfigService): TypeOrmModuleOptions => {
     database: configService.get<string>('database.mySQL.dbName'),
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     autoLoadEntities: true,
+    synchronize: true,
   };
 };
 

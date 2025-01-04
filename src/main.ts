@@ -22,7 +22,7 @@ async function bootstrap() {
     origin: configService.get('middleware.cors.allowOrigin'),
     methods: configService.get('middleware.cors.allowMethod'),
   });
-
+  
   // Setup swagger if swagger.enable = 1
   if (Boolean(Number(SWAGGER_ENABLE))) {
     new SwaggerApp(app).initial();
