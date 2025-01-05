@@ -21,6 +21,7 @@ import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
 import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators/api-ok-response-paginate.decorator";
 import PaginationRequestDto from "src/common/pagination/dtos/pagination_request.dto";
 import { PaginationRequestPipe } from "src/common/request/pipes/pagination_request.pipe";
+import PaginationSearchRequestDto from "src/common/pagination/dtos/pagination_search_request.dto";
 
 @ApiBearerAuth()
 @Controller({
@@ -33,7 +34,7 @@ export class AdminController {
   @Get()
   // @UseGuards(JwtAuthGuard)
   @ApiOkResponsePaginateDecorator(GetAdminReponseDto)
-  async getUsers(@Query(PaginationRequestPipe) query: PaginationRequestDto) {
+  async getUsers(@Query(PaginationRequestPipe) query: PaginationSearchRequestDto) {
     return await this.userService.getAdmins(query);
   }
 

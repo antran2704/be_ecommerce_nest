@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository, SelectQueryBuilder } from "typeorm";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 
@@ -11,12 +11,11 @@ import { ADMIN_MESSAGES } from "../messages/admin.error";
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import {
   CreateSuccessResponse,
-  GetSuccessResponse,
   GetSuccessWithPaginationResponse,
 } from "src/common/response/success.response";
 import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
-import PaginationRequestDto from "src/common/pagination/dtos/pagination_request.dto";
 import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
+import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
 
 @Injectable()
 export class AdminService {
@@ -89,10 +88,30 @@ export class AdminService {
     });
   }
 
-  async getAdmins(params: PaginationRequestDto): Promise<GetSuccessWithPaginationResponse<GetAdminReponseDto[]>> {
-    const {data, pagination} = await getEntitesAndPagination(this.userRepository, params);
+  async getAdmins(
+    params: PaginationSearchRequestDto,
+  ): Promise<GetSuccessWithPaginationResponse<GetAdminReponseDto[]>> {
+    const { data, pagination } = await getEntitesAndPagination(
+      this.userRepository,
+      params,
+      (query, originalNameEntity) => {
+        if (params.search) {
+          query.where(`${originalNameEntity}.email LIKE :email`, {
+            email: `%${params.search}%`,
+          });
+        }
+      },
+    );
 
-    const formatData: GetAdminReponseDto[] = this.mapper.mapArray(data, Admin, GetAdminReponseDto);
-    return new GetSuccessWithPaginationResponse<GetAdminReponseDto[]>(formatData, pagination);
+    const formatData: GetAdminReponseDto[] = this.mapper.mapArray(
+      data,
+      Admin,
+      GetAdminReponseDto,
+    );
+
+    return new GetSuccessWithPaginationResponse<GetAdminReponseDto[]>(
+      formatData,
+      pagination,
+    );
   }
 }

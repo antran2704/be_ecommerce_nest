@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Brackets, FindOptionsWhere, Repository, SelectQueryBuilder } from "typeorm";
 import PaginationRequestDto from "../dtos/pagination_request.dto";
 import { ENUM_PAGINATION_ORDER } from "../enums/order.enum";
 import { CREATED_AT_FIELD } from "src/common/database/constants/fields.constant";
@@ -7,7 +7,7 @@ import PaginationResponseDto from "../dtos/pagination_response.dto";
 const getEntitesAndPagination = async <T>(
   model: Repository<T>,
   dto: PaginationRequestDto,
-  extraFilter?: any,
+  extraFilter?: (query: SelectQueryBuilder<T>, originalNameEntity?: string) => void
 ): Promise<{ data: T[]; pagination: PaginationResponseDto }> => {
   let { page, limit, order } = dto;
 
@@ -15,21 +15,31 @@ const getEntitesAndPagination = async <T>(
   if (!limit) limit = 10;
   if (!order) order = ENUM_PAGINATION_ORDER.DESC;
 
-  // Init sort
-  const sort = getSort(dto.sort, model);
+  const ORIGINAL_NAME_ENTITY = "entity"
 
-  const [data, total] = await model.findAndCount({
-    where: extraFilter,
-    order: sort.reduce((acc, cur) => {
-      acc[cur] =
-        order === ENUM_PAGINATION_ORDER.ASC
-          ? ENUM_PAGINATION_ORDER.ASC
-          : ENUM_PAGINATION_ORDER.DESC;
-      return acc;
-    }, {}),
-    take: limit,
-    skip: (page - 1) * limit,
+  // Init sort
+  const sorts = getSort(dto.sort, model);
+
+  const queryBuilder = model.createQueryBuilder(ORIGINAL_NAME_ENTITY);
+
+  // add mutiple sort
+  sorts.forEach((sortOption) => {
+    queryBuilder.addOrderBy(
+      `${ORIGINAL_NAME_ENTITY}.${sortOption}`,
+      order === ENUM_PAGINATION_ORDER.ASC
+        ? ENUM_PAGINATION_ORDER.ASC
+        : ENUM_PAGINATION_ORDER.DESC,
+    );
   });
+
+  if (extraFilter) {
+    extraFilter(queryBuilder, ORIGINAL_NAME_ENTITY); // Truyền query để thêm điều kiện vào
+  }
+
+  const [data, total] = await queryBuilder
+    .skip((page - 1) * limit)
+    .take(limit)
+    .getManyAndCount();
 
   const pagination: PaginationResponseDto = {
     page,
