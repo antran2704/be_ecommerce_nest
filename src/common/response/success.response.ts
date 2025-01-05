@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import SUCCESS_RESPONSE_MESSAGES from "./message.response";
+import PaginationResponseDto from "../pagination/dtos/pagination_response.dto";
 
 class SuccessResponse {
   @ApiProperty({
@@ -28,6 +29,20 @@ export class GetSuccessResponse<T> extends SuccessResponse {
   constructor(data: T, message: string = SUCCESS_RESPONSE_MESSAGES.GET) {
     super(200, message);
     this.data = data;
+  }
+}
+
+export class GetSuccessWithPaginationResponse<T> extends SuccessResponse {
+  @ApiProperty({ description: "Response data" })
+  data: T;
+
+  @ApiProperty({ description: "Response data" })
+  pagination: PaginationResponseDto;
+
+  constructor(data: T, pagination: PaginationResponseDto, message: string = SUCCESS_RESPONSE_MESSAGES.GET) {
+    super(200, message);
+    this.data = data;
+    this.pagination = pagination;
   }
 }
 

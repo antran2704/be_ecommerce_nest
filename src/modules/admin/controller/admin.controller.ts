@@ -2,50 +2,39 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
-  Request,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
-  ApiProperty,
   ApiResponse,
-  ApiResponseProperty,
 } from "@nestjs/swagger";
 
 import { AdminService } from "../services/admin.service";
 import { JwtAuthGuard } from "src/common/auth/guards/jwt-auth.guard";
 import { CreateAdminDto } from "../dtos/create_admin.dto";
 import { CreateSuperAdminDto } from "../dtos/create_super_admin.dto";
-import {
-  CreateSuccessResponse,
-  GetSuccessResponse,
-} from "src/common/response/success.response";
+import { CreateSuccessResponse } from "src/common/response/success.response";
 import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
+import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators/api-ok-response-paginate.decorator";
+import PaginationRequestDto from "src/common/pagination/dtos/pagination_request.dto";
+import { PaginationRequestPipe } from "src/common/request/pipes/pagination_request.pipe";
 
 @ApiBearerAuth()
 @Controller({
   version: "1",
-  path: "admin",
+  path: "admins",
 })
 export class AdminController {
   constructor(private readonly userService: AdminService) {}
 
   @Get()
   // @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 200,
-    example: new GetSuccessResponse<GetAdminReponseDto[]>([
-      {
-        email: "admin@gmail.com",
-        name: "admin",
-        isAdmin: true,
-        isActive: true,
-      },
-    ]),
-  })
-  async getUsers(@Request() req) {
-    return await this.userService.getAdmins();
+  @ApiOkResponsePaginateDecorator(GetAdminReponseDto)
+  async getUsers(@Query(PaginationRequestPipe) query: PaginationRequestDto) {
+    return await this.userService.getAdmins(query);
   }
 
   @Post()

@@ -1,5 +1,4 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { IAccessTokenPayload } from 'src/modules/auth/interfaces/auth.interface';
 import { ENUM_PERMISSION } from 'src/modules/permissions/enums/permission.enum';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -27,7 +26,6 @@ export class PermissionGuard extends JwtAuthGuard {
 
     // Pass if user is admin
     if (user.isAdmin) return true;
-    console.log("context", context)
     // Get required permissions form Permission decorator
     const requiredPermissions = this.reflector.get<string[]>(
       Permissions,

@@ -12,8 +12,11 @@ import { AuthCommonService } from "src/common/auth/services/auth.service";
 import {
   CreateSuccessResponse,
   GetSuccessResponse,
+  GetSuccessWithPaginationResponse,
 } from "src/common/response/success.response";
 import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
+import PaginationRequestDto from "src/common/pagination/dtos/pagination_request.dto";
+import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
 
 @Injectable()
 export class AdminService {
@@ -86,10 +89,10 @@ export class AdminService {
     });
   }
 
-  async getAdmins(): Promise<GetSuccessResponse<GetAdminReponseDto[]>> {
-    const users = await this.userRepository.find();
+  async getAdmins(params: PaginationRequestDto): Promise<GetSuccessWithPaginationResponse<GetAdminReponseDto[]>> {
+    const {data, pagination} = await getEntitesAndPagination(this.userRepository, params);
 
-    const formatData: GetAdminReponseDto[] = this.mapper.mapArray(users, Admin, GetAdminReponseDto);
-    return new GetSuccessResponse<GetAdminReponseDto[]>(formatData);
+    const formatData: GetAdminReponseDto[] = this.mapper.mapArray(data, Admin, GetAdminReponseDto);
+    return new GetSuccessWithPaginationResponse<GetAdminReponseDto[]>(formatData, pagination);
   }
 }
