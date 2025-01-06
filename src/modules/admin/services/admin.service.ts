@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FindOptionsWhere, Repository, SelectQueryBuilder } from "typeorm";
+import { Repository } from "typeorm";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 
-import { Admin } from "../entities/admin";
+import { Admin } from "../entities/admin.entity";
+import { AuthAdminToken } from "../entities/auth_admin_token.entity";
+
 import { CreateAdminDto } from "../dtos/create_admin.dto";
 import { CreateSuperAdminDto } from "../dtos/create_super_admin.dto";
 import { ADMIN_MESSAGES } from "../messages/admin.error";
@@ -16,18 +18,22 @@ import {
 import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
 import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
 import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
+import { GetDatabaseDefaultID } from "src/helpers/database";
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(Admin)
-    private readonly userRepository: Repository<Admin>,
+    private readonly adminEntity: Repository<Admin>,
+    @InjectRepository(AuthAdminToken)
+    private readonly authAdminTokenEntity: Repository<AuthAdminToken>,
+
     private readonly authCommonService: AuthCommonService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
   async createUser(payload: CreateAdminDto): Promise<CreateSuccessResponse> {
-    const isExitUser = await this.userRepository.findOneBy({
+    const isExitUser = await this.adminEntity.findOneBy({
       email: payload.email,
     });
 
@@ -44,10 +50,24 @@ export class AdminService {
       password: hashPassword,
     };
 
-    const user = this.userRepository.create(dataForSave);
-    return await this.userRepository.save(user).then(() => {
-      return new CreateSuccessResponse();
+    const userId = GetDatabaseDefaultID("AD");
+
+    const user = this.adminEntity.create({
+      ...dataForSave,
+      id: userId,
     });
+
+    // save user
+    await this.adminEntity.save(user);
+
+    const adminAuthToken = this.authAdminTokenEntity.create({
+      user_id: userId,
+    });
+
+    // save auth token of user
+    await this.authAdminTokenEntity.save(adminAuthToken);
+
+    return new CreateSuccessResponse();
   }
 
   async createSuperUser(
@@ -64,7 +84,7 @@ export class AdminService {
     if (godKey !== payload.godKey)
       throw new BadRequestException(ADMIN_MESSAGES.GOD_KEY_INVALID);
 
-    const isExitUser = await this.userRepository.findOneBy({
+    const isExitUser = await this.adminEntity.findOneBy({
       email: payload.email,
     });
 
@@ -80,8 +100,12 @@ export class AdminService {
       password: hashPassword,
     };
 
-    const user = this.userRepository.create({ ...dataForSave, isAdmin: true });
-    return await this.userRepository.save(user).then(() => {
+    const user = this.adminEntity.create({
+      ...dataForSave,
+      id: GetDatabaseDefaultID("AD"),
+      is_admin: true,
+    });
+    return await this.adminEntity.save(user).then(() => {
       return new CreateSuccessResponse(
         ADMIN_MESSAGES.CREATE_SUPER_ADMIN_SUCCESS,
       );
@@ -92,7 +116,7 @@ export class AdminService {
     params: PaginationSearchRequestDto,
   ): Promise<GetSuccessWithPaginationResponse<GetAdminReponseDto[]>> {
     const { data, pagination } = await getEntitesAndPagination(
-      this.userRepository,
+      this.adminEntity,
       params,
       (query, originalNameEntity) => {
         if (params.search) {

@@ -1,12 +1,13 @@
 import { AutoMap } from "@automapper/classes";
+import { Entity, Column, PrimaryColumn } from "typeorm";
+
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Admin extends DatabaseModifierEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   @AutoMap()
-  id: number;
+  id: string;
 
   @Column()
   @AutoMap()
@@ -21,9 +22,9 @@ export class Admin extends DatabaseModifierEntity {
 
   @Column({ default: true })
   @AutoMap()
-  isActive: boolean;
+  is_active: boolean;
 
   @Column({ default: false })
   @AutoMap()
-  isAdmin: boolean;
+  is_admin: boolean;
 }
