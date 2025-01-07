@@ -16,26 +16,23 @@ import {
   GetSuccessWithPaginationResponse,
 } from "src/common/response/success.response";
 import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
-import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
 import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
-import { GetDatabaseDefaultID } from "src/helpers/database";
+import { IAdminService } from "../interfaces/admin_service.interface";
+import { AdminRepository } from "../repositories/admin.repository";
+import { AuthAdminTokenRepository } from "../repositories/authAdminToken.repository";
 
 @Injectable()
-export class AdminService {
+export class AdminService implements IAdminService {
   constructor(
-    @InjectRepository(Admin)
-    private readonly adminEntity: Repository<Admin>,
-    @InjectRepository(AuthAdminToken)
-    private readonly authAdminTokenEntity: Repository<AuthAdminToken>,
+    private readonly adminRepository: AdminRepository,
+    private readonly authAdminTokenRepository: AuthAdminTokenRepository,
 
     private readonly authCommonService: AuthCommonService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
   async createUser(payload: CreateAdminDto): Promise<CreateSuccessResponse> {
-    const isExitUser = await this.adminEntity.findOneBy({
-      email: payload.email,
-    });
+    const isExitUser = await this.adminRepository.findByEmail(payload.email);
 
     if (isExitUser) {
       throw new BadRequestException(ADMIN_MESSAGES.USER_EXISTED);
@@ -50,22 +47,11 @@ export class AdminService {
       password: hashPassword,
     };
 
-    const userId = GetDatabaseDefaultID("AD");
-
-    const user = this.adminEntity.create({
-      ...dataForSave,
-      id: userId,
-    });
-
     // save user
-    await this.adminEntity.save(user);
-
-    const adminAuthToken = this.authAdminTokenEntity.create({
-      user_id: userId,
-    });
+    const userId = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenEntity.save(adminAuthToken);
+    await this.authAdminTokenRepository.create(userId);
 
     return new CreateSuccessResponse();
   }
@@ -84,9 +70,7 @@ export class AdminService {
     if (godKey !== payload.godKey)
       throw new BadRequestException(ADMIN_MESSAGES.GOD_KEY_INVALID);
 
-    const isExitUser = await this.adminEntity.findOneBy({
-      email: payload.email,
-    });
+    const isExitUser = await this.adminRepository.findByEmail(payload.email);
 
     if (isExitUser) {
       throw new BadRequestException(ADMIN_MESSAGES.USER_EXISTED);
@@ -100,32 +84,19 @@ export class AdminService {
       password: hashPassword,
     };
 
-    const user = this.adminEntity.create({
-      ...dataForSave,
-      id: GetDatabaseDefaultID("AD"),
-      is_admin: true,
-    });
-    return await this.adminEntity.save(user).then(() => {
-      return new CreateSuccessResponse(
-        ADMIN_MESSAGES.CREATE_SUPER_ADMIN_SUCCESS,
-      );
-    });
+    // save user
+    const userId = await this.adminRepository.createAdmin(dataForSave);
+
+    // save auth token of user
+    await this.authAdminTokenRepository.create(userId);
+
+    return new CreateSuccessResponse(ADMIN_MESSAGES.CREATE_SUPER_ADMIN_SUCCESS);
   }
 
   async getAdmins(
     params: PaginationSearchRequestDto,
   ): Promise<GetSuccessWithPaginationResponse<GetAdminReponseDto[]>> {
-    const { data, pagination } = await getEntitesAndPagination(
-      this.adminEntity,
-      params,
-      (query, originalNameEntity) => {
-        if (params.search) {
-          query.where(`${originalNameEntity}.email LIKE :email`, {
-            email: `%${params.search}%`,
-          });
-        }
-      },
-    );
+    const { data, pagination } = await this.adminRepository.findAdmins(params);
 
     const formatData: GetAdminReponseDto[] = this.mapper.mapArray(
       data,
@@ -133,8 +104,8 @@ export class AdminService {
       GetAdminReponseDto,
     );
 
-    return new GetSuccessWithPaginationResponse<GetAdminReponseDto[]>(
-      formatData,
+    return new GetSuccessWithPaginationResponse<any[]>(
+      data,
       pagination,
     );
   }

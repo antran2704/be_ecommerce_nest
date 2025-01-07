@@ -1,7 +1,8 @@
 import { AutoMap } from "@automapper/classes";
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
 
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
+import { AuthAdminToken } from "./auth_admin_token.entity";
 
 @Entity()
 export class Admin extends DatabaseModifierEntity {
@@ -27,4 +28,7 @@ export class Admin extends DatabaseModifierEntity {
   @Column({ default: false })
   @AutoMap()
   is_admin: boolean;
+
+  @OneToOne(() => AuthAdminToken, (entity) => entity.user)
+  authAdminToken: AuthAdminToken;
 }

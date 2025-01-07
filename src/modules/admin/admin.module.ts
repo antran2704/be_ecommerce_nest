@@ -6,10 +6,20 @@ import { Admin } from "./entities/admin.entity";
 import { AuthCommonModule } from "src/common/auth/auth.module";
 import { GetAdminReponseProfile } from "./profiles/get_admin_response.profile";
 import { AuthAdminToken } from "./entities/auth_admin_token.entity";
+import { AdminRepository } from "./repositories/admin.repository";
+import { AuthAdminTokenRepository } from "./repositories/authAdminToken.repository";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Admin, AuthAdminToken]), AuthCommonModule],
-  providers: [AdminService, GetAdminReponseProfile],
+  imports: [
+    TypeOrmModule.forFeature([Admin, AuthAdminToken]),
+    AuthCommonModule,
+  ],
+  providers: [
+    AdminService,
+    GetAdminReponseProfile,
+    AdminRepository,
+    AuthAdminTokenRepository,
+  ],
   exports: [AdminService],
 })
 export class AdminModule {}

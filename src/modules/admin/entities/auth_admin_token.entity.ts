@@ -20,7 +20,7 @@ export class AuthAdminToken {
   @AutoMap()
   expire_otp_at: string;
 
-  @OneToOne(() => Admin, (admin) => admin.id)
+  @OneToOne(() => Admin, (admin) => admin.authAdminToken)
   @JoinColumn({ name: "user_id" })
   user: Admin;
 
