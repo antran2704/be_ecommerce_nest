@@ -1,7 +1,7 @@
 import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
-import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
 import { Admin } from "../entities/admin.entity";
+import { GetAdminResponseDto } from "../dtos";
 
 export class GetAdminReponseProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -13,21 +13,21 @@ export class GetAdminReponseProfile extends AutomapperProfile {
       createMap(
         mapper,
         Admin,
-        GetAdminReponseDto,
+        GetAdminResponseDto,
         forMember(
-          (dest: GetAdminReponseDto) => dest?.isActive,
+          (dest: GetAdminResponseDto) => dest?.isActive,
           mapFrom((src: Admin) => src.is_active),
         ),
         forMember(
-          (dest: GetAdminReponseDto) => dest?.isAdmin,
+          (dest: GetAdminResponseDto) => dest?.isAdmin,
           mapFrom((src: Admin) => src.is_admin),
         ),
         forMember(
-          (dest: GetAdminReponseDto) => dest?.userId,
+          (dest: GetAdminResponseDto) => dest?.userId,
           mapFrom((src: Admin) => src.id),
         ),
         forMember(
-          (dest: GetAdminReponseDto) => dest?.createdAt,
+          (dest: GetAdminResponseDto) => dest?.createdAt,
           mapFrom((src: Admin) => src.created_at),
         ),
       );

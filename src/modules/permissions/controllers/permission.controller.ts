@@ -1,27 +1,27 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { Controller, Get, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 
-import { PermissionService } from '../services/permission.service';
-import { ENUM_PERMISSION } from '../enums/permission.enum';
-import { Permissions } from 'src/common/auth/decorators/permission.decorator';
-import { PermissionGuard } from 'src/common/auth/guards';
+import { PermissionService } from "../services/permission.service";
+import { ENUM_PERMISSION } from "../enums/permission.enum";
+import { Permissions } from "src/common/auth/decorators/permission.decorator";
+import { PermissionGuard } from "src/common/auth/guards";
 
-@Controller('permission')
+@Controller("permission")
 @ApiBearerAuth()
 export class PermissionController {
   constructor(private permissionService: PermissionService) {}
 
-  @Get('/')
+  @Get("/")
   @Permissions([ENUM_PERMISSION.HOME_VIEW])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 200,
-    description: 'Get list permission',
+    description: "Get list permission",
     example: {
       ADMIN: {
-        title: 'HOME',
-        key: 'HOME',
-        childrend: [{ title: 'HOME.VIEW', key: 'HOME.VIEW' }],
+        title: "HOME",
+        key: "HOME",
+        childrend: [{ title: "HOME.VIEW", key: "HOME.VIEW" }],
       },
     },
   })

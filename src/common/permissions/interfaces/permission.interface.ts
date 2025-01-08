@@ -1,7 +1,7 @@
 import { Permission } from "../permission";
 
 interface IPermissionDic {
-    [key: string]: Permission[]
+  [key: string]: Permission[];
 }
 
 export type { IPermissionDic };

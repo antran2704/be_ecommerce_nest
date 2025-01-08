@@ -1,5 +1,5 @@
-﻿import { IPermissionDic } from './interfaces/permission.interface';
-import { Permission } from './permission';
+﻿import { IPermissionDic } from "./interfaces/permission.interface";
+import { Permission } from "./permission";
 
 export class PermissionDictionary {
   private static PERMISSION_DICTIONARY: IPermissionDic = {};

@@ -7,7 +7,10 @@ import PaginationResponseDto from "../dtos/pagination_response.dto";
 const getEntitesAndPagination = async <T>(
   model: Repository<T>,
   dto: PaginationRequestDto,
-  extraFilter?: (query: SelectQueryBuilder<T>, originalNameEntity?: string) => void
+  extraFilter?: (
+    query: SelectQueryBuilder<T>,
+    originalNameEntity?: string,
+  ) => void,
 ): Promise<{ data: T[]; pagination: PaginationResponseDto }> => {
   let { page, limit, order } = dto;
 
@@ -15,7 +18,7 @@ const getEntitesAndPagination = async <T>(
   if (!limit) limit = 10;
   if (!order) order = ENUM_PAGINATION_ORDER.DESC;
 
-  const ORIGINAL_NAME_ENTITY = "entity"
+  const ORIGINAL_NAME_ENTITY = "entity";
 
   // Init sort
   const sorts = getSort(dto.sort, model);

@@ -4,19 +4,35 @@ import {
   GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
 } from "src/common/response/success.response";
-import { CreateAdminDto } from "../dtos/create_admin.dto";
-import { CreateSuperAdminDto } from "../dtos/create_super_admin.dto";
-import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
-import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
+
+import {
+  ChangePasswordAdminRequestDto,
+  CreateAdminRequestDto,
+  CreateSuperAdminRequestDto,
+  GetAdminResponseDto,
+  SearchAdminsRequestDto,
+} from "../dtos";
 
 export interface IAdminService {
-  createUser(payload: CreateAdminDto): Promise<CreateSuccessResponse>;
-  createSuperUser(payload: CreateSuperAdminDto): Promise<CreateSuccessResponse>;
+  createUser(payload: CreateAdminRequestDto): Promise<CreateSuccessResponse>;
+  createSuperUser(
+    payload: CreateSuperAdminRequestDto,
+  ): Promise<CreateSuccessResponse>;
   getAdmins(
-    params: PaginationSearchRequestDto,
-  ): Promise<GetSuccessWithPaginationResponse<GetAdminReponseDto[]>>;
+    params: SearchAdminsRequestDto,
+  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto[]>>;
 
-  updateAdmin(id: string, payload: CreateAdminDto): Promise<UpdatedSuccessResponse>;
+  updateAdmin(
+    id: string,
+    payload: CreateAdminRequestDto,
+  ): Promise<UpdatedSuccessResponse>;
+
+  enableAdmin(id: string): Promise<UpdatedSuccessResponse>;
+  disableAdmin(id: string): Promise<UpdatedSuccessResponse>;
+  changePassword(
+    id: string,
+    data: ChangePasswordAdminRequestDto,
+  ): Promise<UpdatedSuccessResponse>;
 
   deleteAdmin(id: string): Promise<DeletedSuccessResponse>;
 }

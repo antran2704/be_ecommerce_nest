@@ -1,9 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { IAccessTokenPayload } from 'src/modules/auth/interfaces/auth.interface';
-import { ENUM_PERMISSION } from 'src/modules/permissions/enums/permission.enum';
-import { Reflector } from '@nestjs/core';
-import { Permissions } from '../decorators/permission.decorator';
-import JwtAuthGuard from './jwt-auth.guard';
+import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
+import { IAccessTokenPayload } from "src/modules/auth/interfaces/auth.interface";
+import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
+import { Reflector } from "@nestjs/core";
+import { Permissions } from "../decorators/permission.decorator";
+import JwtAuthGuard from "./jwt-auth.guard";
 
 const initPermission = [ENUM_PERMISSION.HOME_VIEW, ENUM_PERMISSION.HOME_CREATE];
 

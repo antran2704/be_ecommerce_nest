@@ -3,13 +3,16 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { IAdminRepository } from "../interfaces/admin_repository.interface";
-import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
 import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
 import PaginationResponseDto from "src/common/pagination/dtos/pagination_response.dto";
 import { Admin } from "../entities/admin.entity";
-import { CreateAdminDto } from "../dtos/create_admin.dto";
 import { GetDatabaseDefaultID } from "src/helpers/database";
-import { UpdateAdminRequestDto } from "../dtos/update_admin_request.dto";
+import {
+  CreateAdminRequestDto,
+  SearchAdminsRequestDto,
+  UpdateAdminRequestDto,
+} from "../dtos";
+import { ENUM_ADMIN_STATUS } from "../enums/admin.enum";
 
 @Injectable()
 export class AdminRepository implements IAdminRepository {
@@ -18,7 +21,7 @@ export class AdminRepository implements IAdminRepository {
     private readonly adminEntity: Repository<Admin>,
   ) {}
 
-  async createSuperUser(payload: CreateAdminDto): Promise<Admin> {
+  async createSuperUser(payload: CreateAdminRequestDto): Promise<Admin> {
     const userId = GetDatabaseDefaultID("AD");
 
     const user = this.adminEntity.create({
@@ -32,7 +35,7 @@ export class AdminRepository implements IAdminRepository {
     return user;
   }
 
-  async createAdmin(payload: CreateAdminDto): Promise<Admin> {
+  async createAdmin(payload: CreateAdminRequestDto): Promise<Admin> {
     const userId = GetDatabaseDefaultID("AD");
 
     const user = this.adminEntity.create({
@@ -47,12 +50,13 @@ export class AdminRepository implements IAdminRepository {
   }
 
   async findAdmins(
-    params: PaginationSearchRequestDto,
+    params: SearchAdminsRequestDto,
   ): Promise<{ data: Admin[]; pagination: PaginationResponseDto }> {
     const { data, pagination } = await getEntitesAndPagination(
       this.adminEntity,
       params,
       (query, originalNameEntity) => {
+        // filter with email or id
         if (params.search) {
           query.where(`${originalNameEntity}.email LIKE :email`, {
             email: `%${params.search}%`,
@@ -60,6 +64,13 @@ export class AdminRepository implements IAdminRepository {
 
           query.orWhere(`${originalNameEntity}.id LIKE :id`, {
             id: `%${params.search}%`,
+          });
+        }
+
+        // filter with status
+        if (params.status) {
+          query.andWhere(`${originalNameEntity}.is_active = :status`, {
+            status: params.status === ENUM_ADMIN_STATUS.ACTIVE ? true : false,
           });
         }
       },
@@ -82,6 +93,18 @@ export class AdminRepository implements IAdminRepository {
 
   async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {
     await this.adminEntity.update({ id }, payload);
+  }
+
+  async changePassword(id: string, password: string): Promise<void> {
+    await this.adminEntity.update({ id }, { password });
+  }
+
+  async enableAdmin(id: string): Promise<void> {
+    await this.adminEntity.update({ id }, { is_active: true });
+  }
+
+  async disableAdmin(id: string): Promise<void> {
+    await this.adminEntity.update({ id }, { is_active: false });
   }
 
   async deleteAdmin(id: string): Promise<void> {

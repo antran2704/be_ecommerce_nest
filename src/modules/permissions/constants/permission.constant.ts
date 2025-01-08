@@ -1,10 +1,10 @@
-import { Permission } from 'src/common/permissions/permission';
+import { Permission } from "src/common/permissions/permission";
 import {
   ENUM_PERMISSION,
   ENUM_PERMISSION_SUBJECT,
-} from '../enums/permission.enum';
-import { PermissionDictionary } from 'src/common/permissions/permission.dictionary';
-import { ENUM_PLATFORM_PERMISSION } from '../enums/platform.enum';
+} from "../enums/permission.enum";
+import { PermissionDictionary } from "src/common/permissions/permission.dictionary";
+import { ENUM_PLATFORM_PERMISSION } from "../enums/platform.enum";
 
 // Home Page Permission
 const homePagePermission = new Permission(

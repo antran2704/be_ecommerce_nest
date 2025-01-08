@@ -15,7 +15,7 @@ export class AuthAdminTokenRepository implements IAuthAdminTokenRepository {
 
   async create(data: Admin): Promise<void> {
     const adminAuthToken = this.authAdminTokenEntity.create({
-      user: data
+      user: data,
     });
 
     await this.authAdminTokenEntity.save(adminAuthToken);

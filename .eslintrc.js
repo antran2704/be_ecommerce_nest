@@ -15,11 +15,10 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', "commitlint.config.ts"],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'on',
     '@typescript-eslint/no-explicit-any': 'off',
     "no-console": "warn",
     "no-unused-vars": ["warn", { "args": "none" }],

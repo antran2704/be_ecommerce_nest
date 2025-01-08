@@ -12,20 +12,23 @@ import {
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 
 import { AdminService } from "../services/admin.service";
-import { CreateAdminDto } from "../dtos/create_admin.dto";
-import { CreateSuperAdminDto } from "../dtos/create_super_admin.dto";
 import {
   CreateSuccessResponse,
   UpdatedSuccessResponse,
 } from "src/common/response/success.response";
-import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
 import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators/api-ok-response-paginate.decorator";
 import { PaginationRequestPipe } from "src/common/request/pipes/pagination_request.pipe";
-import PaginationSearchRequestDto from "src/common/pagination/dtos/pagination_search_request.dto";
 import { Permissions } from "src/common/auth/decorators/permission.decorator";
 import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
 import { PermissionGuard } from "src/common/auth/guards";
-import { UpdateAdminRequestDto } from "../dtos/update_admin_request.dto";
+import {
+  ChangePasswordAdminRequestDto,
+  CreateAdminRequestDto,
+  CreateSuperAdminRequestDto,
+  GetAdminResponseDto,
+  SearchAdminsRequestDto,
+  UpdateAdminRequestDto,
+} from "../dtos";
 
 @ApiBearerAuth()
 @Controller({
@@ -36,12 +39,10 @@ export class AdminController {
   constructor(private readonly userService: AdminService) {}
 
   @Get()
-  @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
-  @UseGuards(PermissionGuard)
-  @ApiOkResponsePaginateDecorator(GetAdminReponseDto)
-  async getUsers(
-    @Query(PaginationRequestPipe) query: PaginationSearchRequestDto,
-  ) {
+  // @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
+  // @UseGuards(PermissionGuard)
+  @ApiOkResponsePaginateDecorator(GetAdminResponseDto)
+  async getUsers(@Query(PaginationRequestPipe) query: SearchAdminsRequestDto) {
     return await this.userService.getAdmins(query);
   }
 
@@ -50,7 +51,7 @@ export class AdminController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  async createAdmin(@Body() payload: CreateAdminDto) {
+  async createAdmin(@Body() payload: CreateAdminRequestDto) {
     return await this.userService.createUser(payload);
   }
 
@@ -59,11 +60,11 @@ export class AdminController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  async createSuperAdmin(@Body() payload: CreateSuperAdminDto) {
+  async createSuperAdmin(@Body() payload: CreateSuperAdminRequestDto) {
     return await this.userService.createSuperUser(payload);
   }
 
-  @Patch("/:user_id")
+  @Patch("/:user_id/")
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
@@ -73,6 +74,36 @@ export class AdminController {
     @Body() payload: UpdateAdminRequestDto,
   ) {
     return await this.userService.updateAdmin(userId, payload);
+  }
+
+  @Patch("/:user_id/change-password")
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  async changePassword(
+    @Param("user_id") userId: string,
+    @Body() payload: ChangePasswordAdminRequestDto,
+  ) {
+    return await this.userService.changePassword(userId, payload);
+  }
+
+  @Patch("/:user_id/enable")
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  async enable(@Param("user_id") userId: string) {
+    return await this.userService.enableAdmin(userId);
+  }
+
+  @Patch("/:user_id/disable")
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  async disable(@Param("user_id") userId: string) {
+    return await this.userService.disableAdmin(userId);
   }
 
   @Delete("/:user_id")

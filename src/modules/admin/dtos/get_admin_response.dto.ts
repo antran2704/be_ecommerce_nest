@@ -1,7 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class GetAdminReponseDto {
+export default class GetAdminResponseDto {
   @ApiProperty({
     example: "AD123",
   })

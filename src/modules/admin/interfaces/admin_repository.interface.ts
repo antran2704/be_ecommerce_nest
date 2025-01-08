@@ -1,19 +1,21 @@
-import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
-import { CreateAdminDto } from "../dtos/create_admin.dto";
 import PaginationResponseDto from "src/common/pagination/dtos/pagination_response.dto";
 import { Admin } from "../entities/admin.entity";
+import { CreateAdminRequestDto, SearchAdminsRequestDto } from "../dtos";
 
 export interface IAdminRepository {
-  createAdmin(payload: CreateAdminDto): Promise<Admin>;
-  createSuperUser(payload: CreateAdminDto): Promise<Admin>;
+  createAdmin(payload: CreateAdminRequestDto): Promise<Admin>;
+  createSuperUser(payload: CreateAdminRequestDto): Promise<Admin>;
 
   findByUserId(id: string): Promise<Admin>;
   findByEmail(email: string): Promise<Admin>;
   findAdmins(
-    params: PaginationSearchRequestDto,
+    params: SearchAdminsRequestDto,
   ): Promise<{ data: Admin[]; pagination: PaginationResponseDto }>;
 
-  updateAdmin(id: string, payload: CreateAdminDto): Promise<void>;
+  updateAdmin(id: string, payload: CreateAdminRequestDto): Promise<void>;
+  enableAdmin(id: string): Promise<void>;
+  disableAdmin(id: string): Promise<void>;
+  changePassword(id: string, password: string): Promise<void>;
 
   deleteAdmin(id: string): Promise<void>;
 }

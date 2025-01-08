@@ -19,12 +19,9 @@ import { HttpExceptionFilter } from "src/common/exceptionFilter/http-exception.f
       provide: APP_PIPE,
       useFactory: () => {
         return new ValidationPipe({
-          whitelist: true,
-          transform: true,
-          forbidNonWhitelisted: true,
-          transformOptions: {
-            enableImplicitConversion: true,
-          },
+          whitelist: true, // Remove properties that do not have in DTO
+          transform: true, // Automatically transform payloads to DTO instances
+          forbidNonWhitelisted: true, // Throw an error when properties that do not have in DTO
         });
       },
     },
