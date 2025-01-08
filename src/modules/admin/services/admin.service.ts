@@ -1,11 +1,8 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 
 import { Admin } from "../entities/admin.entity";
-import { AuthAdminToken } from "../entities/auth_admin_token.entity";
 
 import { CreateAdminDto } from "../dtos/create_admin.dto";
 import { CreateSuperAdminDto } from "../dtos/create_super_admin.dto";
@@ -13,13 +10,16 @@ import { ADMIN_MESSAGES } from "../messages/admin.error";
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import {
   CreateSuccessResponse,
+  DeletedSuccessResponse,
   GetSuccessWithPaginationResponse,
+  UpdatedSuccessResponse,
 } from "src/common/response/success.response";
 import { GetAdminReponseDto } from "../dtos/get_admin_response.dto";
 import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
 import { IAdminService } from "../interfaces/admin_service.interface";
 import { AdminRepository } from "../repositories/admin.repository";
 import { AuthAdminTokenRepository } from "../repositories/authAdminToken.repository";
+import { UpdateAdminRequestDto } from "../dtos/update_admin_request.dto";
 
 @Injectable()
 export class AdminService implements IAdminService {
@@ -104,9 +104,30 @@ export class AdminService implements IAdminService {
       GetAdminReponseDto,
     );
 
-    return new GetSuccessWithPaginationResponse<any[]>(
-      data,
+    return new GetSuccessWithPaginationResponse<GetAdminReponseDto[]>(
+      formatData,
       pagination,
     );
+  }
+
+  async updateAdmin(
+    id: string,
+    payload: UpdateAdminRequestDto,
+  ): Promise<UpdatedSuccessResponse> {
+    const isExitUser = await this.adminRepository.findByUserId(id);
+
+    if (!isExitUser) {
+      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+    }
+
+    await this.adminRepository.updateAdmin(id, payload);
+
+    return new UpdatedSuccessResponse();
+  }
+
+  async deleteAdmin(id: string): Promise<DeletedSuccessResponse> {
+    await this.adminRepository.deleteAdmin(id);
+
+    return new DeletedSuccessResponse();
   }
 }

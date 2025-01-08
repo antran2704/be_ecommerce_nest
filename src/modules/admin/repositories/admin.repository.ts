@@ -1,14 +1,15 @@
 import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { IAdminRepository } from "../interfaces/admin_repository.interface";
 import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
 import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
-import { InjectRepository } from "@nestjs/typeorm";
 import PaginationResponseDto from "src/common/pagination/dtos/pagination_response.dto";
 import { Admin } from "../entities/admin.entity";
 import { CreateAdminDto } from "../dtos/create_admin.dto";
 import { GetDatabaseDefaultID } from "src/helpers/database";
+import { UpdateAdminRequestDto } from "../dtos/update_admin_request.dto";
 
 @Injectable()
 export class AdminRepository implements IAdminRepository {
@@ -17,7 +18,7 @@ export class AdminRepository implements IAdminRepository {
     private readonly adminEntity: Repository<Admin>,
   ) {}
 
-  async createSuperUser(payload: CreateAdminDto): Promise<string> {
+  async createSuperUser(payload: CreateAdminDto): Promise<Admin> {
     const userId = GetDatabaseDefaultID("AD");
 
     const user = this.adminEntity.create({
@@ -28,10 +29,10 @@ export class AdminRepository implements IAdminRepository {
 
     await this.adminEntity.save(user);
 
-    return userId;
+    return user;
   }
 
-  async createAdmin(payload: CreateAdminDto): Promise<string> {
+  async createAdmin(payload: CreateAdminDto): Promise<Admin> {
     const userId = GetDatabaseDefaultID("AD");
 
     const user = this.adminEntity.create({
@@ -42,7 +43,7 @@ export class AdminRepository implements IAdminRepository {
     // save user
     await this.adminEntity.save(user);
 
-    return userId;
+    return user;
   }
 
   async findAdmins(
@@ -56,9 +57,11 @@ export class AdminRepository implements IAdminRepository {
           query.where(`${originalNameEntity}.email LIKE :email`, {
             email: `%${params.search}%`,
           });
-        }
 
-        query.leftJoinAndSelect(`${originalNameEntity}.authAdminToken`, "authAdminToken");
+          query.orWhere(`${originalNameEntity}.id LIKE :id`, {
+            id: `%${params.search}%`,
+          });
+        }
       },
     );
 
@@ -69,5 +72,19 @@ export class AdminRepository implements IAdminRepository {
     return await this.adminEntity.findOneBy({
       email,
     });
+  }
+
+  async findByUserId(id: string): Promise<Admin> {
+    return await this.adminEntity.findOneBy({
+      id,
+    });
+  }
+
+  async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {
+    await this.adminEntity.update({ id }, payload);
+  }
+
+  async deleteAdmin(id: string): Promise<void> {
+    await this.adminEntity.delete(id);
   }
 }

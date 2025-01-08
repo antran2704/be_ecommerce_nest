@@ -1,6 +1,8 @@
 import {
   CreateSuccessResponse,
+  DeletedSuccessResponse,
   GetSuccessWithPaginationResponse,
+  UpdatedSuccessResponse,
 } from "src/common/response/success.response";
 import { CreateAdminDto } from "../dtos/create_admin.dto";
 import { CreateSuperAdminDto } from "../dtos/create_super_admin.dto";
@@ -13,4 +15,8 @@ export interface IAdminService {
   getAdmins(
     params: PaginationSearchRequestDto,
   ): Promise<GetSuccessWithPaginationResponse<GetAdminReponseDto[]>>;
+
+  updateAdmin(id: string, payload: CreateAdminDto): Promise<UpdatedSuccessResponse>;
+
+  deleteAdmin(id: string): Promise<DeletedSuccessResponse>;
 }

@@ -1,5 +1,11 @@
 import { AutoMap } from "@automapper/classes";
-import { Entity, Column, OneToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  OneToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Admin } from "./admin.entity";
 
 @Entity()
@@ -8,22 +14,21 @@ export class AuthAdminToken {
   @AutoMap()
   id: string;
 
-  @Column({default: ""})
+  @Column({ default: "" })
   @AutoMap()
   refresh_token: string;
 
-  @Column({default: ""})
+  @Column({ default: "" })
   @AutoMap()
   forgot_otp: string;
 
-  @Column({default: ""})
+  @Column({ default: "" })
   @AutoMap()
   expire_otp_at: string;
 
-  @OneToOne(() => Admin, (admin) => admin.authAdminToken)
+  @OneToOne(() => Admin, (admin) => admin.authAdminToken, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "user_id" })
   user: Admin;
-
-  @Column()
-  user_id: string;
 }

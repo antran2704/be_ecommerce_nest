@@ -1,3 +1,5 @@
+import { Admin } from "../entities/admin.entity";
+
 export interface IAuthAdminTokenRepository {
-  create(userId: string): Promise<void>;
+  create(data: Admin): Promise<void>;
 }

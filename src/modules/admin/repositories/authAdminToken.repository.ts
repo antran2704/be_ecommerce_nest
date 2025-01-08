@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 
 import { IAuthAdminTokenRepository } from "../interfaces/auth_admin_token_repositoty.interface";
 import { AuthAdminToken } from "../entities/auth_admin_token.entity";
+import { Admin } from "../entities/admin.entity";
 
 @Injectable()
 export class AuthAdminTokenRepository implements IAuthAdminTokenRepository {
@@ -12,13 +13,11 @@ export class AuthAdminTokenRepository implements IAuthAdminTokenRepository {
     private readonly authAdminTokenEntity: Repository<AuthAdminToken>,
   ) {}
 
-  async create(userId: string): Promise<void> {
+  async create(data: Admin): Promise<void> {
     const adminAuthToken = this.authAdminTokenEntity.create({
-      user_id: userId,
-      
+      user: data
     });
 
-    // save auth token of user
     await this.authAdminTokenEntity.save(adminAuthToken);
   }
 }

@@ -22,6 +22,14 @@ export class GetAdminReponseProfile extends AutomapperProfile {
           (dest: GetAdminReponseDto) => dest?.isAdmin,
           mapFrom((src: Admin) => src.is_admin),
         ),
+        forMember(
+          (dest: GetAdminReponseDto) => dest?.userId,
+          mapFrom((src: Admin) => src.id),
+        ),
+        forMember(
+          (dest: GetAdminReponseDto) => dest?.createdAt,
+          mapFrom((src: Admin) => src.created_at),
+        ),
       );
     };
   }

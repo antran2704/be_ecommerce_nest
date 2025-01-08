@@ -3,10 +3,11 @@ import {
   Module,
   NestModule,
   ValidationPipe,
-} from '@nestjs/common';
-import { HelmetMiddleware } from './helmet.middleware';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
-import { HttpExceptionFilter } from 'src/common/exceptionFilter/http-exception.filter';
+} from "@nestjs/common";
+import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+
+import { HelmetMiddleware } from "./helmet.middleware";
+import { HttpExceptionFilter } from "src/common/exceptionFilter/http-exception.filter";
 
 @Module({
   providers: [
@@ -16,12 +17,21 @@ import { HttpExceptionFilter } from 'src/common/exceptionFilter/http-exception.f
     },
     {
       provide: APP_PIPE,
-      useClass: ValidationPipe,
+      useFactory: () => {
+        return new ValidationPipe({
+          whitelist: true,
+          transform: true,
+          forbidNonWhitelisted: true,
+          transformOptions: {
+            enableImplicitConversion: true,
+          },
+        });
+      },
     },
   ],
 })
 export class MiddlewareModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HelmetMiddleware).forRoutes('*');
+    consumer.apply(HelmetMiddleware).forRoutes("*");
   }
 }
