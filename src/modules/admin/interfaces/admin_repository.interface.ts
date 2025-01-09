@@ -1,6 +1,6 @@
-import PaginationResponseDto from "src/common/pagination/dtos/pagination_response.dto";
 import { Admin } from "../entities/admin.entity";
 import { CreateAdminRequestDto, SearchAdminsRequestDto } from "../dtos";
+import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 
 export interface IAdminRepository {
   createAdmin(payload: CreateAdminRequestDto): Promise<Admin>;
@@ -10,7 +10,7 @@ export interface IAdminRepository {
   findByEmail(email: string): Promise<Admin>;
   findAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<{ data: Admin[]; pagination: PaginationResponseDto }>;
+  ): Promise<IEntitesAndPaginationReponse<Admin>>;
 
   updateAdmin(id: string, payload: CreateAdminRequestDto): Promise<void>;
   enableAdmin(id: string): Promise<void>;

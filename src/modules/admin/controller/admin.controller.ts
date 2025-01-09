@@ -14,6 +14,7 @@ import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { AdminService } from "../services/admin.service";
 import {
   CreateSuccessResponse,
+  DeletedSuccessResponse,
   UpdatedSuccessResponse,
 } from "src/common/response/success.response";
 import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators/api-ok-response-paginate.decorator";
@@ -39,8 +40,8 @@ export class AdminController {
   constructor(private readonly userService: AdminService) {}
 
   @Get()
-  // @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
-  // @UseGuards(PermissionGuard)
+  @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
+  @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetAdminResponseDto)
   async getUsers(@Query(PaginationRequestPipe) query: SearchAdminsRequestDto) {
     return await this.userService.getAdmins(query);
@@ -51,6 +52,8 @@ export class AdminController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
+  @Permissions([ENUM_PERMISSION.ADMIN_CREATE])
+  @UseGuards(PermissionGuard)
   async createAdmin(@Body() payload: CreateAdminRequestDto) {
     return await this.userService.createUser(payload);
   }
@@ -69,6 +72,8 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
+  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @UseGuards(PermissionGuard)
   async updateAdmin(
     @Param("user_id") userId: string,
     @Body() payload: UpdateAdminRequestDto,
@@ -81,6 +86,8 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
+  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @UseGuards(PermissionGuard)
   async changePassword(
     @Param("user_id") userId: string,
     @Body() payload: ChangePasswordAdminRequestDto,
@@ -93,6 +100,8 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
+  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @UseGuards(PermissionGuard)
   async enable(@Param("user_id") userId: string) {
     return await this.userService.enableAdmin(userId);
   }
@@ -102,11 +111,19 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
+  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @UseGuards(PermissionGuard)
   async disable(@Param("user_id") userId: string) {
     return await this.userService.disableAdmin(userId);
   }
 
   @Delete("/:user_id")
+  @Permissions([ENUM_PERMISSION.ADMIN_DELETE])
+  @UseGuards(PermissionGuard)
+  @ApiResponse({
+    status: 201,
+    example: new DeletedSuccessResponse(),
+  })
   async deleteAdmin(@Param("user_id") userId: string) {
     return await this.userService.deleteAdmin(userId);
   }

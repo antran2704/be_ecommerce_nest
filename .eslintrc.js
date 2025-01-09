@@ -15,7 +15,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', "commitlint.config.ts"],
+  ignorePatterns: ['.eslintrc.js', "commitlint.config.ts", "*.enum.ts"],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -25,6 +25,7 @@ module.exports = {
     "no-var": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "prefer-const": "warn"
+    "prefer-const": "warn",
+    "prettier/prettier": "off",
   },
 };

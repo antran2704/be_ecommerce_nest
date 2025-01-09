@@ -95,12 +95,12 @@ export class AdminService implements IAdminService {
     // save auth token of user
     await this.authAdminTokenRepository.create(userId);
 
-    return new CreateSuccessResponse(ADMIN_MESSAGES.CREATE_SUPER_ADMIN_SUCCESS);
+    return new CreateSuccessResponse();
   }
 
   async getAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto[]>> {
+  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto>> {
     const { data, pagination } = await this.adminRepository.findAdmins(params);
 
     const formatData: GetAdminResponseDto[] = this.mapper.mapArray(
@@ -109,7 +109,7 @@ export class AdminService implements IAdminService {
       GetAdminResponseDto,
     );
 
-    return new GetSuccessWithPaginationResponse<GetAdminResponseDto[]>(
+    return new GetSuccessWithPaginationResponse<GetAdminResponseDto>(
       formatData,
       pagination,
     );

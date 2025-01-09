@@ -20,7 +20,7 @@ export interface IAdminService {
   ): Promise<CreateSuccessResponse>;
   getAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto[]>>;
+  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto>>;
 
   updateAdmin(
     id: string,

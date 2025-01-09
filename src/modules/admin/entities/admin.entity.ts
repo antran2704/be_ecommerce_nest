@@ -1,5 +1,5 @@
 import { AutoMap } from "@automapper/classes";
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToOne } from "typeorm";
 
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
 import { AuthAdminToken } from "./auth_admin_token.entity";

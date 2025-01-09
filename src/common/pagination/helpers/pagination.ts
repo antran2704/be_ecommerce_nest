@@ -3,6 +3,7 @@ import PaginationRequestDto from "../dtos/pagination_request.dto";
 import { ENUM_PAGINATION_ORDER } from "../enums/order.enum";
 import { CREATED_AT_FIELD } from "src/common/database/constants/fields.constant";
 import PaginationResponseDto from "../dtos/pagination_response.dto";
+import { IEntitesAndPaginationReponse } from "../interfaces/pagination.interface";
 
 const getEntitesAndPagination = async <T>(
   model: Repository<T>,
@@ -11,7 +12,7 @@ const getEntitesAndPagination = async <T>(
     query: SelectQueryBuilder<T>,
     originalNameEntity?: string,
   ) => void,
-): Promise<{ data: T[]; pagination: PaginationResponseDto }> => {
+): Promise<IEntitesAndPaginationReponse<T>> => {
   let { page, limit, order } = dto;
 
   if (!page) page = 1;

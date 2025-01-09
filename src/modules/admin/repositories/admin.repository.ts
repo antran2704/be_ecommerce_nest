@@ -4,7 +4,6 @@ import { Repository } from "typeorm";
 
 import { IAdminRepository } from "../interfaces/admin_repository.interface";
 import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
-import PaginationResponseDto from "src/common/pagination/dtos/pagination_response.dto";
 import { Admin } from "../entities/admin.entity";
 import { GetDatabaseDefaultID } from "src/helpers/database";
 import {
@@ -13,6 +12,7 @@ import {
   UpdateAdminRequestDto,
 } from "../dtos";
 import { ENUM_ADMIN_STATUS } from "../enums/admin.enum";
+import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 
 @Injectable()
 export class AdminRepository implements IAdminRepository {
@@ -51,19 +51,19 @@ export class AdminRepository implements IAdminRepository {
 
   async findAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<{ data: Admin[]; pagination: PaginationResponseDto }> {
+  ): Promise<IEntitesAndPaginationReponse<Admin>> {
     const { data, pagination } = await getEntitesAndPagination(
       this.adminEntity,
       params,
       (query, originalNameEntity) => {
         // filter with email or id
         if (params.search) {
-          query.where(`${originalNameEntity}.email LIKE :email`, {
-            email: `%${params.search}%`,
+          query.where(`${originalNameEntity}.id LIKE :id`, {
+            id: `%${params.search}%`,
           });
 
-          query.orWhere(`${originalNameEntity}.id LIKE :id`, {
-            id: `%${params.search}%`,
+          query.orWhere(`${originalNameEntity}.email LIKE :email`, {
+            email: `%${params.search}%`,
           });
         }
 
