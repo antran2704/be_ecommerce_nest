@@ -38,8 +38,8 @@ module.exports = {
         description: "Select the type of change that you're committing:",
         enum: {
           feat: {
-            description: "A new feature 123123 ✨",
-            title: "Features 123123",
+            description: "A new feature ✨",
+            title: "Features",
             emoji: "✨",
           },
           fix: {

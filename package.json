@@ -24,7 +24,7 @@
     "format:fix": "prettier --write \"{src,apps,libs,test}/**/*.ts\"",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "commit": "git-cz"
+    "commit": "cz"
   },
   "config": {
     "commitizen": {
@@ -81,7 +81,6 @@
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "git-cz": "^4.9.0",
     "husky": "^9.1.7",
     "jest": "^29.5.0",
     "lint-staged": "^15.3.0",
