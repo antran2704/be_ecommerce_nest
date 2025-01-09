@@ -7,10 +7,8 @@ import { Admin } from "../entities/admin.entity";
 import { ADMIN_MESSAGES } from "../messages/admin.error";
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import {
-  CreateSuccessResponse,
   DeletedSuccessResponse,
   GetSuccessWithPaginationResponse,
-  UpdatedSuccessResponse,
 } from "src/common/response/success.response";
 import { IAdminService } from "../interfaces/admin_service.interface";
 import { AdminRepository } from "../repositories/admin.repository";
@@ -23,6 +21,7 @@ import {
   SearchAdminsRequestDto,
   UpdateAdminRequestDto,
 } from "../dtos";
+import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 
 @Injectable()
 export class AdminService implements IAdminService {
@@ -34,9 +33,7 @@ export class AdminService implements IAdminService {
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
-  async createUser(
-    payload: CreateAdminRequestDto,
-  ): Promise<CreateSuccessResponse> {
+  async createUser(payload: CreateAdminRequestDto): Promise<void> {
     const isExitUser = await this.adminRepository.findByEmail(payload.email);
 
     if (isExitUser) {
@@ -57,13 +54,9 @@ export class AdminService implements IAdminService {
 
     // save auth token of user
     await this.authAdminTokenRepository.create(userId);
-
-    return new CreateSuccessResponse();
   }
 
-  async createSuperUser(
-    payload: CreateSuperAdminRequestDto,
-  ): Promise<CreateSuccessResponse> {
+  async createSuperUser(payload: CreateSuperAdminRequestDto): Promise<void> {
     const godKey = process.env.CREATE_GOD_USER_KEY;
     const defaultPassword = process.env.PASSWORD_GOD_USER;
 
@@ -94,13 +87,11 @@ export class AdminService implements IAdminService {
 
     // save auth token of user
     await this.authAdminTokenRepository.create(userId);
-
-    return new CreateSuccessResponse();
   }
 
   async getAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto>> {
+  ): Promise<IEntitesAndPaginationReponse<GetAdminResponseDto>> {
     const { data, pagination } = await this.adminRepository.findAdmins(params);
 
     const formatData: GetAdminResponseDto[] = this.mapper.mapArray(
@@ -109,16 +100,26 @@ export class AdminService implements IAdminService {
       GetAdminResponseDto,
     );
 
-    return new GetSuccessWithPaginationResponse<GetAdminResponseDto>(
-      formatData,
-      pagination,
-    );
+    return { data: formatData, pagination };
   }
 
-  async updateAdmin(
-    id: string,
-    payload: UpdateAdminRequestDto,
-  ): Promise<UpdatedSuccessResponse> {
+  async getAdmin(id: string): Promise<GetAdminResponseDto> {
+    const user = await this.adminRepository.findByUserId(id);
+
+    if (!user) {
+      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+    }
+
+    const result: GetAdminResponseDto = this.mapper.map(
+      user,
+      Admin,
+      GetAdminResponseDto,
+    );
+
+    return result;
+  }
+
+  async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {
     const isExitUser = await this.adminRepository.findByUserId(id);
 
     if (!isExitUser) {
@@ -126,14 +127,12 @@ export class AdminService implements IAdminService {
     }
 
     await this.adminRepository.updateAdmin(id, payload);
-
-    return new UpdatedSuccessResponse();
   }
 
   async changePassword(
     id: string,
     data: ChangePasswordAdminRequestDto,
-  ): Promise<UpdatedSuccessResponse> {
+  ): Promise<void> {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
@@ -154,11 +153,9 @@ export class AdminService implements IAdminService {
     );
 
     await this.adminRepository.changePassword(id, hashPassword);
-
-    return new UpdatedSuccessResponse();
   }
 
-  async enableAdmin(id: string): Promise<UpdatedSuccessResponse> {
+  async enableAdmin(id: string): Promise<void> {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
@@ -170,11 +167,9 @@ export class AdminService implements IAdminService {
     }
 
     await this.adminRepository.enableAdmin(id);
-
-    return new UpdatedSuccessResponse();
   }
 
-  async disableAdmin(id: string): Promise<UpdatedSuccessResponse> {
+  async disableAdmin(id: string): Promise<void> {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
@@ -186,11 +181,9 @@ export class AdminService implements IAdminService {
     }
 
     await this.adminRepository.disableAdmin(id);
-
-    return new UpdatedSuccessResponse();
   }
 
-  async deleteAdmin(id: string): Promise<DeletedSuccessResponse> {
+  async deleteAdmin(id: string): Promise<void> {
     const isExitUser = await this.adminRepository.findByUserId(id);
 
     if (!isExitUser) {
@@ -198,7 +191,5 @@ export class AdminService implements IAdminService {
     }
 
     await this.adminRepository.deleteAdmin(id);
-
-    return new DeletedSuccessResponse();
   }
 }

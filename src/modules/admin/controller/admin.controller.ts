@@ -15,6 +15,8 @@ import { AdminService } from "../services/admin.service";
 import {
   CreateSuccessResponse,
   DeletedSuccessResponse,
+  GetSuccessResponse,
+  GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
 } from "src/common/response/success.response";
 import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators/api-ok-response-paginate.decorator";
@@ -30,12 +32,10 @@ import {
   SearchAdminsRequestDto,
   UpdateAdminRequestDto,
 } from "../dtos";
+import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
 
 @ApiBearerAuth()
-@Controller({
-  version: "1",
-  path: "admins",
-})
+@Controller("admins")
 export class AdminController {
   constructor(private readonly userService: AdminService) {}
 
@@ -43,8 +43,24 @@ export class AdminController {
   @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetAdminResponseDto)
-  async getUsers(@Query(PaginationRequestPipe) query: SearchAdminsRequestDto) {
-    return await this.userService.getAdmins(query);
+  async getUsers(
+    @Query(PaginationRequestPipe) query: SearchAdminsRequestDto,
+  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto>> {
+    const { data, pagination } = await this.userService.getAdmins(query);
+
+    return new GetSuccessWithPaginationResponse(data, pagination);
+  }
+
+  @Get("/:user_id")
+  @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
+  @UseGuards(PermissionGuard)
+  @ApiOkResponseDecorator(GetAdminResponseDto)
+  async getUser(
+    @Param("user_id") userId: string,
+  ): Promise<GetSuccessResponse<GetAdminResponseDto>> {
+    const data = await this.userService.getAdmin(userId);
+
+    return new GetSuccessResponse(data);
   }
 
   @Post()
@@ -54,8 +70,11 @@ export class AdminController {
   })
   @Permissions([ENUM_PERMISSION.ADMIN_CREATE])
   @UseGuards(PermissionGuard)
-  async createAdmin(@Body() payload: CreateAdminRequestDto) {
-    return await this.userService.createUser(payload);
+  async createAdmin(
+    @Body() payload: CreateAdminRequestDto,
+  ): Promise<CreateSuccessResponse> {
+    await this.userService.createUser(payload);
+    return new CreateSuccessResponse();
   }
 
   @Post("/super-admin")
@@ -63,11 +82,14 @@ export class AdminController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  async createSuperAdmin(@Body() payload: CreateSuperAdminRequestDto) {
-    return await this.userService.createSuperUser(payload);
+  async createSuperAdmin(
+    @Body() payload: CreateSuperAdminRequestDto,
+  ): Promise<CreateSuccessResponse> {
+    await this.userService.createSuperUser(payload);
+    return new CreateSuccessResponse();
   }
 
-  @Patch("/:user_id/")
+  @Patch("/:user_id")
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
@@ -91,8 +113,9 @@ export class AdminController {
   async changePassword(
     @Param("user_id") userId: string,
     @Body() payload: ChangePasswordAdminRequestDto,
-  ) {
-    return await this.userService.changePassword(userId, payload);
+  ): Promise<UpdatedSuccessResponse> {
+    await this.userService.changePassword(userId, payload);
+    return new UpdatedSuccessResponse();
   }
 
   @Patch("/:user_id/enable")
@@ -102,8 +125,11 @@ export class AdminController {
   })
   @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
   @UseGuards(PermissionGuard)
-  async enable(@Param("user_id") userId: string) {
-    return await this.userService.enableAdmin(userId);
+  async enable(
+    @Param("user_id") userId: string,
+  ): Promise<UpdatedSuccessResponse> {
+    await this.userService.enableAdmin(userId);
+    return new UpdatedSuccessResponse();
   }
 
   @Patch("/:user_id/disable")
@@ -113,8 +139,11 @@ export class AdminController {
   })
   @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
   @UseGuards(PermissionGuard)
-  async disable(@Param("user_id") userId: string) {
-    return await this.userService.disableAdmin(userId);
+  async disable(
+    @Param("user_id") userId: string,
+  ): Promise<UpdatedSuccessResponse> {
+    await this.userService.disableAdmin(userId);
+    return new UpdatedSuccessResponse();
   }
 
   @Delete("/:user_id")
@@ -124,7 +153,10 @@ export class AdminController {
     status: 201,
     example: new DeletedSuccessResponse(),
   })
-  async deleteAdmin(@Param("user_id") userId: string) {
-    return await this.userService.deleteAdmin(userId);
+  async deleteAdmin(
+    @Param("user_id") userId: string,
+  ): Promise<DeletedSuccessResponse> {
+    await this.userService.deleteAdmin(userId);
+    return new DeletedSuccessResponse();
   }
 }

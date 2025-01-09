@@ -3,7 +3,7 @@ import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { Admin } from "../entities/admin.entity";
 import { GetAdminResponseDto } from "../dtos";
 
-export class GetAdminReponseProfile extends AutomapperProfile {
+export class GetAdminReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }

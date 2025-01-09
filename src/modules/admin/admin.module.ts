@@ -4,7 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdminService } from "./services/admin.service";
 import { Admin } from "./entities/admin.entity";
 import { AuthCommonModule } from "src/common/auth/auth.module";
-import { GetAdminReponseProfile } from "./profiles/get_admin_response.profile";
+import { GetAdminReponseMapper } from "./mappers/get_admin_response.mapper";
 import { AuthAdminToken } from "./entities/auth_admin_token.entity";
 import { AdminRepository } from "./repositories/admin.repository";
 import { AuthAdminTokenRepository } from "./repositories/authAdminToken.repository";
@@ -16,7 +16,7 @@ import { AuthAdminTokenRepository } from "./repositories/authAdminToken.reposito
   ],
   providers: [
     AdminService,
-    GetAdminReponseProfile,
+    GetAdminReponseMapper,
     AdminRepository,
     AuthAdminTokenRepository,
   ],
