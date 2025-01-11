@@ -2,14 +2,10 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 
-import { Admin } from "../entities/admin.entity";
+import { AdminEntity } from "../entities/admin.entity";
 
 import { ADMIN_MESSAGES } from "../messages/admin.error";
 import { AuthCommonService } from "src/common/auth/services/auth.service";
-import {
-  DeletedSuccessResponse,
-  GetSuccessWithPaginationResponse,
-} from "src/common/response/success.response";
 import { IAdminService } from "../interfaces/admin_service.interface";
 import { AdminRepository } from "../repositories/admin.repository";
 import { AuthAdminTokenRepository } from "../repositories/authAdminToken.repository";
@@ -50,10 +46,10 @@ export class AdminService implements IAdminService {
     };
 
     // save user
-    const userId = await this.adminRepository.createAdmin(dataForSave);
+    const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenRepository.create(userId);
+    await this.authAdminTokenRepository.create(newUser);
   }
 
   async createSuperUser(payload: CreateSuperAdminRequestDto): Promise<void> {
@@ -83,10 +79,10 @@ export class AdminService implements IAdminService {
     };
 
     // save user
-    const userId = await this.adminRepository.createAdmin(dataForSave);
+    const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenRepository.create(userId);
+    await this.authAdminTokenRepository.create(newUser);
   }
 
   async getAdmins(
@@ -96,7 +92,7 @@ export class AdminService implements IAdminService {
 
     const formatData: GetAdminResponseDto[] = this.mapper.mapArray(
       data,
-      Admin,
+      AdminEntity,
       GetAdminResponseDto,
     );
 
@@ -112,7 +108,7 @@ export class AdminService implements IAdminService {
 
     const result: GetAdminResponseDto = this.mapper.map(
       user,
-      Admin,
+      AdminEntity,
       GetAdminResponseDto,
     );
 

@@ -3,23 +3,24 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { IGroupRoleRepository } from "../interfaces";
-import { GroupRole } from "../entities/group_role.entity";
+import { GroupRoleEntity } from "../entities/group_role.entity";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
 import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
 import { CreateGroupRoleRequestDto, UpdateGroupRoleRequestDto } from "../dtos";
 import { GetDatabaseDefaultID } from "src/helpers/database";
+import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
 
 @Injectable()
 export default class GroupRoleRepository implements IGroupRoleRepository {
   constructor(
-    @InjectRepository(GroupRole)
-    private readonly groupRoleEntity: Repository<GroupRole>,
+    @InjectRepository(GroupRoleEntity)
+    private readonly groupRoleEntity: Repository<GroupRoleEntity>,
   ) {}
 
   async getGroupRoles(
     params: PaginationSearchRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<GroupRole>> {
+  ): Promise<IEntitesAndPaginationReponse<GroupRoleEntity>> {
     const { data, pagination } = await getEntitesAndPagination(
       this.groupRoleEntity,
       params,
@@ -40,16 +41,16 @@ export default class GroupRoleRepository implements IGroupRoleRepository {
     return { data, pagination };
   }
 
-  async getGroupRole(id: string): Promise<GroupRole> {
+  async getGroupRole(id: string): Promise<GroupRoleEntity> {
     return this.groupRoleEntity.findOneBy({ id });
   }
 
-  async getGroupRoleByName(value: string): Promise<GroupRole> {
+  async getGroupRoleByName(value: string): Promise<GroupRoleEntity> {
     return this.groupRoleEntity.findOneBy({ name: value });
   }
 
   async createGroupRole(payload: CreateGroupRoleRequestDto): Promise<void> {
-    const id = GetDatabaseDefaultID("GR");
+    const id = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.GR);
 
     const groupRole = this.groupRoleEntity.create({ ...payload, id });
 

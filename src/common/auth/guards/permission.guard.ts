@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
+import { Injectable, ExecutionContext } from "@nestjs/common";
 import { IAccessTokenPayload } from "src/modules/auth/interfaces/auth.interface";
 import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
 import { Reflector } from "@nestjs/core";

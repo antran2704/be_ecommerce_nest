@@ -6,10 +6,10 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Admin } from "./admin.entity";
+import { AdminEntity } from "./admin.entity";
 
-@Entity()
-export class AuthAdminToken {
+@Entity({ name: "auth_admin_token" })
+export class AuthAdminTokenEntity {
   @PrimaryGeneratedColumn()
   @AutoMap()
   id: string;
@@ -26,9 +26,9 @@ export class AuthAdminToken {
   @AutoMap()
   expire_otp_at: string;
 
-  @OneToOne(() => Admin, (admin) => admin.authAdminToken, {
+  @OneToOne(() => AdminEntity, (admin) => admin.authAdminToken, {
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "user_id" })
-  user: Admin;
+  user: AdminEntity;
 }

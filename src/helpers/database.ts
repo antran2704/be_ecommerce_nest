@@ -1,4 +1,6 @@
-function GetDatabaseDefaultID(prefix: string): string {
+import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
+
+function GetDatabaseDefaultID(prefix: ENUM_PREFIX_DATABASE): string {
   // Get the current date
   const date = new Date();
   const day = String(date.getDate()).padStart(2, "0");

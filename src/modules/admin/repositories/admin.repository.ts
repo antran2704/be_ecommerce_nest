@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 
 import { IAdminRepository } from "../interfaces/admin_repository.interface";
 import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
-import { Admin } from "../entities/admin.entity";
+import { AdminEntity } from "../entities/admin.entity";
 import { GetDatabaseDefaultID } from "src/helpers/database";
 import {
   CreateAdminRequestDto,
@@ -13,16 +13,17 @@ import {
 } from "../dtos";
 import { ENUM_ADMIN_STATUS } from "../enums/admin.enum";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
 
 @Injectable()
 export class AdminRepository implements IAdminRepository {
   constructor(
-    @InjectRepository(Admin)
-    private readonly adminEntity: Repository<Admin>,
+    @InjectRepository(AdminEntity)
+    private readonly adminEntity: Repository<AdminEntity>,
   ) {}
 
-  async createSuperUser(payload: CreateAdminRequestDto): Promise<Admin> {
-    const userId = GetDatabaseDefaultID("AD");
+  async createSuperUser(payload: CreateAdminRequestDto): Promise<AdminEntity> {
+    const userId = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.AD);
 
     const user = this.adminEntity.create({
       ...payload,
@@ -35,8 +36,8 @@ export class AdminRepository implements IAdminRepository {
     return user;
   }
 
-  async createAdmin(payload: CreateAdminRequestDto): Promise<Admin> {
-    const userId = GetDatabaseDefaultID("AD");
+  async createAdmin(payload: CreateAdminRequestDto): Promise<AdminEntity> {
+    const userId = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.AD);
 
     const user = this.adminEntity.create({
       ...payload,
@@ -51,7 +52,7 @@ export class AdminRepository implements IAdminRepository {
 
   async findAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<Admin>> {
+  ): Promise<IEntitesAndPaginationReponse<AdminEntity>> {
     const { data, pagination } = await getEntitesAndPagination(
       this.adminEntity,
       params,
@@ -59,11 +60,11 @@ export class AdminRepository implements IAdminRepository {
         // filter with email or id
         if (params.search) {
           query.where(`${originalNameEntity}.id LIKE :id`, {
-            id: `%${params.search}%`,
+            id: `${params.search}%`,
           });
 
           query.orWhere(`${originalNameEntity}.email LIKE :email`, {
-            email: `%${params.search}%`,
+            email: `${params.search}%`,
           });
         }
 
@@ -79,13 +80,13 @@ export class AdminRepository implements IAdminRepository {
     return { data, pagination };
   }
 
-  async findByEmail(email: string): Promise<Admin> {
+  async findByEmail(email: string): Promise<AdminEntity> {
     return await this.adminEntity.findOneBy({
       email,
     });
   }
 
-  async findByUserId(id: string): Promise<Admin> {
+  async findByUserId(id: string): Promise<AdminEntity> {
     return await this.adminEntity.findOneBy({
       id,
     });

@@ -1,9 +1,10 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
+import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
 
 export default class GetAdminResponseDto {
   @ApiProperty({
-    example: "AD123",
+    example: `${ENUM_PREFIX_DATABASE.AD}123`,
   })
   @AutoMap()
   userId: string;

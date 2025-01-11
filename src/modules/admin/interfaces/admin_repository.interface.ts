@@ -1,16 +1,16 @@
-import { Admin } from "../entities/admin.entity";
+import { AdminEntity } from "../entities/admin.entity";
 import { CreateAdminRequestDto, SearchAdminsRequestDto } from "../dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 
 export interface IAdminRepository {
-  createAdmin(payload: CreateAdminRequestDto): Promise<Admin>;
-  createSuperUser(payload: CreateAdminRequestDto): Promise<Admin>;
+  createAdmin(payload: CreateAdminRequestDto): Promise<AdminEntity>;
+  createSuperUser(payload: CreateAdminRequestDto): Promise<AdminEntity>;
 
-  findByUserId(id: string): Promise<Admin>;
-  findByEmail(email: string): Promise<Admin>;
+  findByUserId(id: string): Promise<AdminEntity>;
+  findByEmail(email: string): Promise<AdminEntity>;
   findAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<Admin>>;
+  ): Promise<IEntitesAndPaginationReponse<AdminEntity>>;
 
   updateAdmin(id: string, payload: CreateAdminRequestDto): Promise<void>;
   enableAdmin(id: string): Promise<void>;

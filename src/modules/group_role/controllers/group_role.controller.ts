@@ -89,7 +89,7 @@ export class GroupRoleController {
   })
   @Permissions([ENUM_PERMISSION.GROUP_ROLE_UPDATE])
   @UseGuards(PermissionGuard)
-  async updateAdmin(
+  async updateGroupRole(
     @Param("group_role_id") id: string,
     @Body() payload: UpdateGroupRoleRequestDto,
   ): Promise<UpdatedSuccessResponse> {

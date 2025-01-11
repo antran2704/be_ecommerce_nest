@@ -7,7 +7,7 @@ import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
 
 import { IGroupRoleService } from "../interfaces";
-import { GroupRole } from "../entities/group_role.entity";
+import { GroupRoleEntity } from "../entities/group_role.entity";
 import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
 import { GROUP_ROLE_MESSAGES } from "../messages/group_role.error";
 import {
@@ -33,7 +33,7 @@ export class GroupRoleService implements IGroupRoleService {
 
     const result: GetGroupRoleResponeDto[] = this.mapper.mapArray(
       data,
-      GroupRole,
+      GroupRoleEntity,
       GetGroupRoleResponeDto,
     );
 
@@ -49,11 +49,21 @@ export class GroupRoleService implements IGroupRoleService {
 
     const result = this.mapper.map(
       groupRole,
-      GroupRole,
+      GroupRoleEntity,
       GetGroupRoleResponeDto,
     );
 
     return result;
+  }
+
+  async getGroupRoleEntity(id: string): Promise<GroupRoleEntity> {
+    const groupRole = await this.groupRoleRepository.getGroupRole(id);
+
+    if (!groupRole) {
+      throw new NotFoundException(GROUP_ROLE_MESSAGES.GROUP_ROLE_NOT_FOUND);
+    }
+
+    return groupRole;
   }
 
   async createGroupRole(payload: CreateGroupRoleRequestDto): Promise<void> {

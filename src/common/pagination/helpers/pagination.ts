@@ -37,7 +37,7 @@ const getEntitesAndPagination = async <T>(
   });
 
   if (extraFilter) {
-    extraFilter(queryBuilder, ORIGINAL_NAME_ENTITY); // Truyền query để thêm điều kiện vào
+    extraFilter(queryBuilder, ORIGINAL_NAME_ENTITY); // Add extra filter
   }
 
   const [data, total] = await queryBuilder

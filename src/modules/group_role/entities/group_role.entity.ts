@@ -2,10 +2,10 @@ import { AutoMap } from "@automapper/classes";
 import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
-import { Role } from "src/modules/role/entities/role.entity";
+import { RoleEntity } from "src/modules/role/entities/role.entity";
 
-@Entity()
-export class GroupRole extends DatabaseModifierEntity {
+@Entity({ name: "group_roles" })
+export class GroupRoleEntity extends DatabaseModifierEntity {
   @PrimaryColumn()
   @AutoMap()
   id: string;
@@ -14,8 +14,8 @@ export class GroupRole extends DatabaseModifierEntity {
   @AutoMap()
   name: string;
 
-  @OneToMany(() => Role, (role) => role.groupRole, {
+  @OneToMany(() => RoleEntity, (role) => role.groupRole, {
     cascade: true,
   })
-  roles: Role[];
+  roles: RoleEntity[];
 }

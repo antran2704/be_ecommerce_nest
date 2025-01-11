@@ -1,9 +1,9 @@
 import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
-import { GroupRole } from "../entities/group_role.entity";
-import { GetGroupRoleResponeDto } from "../dtos";
+import { RoleEntity } from "../entities/role.entity";
+import { GetRoleResponeDto } from "../dtos";
 
-export default class GetGroupRoleMapper extends AutomapperProfile {
+export default class GetRoleMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -12,11 +12,11 @@ export default class GetGroupRoleMapper extends AutomapperProfile {
     return (mapper: Mapper) => {
       createMap(
         mapper,
-        GroupRole,
-        GetGroupRoleResponeDto,
+        RoleEntity,
+        GetRoleResponeDto,
         forMember(
-          (dest: GetGroupRoleResponeDto) => dest?.groupRoleId,
-          mapFrom((src: GroupRole) => src.id),
+          (dest: GetRoleResponeDto) => dest?.roleId,
+          mapFrom((src: RoleEntity) => src.id),
         ),
       );
     };

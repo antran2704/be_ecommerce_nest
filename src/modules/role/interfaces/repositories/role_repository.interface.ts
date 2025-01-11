@@ -1,16 +1,23 @@
-import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
-import { Role } from "../../entities/role.entity";
-import { CreateRoleRequestDto, UpdateRoleRequestDto } from "../../dtos";
+import { RoleEntity } from "../../entities/role.entity";
+import {
+  CreateRoleRequestDto,
+  SearchRolesRequestDto,
+  UpdateRoleRequestDto,
+} from "../../dtos";
+import { GroupRoleEntity } from "src/modules/group_role/entities/group_role.entity";
 
 export default interface IRoleRepository {
-  getGroupRoles(
-    params: PaginationSearchRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<Role>>;
-  getGroupRole(id: string): Promise<Role>;
-  getGroupRoleByName(value: string): Promise<Role>;
+  getRoles(
+    params: SearchRolesRequestDto,
+  ): Promise<IEntitesAndPaginationReponse<RoleEntity>>;
+  getRoleById(id: string): Promise<RoleEntity>;
+  getRoleByName(value: string): Promise<RoleEntity>;
 
-  createGroupRole(payload: CreateRoleRequestDto): Promise<void>;
-  updateGroupRole(id: string, payload: UpdateRoleRequestDto): Promise<void>;
-  deleteGroupRole(id: string): Promise<void>;
+  createRole(
+    groupRole: GroupRoleEntity,
+    payload: CreateRoleRequestDto,
+  ): Promise<void>;
+  updateRole(id: string, payload: UpdateRoleRequestDto): Promise<void>;
+  deleteRole(id: string): Promise<void>;
 }

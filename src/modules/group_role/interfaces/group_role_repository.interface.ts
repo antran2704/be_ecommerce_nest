@@ -1,14 +1,14 @@
 import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
-import { GroupRole } from "../entities/group_role.entity";
+import { GroupRoleEntity } from "../entities/group_role.entity";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 import { CreateGroupRoleRequestDto, UpdateGroupRoleRequestDto } from "../dtos";
 
 export default interface IGroupRoleRepository {
   getGroupRoles(
     params: PaginationSearchRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<GroupRole>>;
-  getGroupRole(id: string): Promise<GroupRole>;
-  getGroupRoleByName(value: string): Promise<GroupRole>;
+  ): Promise<IEntitesAndPaginationReponse<GroupRoleEntity>>;
+  getGroupRole(id: string): Promise<GroupRoleEntity>;
+  getGroupRoleByName(value: string): Promise<GroupRoleEntity>;
 
   createGroupRole(payload: CreateGroupRoleRequestDto): Promise<void>;
   updateGroupRole(
