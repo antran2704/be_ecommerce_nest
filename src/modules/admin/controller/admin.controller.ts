@@ -23,11 +23,12 @@ import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators
 import { PaginationRequestPipe } from "src/common/request/pipes/pagination_request.pipe";
 import { Permissions } from "src/common/auth/decorators/permission.decorator";
 import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
-import { PermissionGuard } from "src/common/auth/guards";
+import { JwtAuthGuard, PermissionGuard } from "src/common/auth/guards";
 import {
   ChangePasswordAdminRequestDto,
   CreateAdminRequestDto,
   CreateSuperAdminRequestDto,
+  GetAdminPermissionResponseDto,
   GetAdminResponseDto,
   SearchAdminsRequestDto,
   UpdateAdminRequestDto,
@@ -39,6 +40,7 @@ import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-
 export class AdminController {
   constructor(private readonly userService: AdminService) {}
 
+  // get all admins
   @Get()
   @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
   @UseGuards(PermissionGuard)
@@ -51,6 +53,7 @@ export class AdminController {
     return new GetSuccessWithPaginationResponse(data, pagination);
   }
 
+  // get an admin
   @Get("/:user_id")
   @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
   @UseGuards(PermissionGuard)
@@ -63,13 +66,26 @@ export class AdminController {
     return new GetSuccessResponse(data);
   }
 
+  // get permission of admin
+  @Get("/:user_id/permissions")
+  @UseGuards(JwtAuthGuard)
+  @ApiOkResponseDecorator(GetAdminPermissionResponseDto)
+  async getPermissions(
+    @Param("user_id") userId: string,
+  ): Promise<GetSuccessResponse<GetAdminPermissionResponseDto>> {
+    const data = await this.userService.getAdminPermissions(userId);
+
+    return new GetSuccessResponse(data);
+  }
+
+  // create admin
   @Post()
   @ApiResponse({
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  // @Permissions([ENUM_PERMISSION.ADMIN_CREATE])
-  // @UseGuards(PermissionGuard)
+  @Permissions([ENUM_PERMISSION.ADMIN_CREATE])
+  @UseGuards(PermissionGuard)
   async createAdmin(
     @Body() payload: CreateAdminRequestDto,
   ): Promise<CreateSuccessResponse> {
@@ -77,6 +93,7 @@ export class AdminController {
     return new CreateSuccessResponse();
   }
 
+  // create super admin
   @Post("/super-admin")
   @ApiResponse({
     status: 201,
@@ -89,6 +106,7 @@ export class AdminController {
     return new CreateSuccessResponse();
   }
 
+  // update admin
   @Patch("/:user_id")
   @ApiResponse({
     status: 201,
@@ -103,6 +121,7 @@ export class AdminController {
     return await this.userService.updateAdmin(userId, payload);
   }
 
+  // change password
   @Patch("/:user_id/change-password")
   @ApiResponse({
     status: 201,
@@ -118,6 +137,7 @@ export class AdminController {
     return new UpdatedSuccessResponse();
   }
 
+  // enable admin
   @Patch("/:user_id/enable")
   @ApiResponse({
     status: 201,
@@ -132,6 +152,7 @@ export class AdminController {
     return new UpdatedSuccessResponse();
   }
 
+  // disable admin
   @Patch("/:user_id/disable")
   @ApiResponse({
     status: 201,
@@ -146,6 +167,7 @@ export class AdminController {
     return new UpdatedSuccessResponse();
   }
 
+  // delete admin
   @Delete("/:user_id")
   @Permissions([ENUM_PERMISSION.ADMIN_DELETE])
   @UseGuards(PermissionGuard)

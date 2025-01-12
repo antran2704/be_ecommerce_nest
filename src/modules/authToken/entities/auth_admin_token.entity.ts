@@ -1,4 +1,5 @@
 import { AutoMap } from "@automapper/classes";
+import { AdminEntity } from "src/modules/admin/entities/admin.entity";
 import {
   Entity,
   Column,
@@ -6,10 +7,9 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AdminEntity } from "./admin.entity";
 
-@Entity({ name: "auth_admin_token" })
-export class AuthAdminTokenEntity {
+@Entity({ name: "auth_token" })
+export class AuthTokenEntity {
   @PrimaryGeneratedColumn()
   @AutoMap()
   id: string;
@@ -24,7 +24,7 @@ export class AuthAdminTokenEntity {
 
   @Column({ default: "" })
   @AutoMap()
-  expire_otp_at: string;
+  forgot_otp_expire_at: string;
 
   @OneToOne(() => AdminEntity, (admin) => admin.authAdminToken, {
     onDelete: "CASCADE",

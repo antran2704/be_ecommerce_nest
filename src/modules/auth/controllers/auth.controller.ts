@@ -1,8 +1,14 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "../services/auth.service";
-import { LoginDto } from "../dtos/login.dto";
 import { ApiBody, ApiResponse } from "@nestjs/swagger";
-import { NewAccessTokenDto } from "../dtos/newAccessToken.dto";
+import {
+  LoginRequestDto,
+  LoginResponseDto,
+  NewAccessTokenRequestDto,
+  NewAccessTokenResponseDto,
+} from "../dtos";
+import { GetSuccessResponse } from "src/common/response/success.response";
+import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
 
 @Controller("auth")
 export class AuthController {
@@ -10,40 +16,23 @@ export class AuthController {
 
   @Post("/login")
   @ApiBody({
-    type: LoginDto,
+    type: LoginRequestDto,
   })
-  @ApiResponse({
-    status: 200,
-    description: "Login successfully",
-    example: {
-      accessToken: "accessToken",
-      refreshToken: "refreshToken",
-    },
-  })
-  @ApiResponse({
-    status: 401,
-    description: "User or password is incorrect",
-  })
-  async login(@Body() payload: LoginDto) {
-    return await this.authService.login(payload);
+  @ApiOkResponseDecorator(LoginResponseDto)
+  async login(
+    @Body() payload: LoginRequestDto,
+  ): Promise<GetSuccessResponse<LoginResponseDto>> {
+    const data = await this.authService.login(payload);
+
+    return new GetSuccessResponse(data);
   }
 
   @Post("/refreshToken")
   @ApiBody({
-    type: NewAccessTokenDto,
+    type: NewAccessTokenRequestDto,
   })
-  @ApiResponse({
-    status: 201,
-    description: "Get new access token successfully",
-    example: {
-      newAccessToken: "abc.xyz.123",
-    },
-  })
-  @ApiResponse({
-    status: 401,
-    description: "Token invalid",
-  })
-  async refreshToken(@Body() payload: NewAccessTokenDto) {
+  @ApiOkResponseDecorator(NewAccessTokenResponseDto)
+  async refreshToken(@Body() payload: NewAccessTokenRequestDto) {
     return await this.authService.getNewAccessToken(payload);
   }
 }

@@ -16,6 +16,8 @@ export interface IAdminRepository {
     params: SearchAdminsRequestDto,
   ): Promise<IEntitesAndPaginationReponse<AdminEntity>>;
 
+  findPermissions(id: string): Promise<AdminEntity>;
+
   updateAdmin(id: string, payload: UpdateAdminDto): Promise<void>;
   enableAdmin(id: string): Promise<void>;
   disableAdmin(id: string): Promise<void>;

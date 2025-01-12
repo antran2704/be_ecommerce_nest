@@ -2,10 +2,12 @@ import {
   ChangePasswordAdminRequestDto,
   CreateAdminRequestDto,
   CreateSuperAdminRequestDto,
+  GetAdminPermissionResponseDto,
   GetAdminResponseDto,
   SearchAdminsRequestDto,
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { AdminEntity } from "../entities/admin.entity";
 
 export interface IAdminService {
   createUser(payload: CreateAdminRequestDto): Promise<void>;
@@ -15,6 +17,10 @@ export interface IAdminService {
   ): Promise<IEntitesAndPaginationReponse<GetAdminResponseDto>>;
 
   getAdmin(id: string): Promise<GetAdminResponseDto>;
+
+  getAdminByEmail(id: string): Promise<AdminEntity>;
+
+  getAdminPermissions(id: string): Promise<GetAdminPermissionResponseDto>;
 
   updateAdmin(id: string, payload: CreateAdminRequestDto): Promise<void>;
 

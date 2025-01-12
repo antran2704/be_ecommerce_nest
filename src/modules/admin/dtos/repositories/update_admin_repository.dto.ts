@@ -3,7 +3,6 @@ import { RoleEntity } from "src/modules/role/entities/role.entity";
 
 export default class UpdateAdminDto {
   @IsNotEmpty()
-  @IsNotEmpty()
   @IsString()
   name: string;
 

@@ -8,10 +8,8 @@ import { AdminEntity } from "../entities/admin.entity";
 import { GetDatabaseDefaultID } from "src/helpers/database";
 import {
   CreateAdminDto,
-  CreateAdminRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
-  UpdateAdminRequestDto,
 } from "../dtos";
 import { ENUM_ADMIN_STATUS } from "../enums/admin.enum";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
@@ -91,6 +89,13 @@ export class AdminRepository implements IAdminRepository {
   async findByUserId(id: string): Promise<AdminEntity> {
     return await this.adminEntity.findOneBy({
       id,
+    });
+  }
+
+  async findPermissions(id: string): Promise<AdminEntity> {
+    return await this.adminEntity.findOne({
+      where: { id },
+      relations: ["role"],
     });
   }
 

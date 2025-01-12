@@ -1,12 +1,13 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { LoginDto } from "../dtos/login.dto";
-import { AuthCommonService } from "src/common/auth/services/auth.service";
 import { ConfigService } from "@nestjs/config";
-import { NewAccessTokenDto } from "../dtos/newAccessToken.dto";
-import {
-  IAccessTokenPayload,
-  IRefreshTokenPayload,
-} from "../interfaces/auth.interface";
+
+import { AuthCommonService } from "src/common/auth/services/auth.service";
+import { LoginRequestDto, NewAccessTokenRequestDto } from "../dtos";
+import { AUTH_MESSAGES } from "../messages/auth.error";
+import { IAuthService } from "../interfaces/auth_service.interface";
+import { IAccessTokenPayload } from "../interfaces/access_token_payload.interface";
+import { IRefreshTokenPayload } from "../interfaces/refresh_token_payload.interface";
+import { AdminService } from "src/modules/admin/services/admin.service";
 
 const listUsers = [
   {
@@ -26,13 +27,14 @@ const listUsers = [
 ];
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
   constructor(
     private authCommonService: AuthCommonService,
+    private adminService: AdminService,
     private configService: ConfigService,
   ) {}
 
-  async login(data: LoginDto) {
+  async login(data: LoginRequestDto) {
     const { email, password } = data;
 
     const user = listUsers.find(
@@ -40,14 +42,15 @@ export class AuthService {
     );
 
     if (!user) {
-      throw new UnauthorizedException("EMAIL_OR_PASSWORD_INCORRECT");
+      throw new UnauthorizedException(
+        AUTH_MESSAGES.EMAIL_OR_PASSWORD_INCORRECT,
+      );
     }
 
-    // TODO: hash password and compare password in DB
     const accessToken =
       this.authCommonService.generateToken<IAccessTokenPayload>(
         {
-          id: user.id,
+          userId: user.id,
           isAdmin: user.isAdmin,
         },
         {
@@ -61,7 +64,7 @@ export class AuthService {
     const refreshToken =
       this.authCommonService.generateToken<IRefreshTokenPayload>(
         {
-          id: user.id,
+          userId: user.id,
         },
         {
           secret: this.configService.get<string>("auth.refreshTokenSecret"),
@@ -74,7 +77,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async getNewAccessToken(payload: NewAccessTokenDto) {
+  async getNewAccessToken(payload: NewAccessTokenRequestDto) {
     const { accessToken, refreshToken } = payload;
 
     const decodedRefreshToken: IRefreshTokenPayload =
@@ -90,7 +93,7 @@ export class AuthService {
       });
 
     // Check if access token and refresh token belong to the same user
-    if (decodedRefreshToken.id !== decodedAccessToken.id) {
+    if (decodedRefreshToken.userId !== decodedAccessToken.userId) {
       throw new UnauthorizedException("REFRESH_TOKEN_INVALID");
     }
 
@@ -105,12 +108,14 @@ export class AuthService {
       throw new UnauthorizedException("REFRESH_TOKEN_EXPIRED");
     }
 
-    const user = listUsers.find((user) => user.id === decodedAccessToken.id);
+    const user = listUsers.find(
+      (user) => user.id === decodedAccessToken.userId,
+    );
 
     const newAccessToken =
       this.authCommonService.generateToken<IAccessTokenPayload>(
         {
-          id: user.id,
+          userId: user.id,
           isAdmin: user.isAdmin,
         },
         {

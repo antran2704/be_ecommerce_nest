@@ -9,8 +9,8 @@ import {
 } from "typeorm";
 
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
-import { AuthAdminTokenEntity } from "./auth_admin_token.entity";
 import { RoleEntity } from "src/modules/role/entities/role.entity";
+import { AuthTokenEntity } from "src/modules/authToken/entities/auth_admin_token.entity";
 
 @Entity({ name: "admins" })
 export class AdminEntity extends DatabaseModifierEntity {
@@ -37,10 +37,10 @@ export class AdminEntity extends DatabaseModifierEntity {
   @AutoMap()
   is_admin: boolean;
 
-  @OneToOne(() => AuthAdminTokenEntity, (entity) => entity.user)
-  authAdminToken: AuthAdminTokenEntity;
+  @OneToOne(() => AuthTokenEntity, (entity) => entity.user)
+  authAdminToken: AuthTokenEntity;
 
   @ManyToOne(() => RoleEntity, (role) => role.users, { nullable: true })
-  @JoinColumn({ name: "role_id" }) // Liên kết với cột role_id
+  @JoinColumn({ name: "role_id" })
   role: RoleEntity | null;
 }

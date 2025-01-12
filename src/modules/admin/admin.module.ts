@@ -5,23 +5,18 @@ import { AdminService } from "./services/admin.service";
 import { AdminEntity } from "./entities/admin.entity";
 import { AuthCommonModule } from "src/common/auth/auth.module";
 import { GetAdminReponseMapper } from "./mappers/get_admin_response.mapper";
-import { AuthAdminTokenEntity } from "./entities/auth_admin_token.entity";
 import { AdminRepository } from "./repositories/admin.repository";
-import { AuthAdminTokenRepository } from "./repositories/authAdminToken.repository";
 import { RoleModule } from "../role/role.module";
+import { AuthTokenModule } from "../authToken/auth_token.module";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AdminEntity, AuthAdminTokenEntity]),
+    TypeOrmModule.forFeature([AdminEntity]),
     AuthCommonModule,
     RoleModule,
+    AuthTokenModule,
   ],
-  providers: [
-    AdminService,
-    GetAdminReponseMapper,
-    AdminRepository,
-    AuthAdminTokenRepository,
-  ],
+  providers: [AdminService, GetAdminReponseMapper, AdminRepository],
   exports: [AdminService],
 })
 export class AdminModule {}

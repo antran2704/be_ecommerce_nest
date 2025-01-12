@@ -8,12 +8,12 @@ import { ADMIN_MESSAGES } from "../messages/admin.error";
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import { IAdminService } from "../interfaces/admin_service.interface";
 import { AdminRepository } from "../repositories/admin.repository";
-import { AuthAdminTokenRepository } from "../repositories/authAdminToken.repository";
 import {
   ChangePasswordAdminRequestDto,
   CreateAdminDto,
   CreateAdminRequestDto,
   CreateSuperAdminRequestDto,
+  GetAdminPermissionResponseDto,
   GetAdminResponseDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
@@ -21,12 +21,14 @@ import {
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 import { RoleService } from "src/modules/role/services/role.service";
+import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
+import { AuthTokenService } from "src/modules/authToken/services/auth_token.service";
 
 @Injectable()
 export class AdminService implements IAdminService {
   constructor(
     private readonly adminRepository: AdminRepository,
-    private readonly authAdminTokenRepository: AuthAdminTokenRepository,
+    private readonly authAdminTokenService: AuthTokenService,
     private readonly roleService: RoleService,
 
     private readonly authCommonService: AuthCommonService,
@@ -56,7 +58,7 @@ export class AdminService implements IAdminService {
     const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenRepository.create(newUser);
+    await this.authAdminTokenService.create(newUser);
   }
 
   async createSuperUser(payload: CreateSuperAdminRequestDto): Promise<void> {
@@ -90,7 +92,7 @@ export class AdminService implements IAdminService {
     const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenRepository.create(newUser);
+    await this.authAdminTokenService.create(newUser);
   }
 
   async getAdmins(
@@ -121,6 +123,28 @@ export class AdminService implements IAdminService {
     );
 
     return result;
+  }
+
+  async getAdminByEmail(email: string): Promise<AdminEntity> {
+    const user = await this.adminRepository.findByEmail(email);
+
+    if (!user) {
+      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+    }
+
+    return user;
+  }
+
+  async getAdminPermissions(
+    id: string,
+  ): Promise<GetAdminPermissionResponseDto> {
+    const user = await this.adminRepository.findPermissions(id);
+
+    if (!user) {
+      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+    }
+
+    return { permissions: (user.role.permissions as ENUM_PERMISSION[]) || [] };
   }
 
   async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {
