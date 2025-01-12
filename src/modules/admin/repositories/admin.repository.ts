@@ -7,8 +7,10 @@ import { getEntitesAndPagination } from "src/common/pagination/helpers/paginatio
 import { AdminEntity } from "../entities/admin.entity";
 import { GetDatabaseDefaultID } from "src/helpers/database";
 import {
+  CreateAdminDto,
   CreateAdminRequestDto,
   SearchAdminsRequestDto,
+  UpdateAdminDto,
   UpdateAdminRequestDto,
 } from "../dtos";
 import { ENUM_ADMIN_STATUS } from "../enums/admin.enum";
@@ -22,7 +24,7 @@ export class AdminRepository implements IAdminRepository {
     private readonly adminEntity: Repository<AdminEntity>,
   ) {}
 
-  async createSuperUser(payload: CreateAdminRequestDto): Promise<AdminEntity> {
+  async createSuperUser(payload: CreateAdminDto): Promise<AdminEntity> {
     const userId = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.AD);
 
     const user = this.adminEntity.create({
@@ -36,7 +38,7 @@ export class AdminRepository implements IAdminRepository {
     return user;
   }
 
-  async createAdmin(payload: CreateAdminRequestDto): Promise<AdminEntity> {
+  async createAdmin(payload: CreateAdminDto): Promise<AdminEntity> {
     const userId = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.AD);
 
     const user = this.adminEntity.create({
@@ -92,7 +94,7 @@ export class AdminRepository implements IAdminRepository {
     });
   }
 
-  async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {
+  async updateAdmin(id: string, payload: UpdateAdminDto): Promise<void> {
     await this.adminEntity.update({ id }, payload);
   }
 

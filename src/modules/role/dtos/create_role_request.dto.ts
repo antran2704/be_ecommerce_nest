@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsArray, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
 
 export default class CreateRoleRequestDto {
   @ApiProperty({
@@ -17,4 +18,14 @@ export default class CreateRoleRequestDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @ApiProperty({
+    enum: ENUM_PERMISSION,
+    required: true,
+    example: [ENUM_PERMISSION.ADMIN_CREATE],
+    type: "array",
+  })
+  @IsArray()
+  @IsEnum(ENUM_PERMISSION, { each: true })
+  permissions: ENUM_PERMISSION[];
 }

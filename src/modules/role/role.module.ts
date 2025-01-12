@@ -1,4 +1,4 @@
-import { forwardRef, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { RoleEntity } from "./entities/role.entity";
@@ -8,11 +8,8 @@ import GetRoleMapper from "./mappers/get_role_response.mapper";
 import { GroupRoleModule } from "../group_role/group_role.module";
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([RoleEntity]),
-    forwardRef(() => GroupRoleModule),
-  ],
+  imports: [TypeOrmModule.forFeature([RoleEntity]), GroupRoleModule],
   providers: [RoleService, RoleRepository, GetRoleMapper],
-  exports: [TypeOrmModule, RoleService],
+  exports: [RoleService],
 })
 export class RoleModule {}

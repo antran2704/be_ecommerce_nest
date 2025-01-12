@@ -9,4 +9,12 @@ export default class UpdateAdminRequestDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @ApiProperty({
+    required: true,
+    example: "RO1201252481",
+  })
+  @IsNotEmpty()
+  @IsString()
+  role: string;
 }

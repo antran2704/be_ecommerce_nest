@@ -11,19 +11,23 @@ import { AdminRepository } from "../repositories/admin.repository";
 import { AuthAdminTokenRepository } from "../repositories/authAdminToken.repository";
 import {
   ChangePasswordAdminRequestDto,
+  CreateAdminDto,
   CreateAdminRequestDto,
   CreateSuperAdminRequestDto,
   GetAdminResponseDto,
   SearchAdminsRequestDto,
+  UpdateAdminDto,
   UpdateAdminRequestDto,
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { RoleService } from "src/modules/role/services/role.service";
 
 @Injectable()
 export class AdminService implements IAdminService {
   constructor(
     private readonly adminRepository: AdminRepository,
     private readonly authAdminTokenRepository: AuthAdminTokenRepository,
+    private readonly roleService: RoleService,
 
     private readonly authCommonService: AuthCommonService,
     @InjectMapper() private readonly mapper: Mapper,
@@ -36,13 +40,16 @@ export class AdminService implements IAdminService {
       throw new BadRequestException(ADMIN_MESSAGES.USER_EXISTED);
     }
 
+    const role = await this.roleService.getRoleEntity(payload.role);
+
     const hashPassword = await this.authCommonService.hashPassword(
       payload.password,
     );
 
-    const dataForSave: CreateAdminRequestDto = {
+    const dataForSave: CreateAdminDto = {
       ...payload,
       password: hashPassword,
+      role,
     };
 
     // save user
@@ -73,9 +80,10 @@ export class AdminService implements IAdminService {
     const hashPassword =
       await this.authCommonService.hashPassword(defaultPassword);
 
-    const dataForSave: CreateAdminRequestDto = {
+    const dataForSave: CreateAdminDto = {
       ...payload,
       password: hashPassword,
+      role: null,
     };
 
     // save user
@@ -122,7 +130,14 @@ export class AdminService implements IAdminService {
       throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
     }
 
-    await this.adminRepository.updateAdmin(id, payload);
+    const role = await this.roleService.getRoleEntity(payload.role);
+
+    const dataForSave: UpdateAdminDto = {
+      ...payload,
+      role,
+    };
+
+    await this.adminRepository.updateAdmin(id, dataForSave);
   }
 
   async changePassword(

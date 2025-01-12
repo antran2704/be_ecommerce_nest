@@ -68,8 +68,8 @@ export class AdminController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ADMIN_CREATE])
-  @UseGuards(PermissionGuard)
+  // @Permissions([ENUM_PERMISSION.ADMIN_CREATE])
+  // @UseGuards(PermissionGuard)
   async createAdmin(
     @Body() payload: CreateAdminRequestDto,
   ): Promise<CreateSuccessResponse> {

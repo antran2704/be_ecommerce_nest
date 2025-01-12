@@ -65,7 +65,7 @@ export class RoleController {
     return new GetSuccessResponse<GetRoleResponeDto>(result);
   }
 
-  // Create group role
+  // Create role
   @Post()
   @ApiResponse({
     status: 201,

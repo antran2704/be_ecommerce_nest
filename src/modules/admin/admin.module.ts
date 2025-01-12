@@ -8,11 +8,13 @@ import { GetAdminReponseMapper } from "./mappers/get_admin_response.mapper";
 import { AuthAdminTokenEntity } from "./entities/auth_admin_token.entity";
 import { AdminRepository } from "./repositories/admin.repository";
 import { AuthAdminTokenRepository } from "./repositories/authAdminToken.repository";
+import { RoleModule } from "../role/role.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AdminEntity, AuthAdminTokenEntity]),
     AuthCommonModule,
+    RoleModule,
   ],
   providers: [
     AdminService,

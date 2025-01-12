@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
 
@@ -14,7 +18,6 @@ import {
 import { RoleEntity } from "../entities/role.entity";
 import { ROLE_MESSAGES } from "../messages/role.error";
 import { GroupRoleService } from "src/modules/group_role/services/group_role.service";
-import { GROUP_ROLE_MESSAGES } from "src/modules/group_role/messages/group_role.error";
 
 @Injectable()
 export class RoleService implements IRoleService {
@@ -40,6 +43,8 @@ export class RoleService implements IRoleService {
   async getRole(id: string): Promise<GetRoleResponeDto> {
     const data = await this.roleRepository.getRoleById(id);
 
+    if (!data) throw new NotFoundException(ROLE_MESSAGES.ROLE_NOT_FOUND);
+
     const result: GetRoleResponeDto = this.mapper.map(
       data,
       RoleEntity,
@@ -47,6 +52,12 @@ export class RoleService implements IRoleService {
     );
 
     return result;
+  }
+
+  async getRoleEntity(id: string): Promise<RoleEntity> {
+    const data = await this.roleRepository.getRoleById(id);
+    if (!data) throw new NotFoundException(ROLE_MESSAGES.ROLE_NOT_FOUND);
+    return data;
   }
 
   async createRole(payload: CreateRoleRequestDto): Promise<void> {
@@ -66,8 +77,7 @@ export class RoleService implements IRoleService {
     // check role is existed
     const isExitRole = await this.roleRepository.getRoleById(id);
 
-    if (!isExitRole)
-      throw new BadRequestException(ROLE_MESSAGES.ROLE_NOT_FOUND);
+    if (!isExitRole) throw new NotFoundException(ROLE_MESSAGES.ROLE_NOT_FOUND);
 
     // check role name is existed
     const role = await this.roleRepository.getRoleByName(payload.name);
@@ -81,7 +91,7 @@ export class RoleService implements IRoleService {
   async deleteRole(id: string): Promise<void> {
     const role = await this.roleRepository.getRoleById(id);
 
-    if (!role) throw new BadRequestException(ROLE_MESSAGES.ROLE_NOT_FOUND);
+    if (!role) throw new NotFoundException(ROLE_MESSAGES.ROLE_NOT_FOUND);
 
     await this.roleRepository.deleteRole(id);
   }

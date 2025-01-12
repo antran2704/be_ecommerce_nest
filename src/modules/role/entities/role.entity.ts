@@ -1,8 +1,16 @@
 import { AutoMap } from "@automapper/classes";
-import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from "typeorm";
 
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
 import { GroupRoleEntity } from "src/modules/group_role/entities/group_role.entity";
+import { AdminEntity } from "src/modules/admin/entities/admin.entity";
 
 @Entity({ name: "roles" })
 export class RoleEntity extends DatabaseModifierEntity {
@@ -14,9 +22,16 @@ export class RoleEntity extends DatabaseModifierEntity {
   @AutoMap()
   name: string;
 
+  @Column({ type: "json" })
+  @AutoMap()
+  permissions: string[];
+
   @ManyToOne(() => GroupRoleEntity, (entity) => entity.roles, {
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "group_role_id" })
   groupRole: GroupRoleEntity;
+
+  @OneToMany(() => AdminEntity, (entity) => entity.role)
+  users: AdminEntity[];
 }
