@@ -61,7 +61,7 @@ export class AdminController {
   async getUser(
     @Param("user_id") userId: string,
   ): Promise<GetSuccessResponse<GetAdminResponseDto>> {
-    const data = await this.userService.getAdmin(userId);
+    const data = await this.userService.getAdminById(userId);
 
     return new GetSuccessResponse(data);
   }

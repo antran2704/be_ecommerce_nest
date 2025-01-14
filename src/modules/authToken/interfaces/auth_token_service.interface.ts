@@ -6,7 +6,7 @@ import {
 } from "../dtos";
 
 export interface IAuthTokenService {
-  get(userId: string): Promise<AuthTokenEntity>;
+  getAuthTokenByUserId(userId: string): Promise<AuthTokenEntity>;
   create(data: AdminEntity): Promise<void>;
   updateRefreshToken(
     userId: string,

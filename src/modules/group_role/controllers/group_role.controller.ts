@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import {
   CreateSuccessResponse,
@@ -34,6 +34,7 @@ import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-
 
 @ApiBearerAuth()
 @Controller("group-roles")
+@ApiTags("Group.Role")
 export class GroupRoleController {
   constructor(private readonly groupRoleService: GroupRoleService) {}
 

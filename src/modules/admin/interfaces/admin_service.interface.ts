@@ -16,9 +16,10 @@ export interface IAdminService {
     params: SearchAdminsRequestDto,
   ): Promise<IEntitesAndPaginationReponse<GetAdminResponseDto>>;
 
-  getAdmin(id: string): Promise<GetAdminResponseDto>;
+  getAdminById(id: string): Promise<GetAdminResponseDto>;
 
-  getAdminByEmail(id: string): Promise<AdminEntity>;
+  getAdminEntityById(id: string): Promise<AdminEntity>;
+  getAdminEntityByEmail(id: string): Promise<AdminEntity>;
 
   getAdminPermissions(id: string): Promise<GetAdminPermissionResponseDto>;
 

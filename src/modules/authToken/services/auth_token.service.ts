@@ -17,7 +17,7 @@ export class AuthTokenService implements IAuthTokenService {
     await this.authTokenRepository.create(data);
   }
 
-  async get(id: string): Promise<AuthTokenEntity> {
+  async getAuthTokenByUserId(id: string): Promise<AuthTokenEntity> {
     return await this.authTokenRepository.getAuthToken(id);
   }
 

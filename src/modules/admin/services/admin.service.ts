@@ -109,7 +109,7 @@ export class AdminService implements IAdminService {
     return { data: formatData, pagination };
   }
 
-  async getAdmin(id: string): Promise<GetAdminResponseDto> {
+  async getAdminById(id: string): Promise<GetAdminResponseDto> {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
@@ -125,7 +125,17 @@ export class AdminService implements IAdminService {
     return result;
   }
 
-  async getAdminByEmail(email: string): Promise<AdminEntity> {
+  async getAdminEntityById(id: string): Promise<AdminEntity> {
+    const user = await this.adminRepository.findByUserId(id);
+
+    if (!user) {
+      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+    }
+
+    return user;
+  }
+
+  async getAdminEntityByEmail(email: string): Promise<AdminEntity> {
     const user = await this.adminRepository.findByEmail(email);
 
     if (!user) {

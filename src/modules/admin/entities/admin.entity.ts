@@ -43,4 +43,8 @@ export class AdminEntity extends DatabaseModifierEntity {
   @ManyToOne(() => RoleEntity, (role) => role.users, { nullable: true })
   @JoinColumn({ name: "role_id" })
   role: RoleEntity | null;
+
+  @Column()
+  @AutoMap()
+  role_id: string;
 }
