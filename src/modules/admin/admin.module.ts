@@ -7,7 +7,7 @@ import { AuthCommonModule } from "src/common/auth/auth.module";
 import { GetAdminReponseMapper } from "./mappers/get_admin_response.mapper";
 import { AdminRepository } from "./repositories/admin.repository";
 import { RoleModule } from "../role/role.module";
-import { AuthTokenModule } from "../authToken/auth_token.module";
+import { AuthTokenModule } from "../auth_token/auth_token.module";
 
 @Module({
   imports: [

@@ -4,19 +4,27 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import * as dayjs from "dayjs";
 
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import {
+  ConfirmOtpForgotPasswordRequestDto,
+  ForgotPasswordRequestDto,
+  ForgotPasswordResponseDto,
   LoginRequestDto,
+  LoginResponseDto,
   LogoutRequestDto,
   NewAccessTokenRequestDto,
+  NewAccessTokenResponseDto,
+  ResetPasswordRequestDto,
 } from "../dtos";
 import { AUTH_ERROR_MESSAGES } from "../messages/auth.error";
 import { IAuthService } from "../interfaces/auth_service.interface";
 import { IAccessTokenPayload } from "../interfaces/access_token_payload.interface";
 import { IRefreshTokenPayload } from "../interfaces/refresh_token_payload.interface";
 import { AdminService } from "src/modules/admin/services/admin.service";
-import { AuthTokenService } from "src/modules/authToken/services/auth_token.service";
+import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
+import { generateOTP } from "src/helpers/OTP";
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -27,7 +35,7 @@ export class AuthService implements IAuthService {
     private configService: ConfigService,
   ) {}
 
-  async login(data: LoginRequestDto) {
+  async login(data: LoginRequestDto): Promise<LoginResponseDto> {
     const { email, password } = data;
 
     const user = await this.adminService.getAdminEntityByEmail(email);
@@ -41,7 +49,7 @@ export class AuthService implements IAuthService {
       throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_WAS_DISABLED);
     }
 
-    const isMatchPassword = await this.authCommonService.comparePassword(
+    const isMatchPassword = await this.authCommonService.compareHashData(
       password,
       user.password,
     );
@@ -115,7 +123,9 @@ export class AuthService implements IAuthService {
     });
   }
 
-  async getNewAccessToken(payload: NewAccessTokenRequestDto) {
+  async getNewAccessToken(
+    payload: NewAccessTokenRequestDto,
+  ): Promise<NewAccessTokenResponseDto> {
     const { accessToken, refreshToken } = payload;
 
     const decodedRefreshToken: IRefreshTokenPayload =
@@ -180,5 +190,83 @@ export class AuthService implements IAuthService {
       );
 
     return { newAccessToken };
+  }
+
+  async forgotPassword(
+    data: ForgotPasswordRequestDto,
+  ): Promise<ForgotPasswordResponseDto> {
+    // check user is exited
+    const user = await this.adminService.getAdminEntityByEmail(data.email);
+
+    const newOtp = generateOTP();
+    const otpHash = await this.authCommonService.hashData(newOtp);
+
+    const otpExpireConfig = this.configService.get<string>(
+      "forgotPassword.expiresIn",
+    );
+
+    const otpExpiresIn = dayjs()
+      .add(Number(otpExpireConfig), "minutes")
+      .toISOString();
+
+    // Update forgot otp and expire of otp
+    this.authTokenService.updateForgotOtp(user.id, {
+      forgotOtp: otpHash,
+      forgotOtpExpireAt: otpExpiresIn,
+    });
+
+    return { otp: newOtp, expireAt: otpExpiresIn };
+  }
+
+  async confirmOtpForgotPassword(
+    data: ConfirmOtpForgotPasswordRequestDto,
+  ): Promise<void> {
+    // check user is exited
+    const user = await this.adminService.getAdminEntityByEmail(data.email);
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
+
+    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+    }
+
+    const isOtpCorrect = await this.authCommonService.compareHashData(
+      data.otp,
+      authToken.forgot_otp,
+    );
+
+    if (!isOtpCorrect) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+    }
+  }
+
+  async resetPassword(data: ResetPasswordRequestDto): Promise<void> {
+    // check user is exited
+    const user = await this.adminService.getAdminEntityByEmail(data.email);
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
+
+    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+    }
+
+    const isOtpCorrect = await this.authCommonService.compareHashData(
+      data.otp,
+      authToken.forgot_otp,
+    );
+
+    if (!isOtpCorrect) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+    }
+
+    await this.adminService.resetPassword(user.id, {
+      newPassword: data.newPassword,
+    });
+
+    // reset forgot otp
+    this.authTokenService.updateForgotOtp(user.id, {
+      forgotOtp: "",
+      forgotOtpExpireAt: "",
+    });
   }
 }

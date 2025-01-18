@@ -22,25 +22,24 @@ export class AuthCommonService {
     try {
       await this.jwtService.verifyAsync(token, options);
       return false;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       return true;
     }
   }
 
-  async hashPassword(password: string) {
+  async hashData(data: string) {
     const saltRounds = 10;
-    const passwordHash = await bcrypt
-      .hash(password, saltRounds)
-      .then(function (hash) {
-        return hash;
-      });
+    const dataHash = await bcrypt.hash(data, saltRounds).then(function (hash) {
+      return hash;
+    });
 
-    return passwordHash;
+    return dataHash;
   }
 
-  async comparePassword(password: string, hashPassword: string) {
+  async compareHashData(data: string, hashData: string) {
     const isValid = await bcrypt
-      .compare(password, hashPassword)
+      .compare(data, hashData)
       .then(function (result) {
         return result;
       });

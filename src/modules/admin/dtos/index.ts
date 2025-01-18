@@ -5,6 +5,7 @@ export { default as UpdateAdminRequestDto } from "./services/update_admin_reques
 export { default as UpdateAdminDto } from "./repositories/update_admin_repository.dto";
 export { default as ChangePasswordAdminRequestDto } from "./services/change_password_request.dto";
 export { default as SearchAdminsRequestDto } from "./services/search_admin_request.dto";
+export { default as ResetPasswordRequestDto } from "./services/reset_password_request.dto";
 
 export { default as GetAdminResponseDto } from "./services/get_admin_response.dto";
 export { default as GetAdminPermissionResponseDto } from "./services/get_admin_permission_response.dto";

@@ -4,6 +4,7 @@ import {
   CreateSuperAdminRequestDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
+  ResetPasswordRequestDto,
   SearchAdminsRequestDto,
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
@@ -31,6 +32,8 @@ export interface IAdminService {
     id: string,
     data: ChangePasswordAdminRequestDto,
   ): Promise<void>;
+
+  resetPassword(id: string, data: ResetPasswordRequestDto): Promise<void>;
 
   deleteAdmin(id: string): Promise<void>;
 }

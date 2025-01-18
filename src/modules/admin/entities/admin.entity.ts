@@ -10,7 +10,7 @@ import {
 
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
 import { RoleEntity } from "src/modules/role/entities/role.entity";
-import { AuthTokenEntity } from "src/modules/authToken/entities/auth_admin_token.entity";
+import { AuthTokenEntity } from "src/modules/auth_token/entities/auth_admin_token.entity";
 
 @Entity({ name: "admins" })
 export class AdminEntity extends DatabaseModifierEntity {

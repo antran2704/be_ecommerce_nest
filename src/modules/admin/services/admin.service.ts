@@ -15,6 +15,7 @@ import {
   CreateSuperAdminRequestDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
+  ResetPasswordRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
   UpdateAdminRequestDto,
@@ -22,7 +23,7 @@ import {
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 import { RoleService } from "src/modules/role/services/role.service";
 import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
-import { AuthTokenService } from "src/modules/authToken/services/auth_token.service";
+import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
 
 @Injectable()
 export class AdminService implements IAdminService {
@@ -44,7 +45,7 @@ export class AdminService implements IAdminService {
 
     const role = await this.roleService.getRoleEntity(payload.role);
 
-    const hashPassword = await this.authCommonService.hashPassword(
+    const hashPassword = await this.authCommonService.hashData(
       payload.password,
     );
 
@@ -79,8 +80,7 @@ export class AdminService implements IAdminService {
       throw new BadRequestException(ADMIN_MESSAGES.USER_EXISTED);
     }
 
-    const hashPassword =
-      await this.authCommonService.hashPassword(defaultPassword);
+    const hashPassword = await this.authCommonService.hashData(defaultPassword);
 
     const dataForSave: CreateAdminDto = {
       ...payload,
@@ -113,7 +113,7 @@ export class AdminService implements IAdminService {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     const result: GetAdminResponseDto = this.mapper.map(
@@ -129,7 +129,7 @@ export class AdminService implements IAdminService {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     return user;
@@ -139,7 +139,7 @@ export class AdminService implements IAdminService {
     const user = await this.adminRepository.findByEmail(email);
 
     if (!user) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     return user;
@@ -151,7 +151,7 @@ export class AdminService implements IAdminService {
     const user = await this.adminRepository.findPermissions(id);
 
     if (!user) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     return { permissions: (user.role.permissions as ENUM_PERMISSION[]) || [] };
@@ -161,7 +161,7 @@ export class AdminService implements IAdminService {
     const isExitUser = await this.adminRepository.findByUserId(id);
 
     if (!isExitUser) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     const role = await this.roleService.getRoleEntity(payload.role);
@@ -181,10 +181,10 @@ export class AdminService implements IAdminService {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
-    const isMatchPassword = await this.authCommonService.comparePassword(
+    const isMatchPassword = await this.authCommonService.compareHashData(
       data.password,
       user.password,
     );
@@ -193,8 +193,20 @@ export class AdminService implements IAdminService {
       throw new BadRequestException(ADMIN_MESSAGES.PASSWORD_INCORRECT);
     }
 
-    const hashPassword = await this.authCommonService.hashPassword(
-      data.password,
+    const hashPassword = await this.authCommonService.hashData(data.password);
+
+    await this.adminRepository.changePassword(id, hashPassword);
+  }
+
+  async resetPassword(id: string, data: ResetPasswordRequestDto) {
+    const user = await this.adminRepository.findByUserId(id);
+
+    if (!user) {
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
+    }
+
+    const hashPassword = await this.authCommonService.hashData(
+      data.newPassword,
     );
 
     await this.adminRepository.changePassword(id, hashPassword);
@@ -204,7 +216,7 @@ export class AdminService implements IAdminService {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     if (user.is_active) {
@@ -218,7 +230,7 @@ export class AdminService implements IAdminService {
     const user = await this.adminRepository.findByUserId(id);
 
     if (!user) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     if (!user.is_active) {
@@ -232,7 +244,7 @@ export class AdminService implements IAdminService {
     const isExitUser = await this.adminRepository.findByUserId(id);
 
     if (!isExitUser) {
-      throw new BadRequestException(ADMIN_MESSAGES.ADMIN_NOT_FOUND);
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
     await this.adminRepository.deleteAdmin(id);

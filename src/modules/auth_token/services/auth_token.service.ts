@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 
 import { AdminEntity } from "../../admin/entities/admin.entity";
 import {
@@ -8,6 +8,7 @@ import {
 import { IAuthTokenService } from "../interfaces/auth_token_service.interface";
 import { AuthTokenRepository } from "../repositories/auth_token.repository";
 import { AuthTokenEntity } from "../entities/auth_admin_token.entity";
+import { AUTH_TOKEN_ERROR_MESSAGES } from "../messages/auth_token.error";
 
 @Injectable()
 export class AuthTokenService implements IAuthTokenService {
@@ -18,13 +19,22 @@ export class AuthTokenService implements IAuthTokenService {
   }
 
   async getAuthTokenByUserId(id: string): Promise<AuthTokenEntity> {
-    return await this.authTokenRepository.getAuthToken(id);
+    const data = await this.authTokenRepository.getAuthToken(id);
+
+    if (!data) throw new NotFoundException(AUTH_TOKEN_ERROR_MESSAGES.NOT_FOUND);
+
+    return data;
   }
 
   async updateForgotOtp(
     userId: string,
     data: UpdateForgotOtpAuthTokenDto,
   ): Promise<void> {
+    const authToken = await this.authTokenRepository.getAuthToken(userId);
+
+    if (!authToken)
+      throw new NotFoundException(AUTH_TOKEN_ERROR_MESSAGES.NOT_FOUND);
+
     await this.authTokenRepository.updateForgotOtp(userId, data);
   }
 
@@ -32,6 +42,11 @@ export class AuthTokenService implements IAuthTokenService {
     userId: string,
     data: UpdateRefreshTokenAuthTokenDto,
   ): Promise<void> {
+    const authToken = await this.authTokenRepository.getAuthToken(userId);
+
+    if (!authToken)
+      throw new NotFoundException(AUTH_TOKEN_ERROR_MESSAGES.NOT_FOUND);
+
     await this.authTokenRepository.updateRefreshToken(userId, data);
   }
 }
