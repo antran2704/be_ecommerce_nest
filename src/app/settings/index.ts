@@ -40,8 +40,8 @@ export class SettingApp implements ISettingApp {
   }
 
   viewEngine() {
-    this.app.setBaseViewsDir(join(__dirname, "../../../../src", "views"));
+    this.app.setBaseViewsDir(join(__dirname, "../../../../src/views/pages"));
     this.app.setViewEngine("hbs");
-    hbs.registerPartials(join(__dirname, "../../../../src/views", "partials"));
+    hbs.registerPartials(join(__dirname, "../../../../src/views/partials"));
   }
 }

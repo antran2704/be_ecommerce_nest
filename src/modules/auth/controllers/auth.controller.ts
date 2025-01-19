@@ -19,15 +19,18 @@ import {
 import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
 import { AUTH_SUCCESS_MESSAGES } from "../messages/auth.success";
 import ConfirmForgotForgotPasswordRequestDto from "../dtos/services/confirm_otp_forgot_password_request.dto";
+import TEMPLATE_EMAIL from "src/common/mail/common/template";
 
 @Controller("auth")
 @ApiTags("Auth.Admin")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // @Get("/test/template")
-  // @Render('pages/signup')
-  // testTemplate() {}
+  @Get("/test/template")
+  @Render(TEMPLATE_EMAIL.OTP_FORGOT_PASSWORD)
+  testTemplate() {
+    return { email: "phamtrangiaan27@gmail.com", otp: "123456" };
+  }
 
   @Post("/login")
   @ApiBody({

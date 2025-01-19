@@ -1,109 +1,17 @@
-{{! footer   }}
-<table cellpadding="0" cellspacing="0" class="es-footer" align="center">
-  <tbody>
-    <tr>
-      <td class="esd-stripe" align="center">
-        <table
-          class="es-footer-body"
-          align="center"
-          cellpadding="0"
-          cellspacing="0"
-          width="600"
-          style="background-color: transparent;"
-        >
-          <tbody>
-            <tr>
-              <td
-                {{!-- class="esd-structure es-p25t es-p25b es-p20r es-p20l" --}}
-                align="left"
-                style="border-radius: 0px 0px 10px 10px; background-color: #4c8aa7; padding: 20px 0px 0px;"
-                bgcolor="#4c8aa7"
-              >
-                <table cellpadding="0" cellspacing="0" width="100%">
-                  <tbody>
-                    <tr>
-                      <td class="esd-container-frame" align="left" style="padding-bottom: 10px;">
-                        <table cellpadding="0" cellspacing="0" width="100%">
-                          <tbody>
-                            <tr>
-                              <td
-                                align="center"
-                                class="esd-block-social"
-                                style="font-size:0"
-                              >
-                                <table
-                                  cellpadding="0"
-                                  cellspacing="0"
-                                >
-                                  <tbody>
-                                    <tr>
-                                      <td
-                                        align="center"
-                                        valign="top"
-                                        style="padding: 0 10px;"
-                                      ><a
-                                          target="_blank"
-                                          href="https://viewstripo.email"
-                                        ><img
-                                            title="Facebook"
-                                            src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/facebook-circle-white.png"
-                                            alt="Fb"
-                                            width="32"
-                                          /></a></td>
-                                      <td
-                                        align="center"
-                                        valign="top"
-                                        style="padding: 0 10px;"
-                                      ><a
-                                          target="_blank"
-                                          href="https://viewstripo.email"
-                                        ><img
-                                            title="Twitter"
-                                            src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/twitter-circle-white.png"
-                                            alt="Tw"
-                                            width="32"
-                                          /></a></td>
-                                      <td
-                                        align="center"
-                                        valign="top"
-                                        style="padding: 0 10px;"
-                                      ><a
-                                          target="_blank"
-                                          href="https://viewstripo.email"
-                                        ><img
-                                            title="Instagram"
-                                            src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/instagram-circle-white.png"
-                                            alt="Inst"
-                                            width="32"
-                                          /></a></td>
-                                      <td align="center" valign="top" style="padding: 0 10px;"><a
-                                          target="_blank"
-                                          href="https://viewstripo.email"
-                                        ><img
-                                            title="Youtube"
-                                            src="https://tlr.stripocdn.email/content/assets/img/social-icons/circle-white/youtube-circle-white.png"
-                                            alt="Yt"
-                                            width="32"
-                                          /></a></td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+<footer>
+  <p style="margin: 0 4px; color: #282828;">Mọi chi tiết xin liên hệ:</p>
+  <p style="margin: 0 4px; color: #282828;">{{customerName}}</p>
+  <p style="margin: 0 4px; color: #282828;">Địa chỉ: {{address}}</p>
+  <p style="margin: 0 4px; color: #282828;">Số điện thoại:
+    <a href="tel:0946003423" style="display: inline-block;">{{phoneNumber}}</a>
+  </p>
+  <p style="margin: 0 4px; color: #282828;">Email:
+    <a style="display: inline-block;">{{customerMail}}</a>
+  </p>
 
-                {{!-- Contact Partial --}}
-                {{> contact}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <div>
+    <strong style="display: block; font-size: 14px; margin-top: 10px; color: #282828;">©
+      {{currentYear}}
+      {{customerName}}</strong>
+  </div>
+</footer>

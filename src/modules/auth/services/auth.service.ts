@@ -5,7 +5,6 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as dayjs from "dayjs";
-import { MailerService } from "@nestjs-modules/mailer";
 
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import {
@@ -26,6 +25,7 @@ import { IRefreshTokenPayload } from "../interfaces/refresh_token_payload.interf
 import { AdminService } from "src/modules/admin/services/admin.service";
 import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
 import { generateOTP } from "src/helpers/OTP";
+import { MailService } from "src/common/mail/services/mail.service";
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -34,7 +34,7 @@ export class AuthService implements IAuthService {
     private adminService: AdminService,
     private authTokenService: AuthTokenService,
     private configService: ConfigService,
-    private readonly mailService: MailerService,
+    private readonly mailService: MailService,
   ) {}
 
   async login(data: LoginRequestDto): Promise<LoginResponseDto> {
@@ -211,16 +211,10 @@ export class AuthService implements IAuthService {
       .add(Number(otpExpireConfig), "minutes")
       .toISOString();
 
-    this.mailService.sendMail({
-      from: "Antran",
-      to: data.email,
-      subject: "Signup account",
-      template: "signup",
-      text: "Please click link to confirm your email!",
-      // context: {
-      //   host: "http://localhost:3000/users/confirm-mail",
-      //   token: tokenEmail,
-      // },
+    // Send email
+    this.mailService.sendOtpForgotPassword({
+      otp: newOtp,
+      toEmail: data.email,
     });
 
     // Update forgot otp and expire of otp
