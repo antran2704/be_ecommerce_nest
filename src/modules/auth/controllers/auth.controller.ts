@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, Render } from "@nestjs/common";
 import { AuthService } from "../services/auth.service";
 import { ApiBody, ApiOkResponse, ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
@@ -24,6 +24,10 @@ import ConfirmForgotForgotPasswordRequestDto from "../dtos/services/confirm_otp_
 @ApiTags("Auth.Admin")
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  // @Get("/test/template")
+  // @Render('pages/signup')
+  // testTemplate() {}
 
   @Post("/login")
   @ApiBody({

@@ -6,6 +6,7 @@ import { AutomapperModule } from "@automapper/nestjs";
 import configs from "src/configs";
 import { DatabaseModule } from "./database/database.module";
 import { AppRouterModule } from "../router/router.module";
+import { MailModule } from "./mail/mail.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AppRouterModule } from "../router/router.module";
       strategyInitializer: classes(),
     }),
     DatabaseModule,
+    MailModule,
     AppRouterModule,
   ],
 })

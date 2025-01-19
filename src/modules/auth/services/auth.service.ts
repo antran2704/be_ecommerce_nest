@@ -5,6 +5,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as dayjs from "dayjs";
+import { MailerService } from "@nestjs-modules/mailer";
 
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import {
@@ -33,6 +34,7 @@ export class AuthService implements IAuthService {
     private adminService: AdminService,
     private authTokenService: AuthTokenService,
     private configService: ConfigService,
+    private readonly mailService: MailerService,
   ) {}
 
   async login(data: LoginRequestDto): Promise<LoginResponseDto> {
@@ -208,6 +210,18 @@ export class AuthService implements IAuthService {
     const otpExpiresIn = dayjs()
       .add(Number(otpExpireConfig), "minutes")
       .toISOString();
+
+    this.mailService.sendMail({
+      from: "Antran",
+      to: data.email,
+      subject: "Signup account",
+      template: "signup",
+      text: "Please click link to confirm your email!",
+      // context: {
+      //   host: "http://localhost:3000/users/confirm-mail",
+      //   token: tokenEmail,
+      // },
+    });
 
     // Update forgot otp and expire of otp
     this.authTokenService.updateForgotOtp(user.id, {
