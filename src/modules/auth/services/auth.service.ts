@@ -1,58 +1,272 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto } from '../dtos/login.dto';
-import { AuthCommonService } from 'src/common/auth/services/auth.service';
-import { ConfigService } from '@nestjs/config';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import * as dayjs from "dayjs";
 
-const listUsers = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'phamtrangiaan27@gmail.com',
-    password: '123456',
-  },
-];
+import { AuthCommonService } from "src/common/auth/services/auth.service";
+import {
+  ConfirmOtpForgotPasswordRequestDto,
+  ForgotPasswordRequestDto,
+  ForgotPasswordResponseDto,
+  LoginRequestDto,
+  LoginResponseDto,
+  LogoutRequestDto,
+  NewAccessTokenRequestDto,
+  NewAccessTokenResponseDto,
+  ResetPasswordRequestDto,
+} from "../dtos";
+import { AUTH_ERROR_MESSAGES } from "../messages/auth.error";
+import { IAuthService } from "../interfaces/auth_service.interface";
+import { IAccessTokenPayload } from "../interfaces/access_token_payload.interface";
+import { IRefreshTokenPayload } from "../interfaces/refresh_token_payload.interface";
+import { AdminService } from "src/modules/admin/services/admin.service";
+import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
+import { generateOTP } from "src/helpers/OTP";
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
   constructor(
     private authCommonService: AuthCommonService,
+    private adminService: AdminService,
+    private authTokenService: AuthTokenService,
     private configService: ConfigService,
   ) {}
 
-  async login(data: LoginDto) {
+  async login(data: LoginRequestDto): Promise<LoginResponseDto> {
     const { email, password } = data;
-    const user = listUsers.find(
-      (user) => user.email === email && user.password === password,
-    );
 
+    const user = await this.adminService.getAdminEntityByEmail(email);
     if (!user) {
-      throw new UnauthorizedException('EMAIL_OR_PASSWORD_INCORRECT');
+      throw new UnauthorizedException(
+        AUTH_ERROR_MESSAGES.EMAIL_OR_PASSWORD_INCORRECT,
+      );
     }
 
-    // TODO: hash password and compare password in DB
+    if (!user.is_active) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_WAS_DISABLED);
+    }
 
-    const accessToken = this.authCommonService.generateToken(
-      {
-        id: user.id,
-        email: user.email,
-      },
-      {
-        secret: this.configService.get<string>('auth.accessTokenSecret'),
-        expiresIn: this.configService.get<string>('auth.accessTokenExpiresIn'),
-      },
+    const isMatchPassword = await this.authCommonService.compareHashData(
+      password,
+      user.password,
     );
 
-    const refreshToken = this.authCommonService.generateToken(
-      {
-        id: user.id,
-        email: user.email,
-      },
-      {
-        secret: this.configService.get<string>('auth.refreshTokenSecret'),
-        expiresIn: this.configService.get<string>('auth.refreshTokenExpiresIn'),
-      },
-    );
+    if (!isMatchPassword) {
+      throw new UnauthorizedException(
+        AUTH_ERROR_MESSAGES.EMAIL_OR_PASSWORD_INCORRECT,
+      );
+    }
+
+    const accessToken =
+      this.authCommonService.generateToken<IAccessTokenPayload>(
+        {
+          userId: user.id,
+          isAdmin: user.is_admin,
+          role: user.role_id,
+        },
+        {
+          secret: this.configService.get<string>("auth.accessTokenSecret"),
+          expiresIn: this.configService.get<string>(
+            "auth.accessTokenExpiresIn",
+          ),
+        },
+      );
+
+    const refreshToken =
+      this.authCommonService.generateToken<IRefreshTokenPayload>(
+        {
+          userId: user.id,
+        },
+        {
+          secret: this.configService.get<string>("auth.refreshTokenSecret"),
+          expiresIn: this.configService.get<string>(
+            "auth.refreshTokenExpiresIn",
+          ),
+        },
+      );
+
+    // Update refresh token
+    await this.authTokenService.updateRefreshToken(user.id, {
+      refreshToken,
+    });
 
     return { accessToken, refreshToken };
+  }
+
+  async logout(payload: LogoutRequestDto): Promise<void> {
+    const user = await this.adminService.getAdminEntityById(payload.userId);
+
+    if (!user) {
+      throw new UnauthorizedException(
+        AUTH_ERROR_MESSAGES.EMAIL_OR_PASSWORD_INCORRECT,
+      );
+    }
+
+    if (!user.is_active) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_WAS_DISABLED);
+    }
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(
+      payload.userId,
+    );
+
+    if (!authToken.refresh_token) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_NOT_LOGIN);
+    }
+
+    // Update refresh token
+    await this.authTokenService.updateRefreshToken(user.id, {
+      refreshToken: "",
+    });
+  }
+
+  async getNewAccessToken(
+    payload: NewAccessTokenRequestDto,
+  ): Promise<NewAccessTokenResponseDto> {
+    const { accessToken, refreshToken } = payload;
+
+    const decodedRefreshToken: IRefreshTokenPayload =
+      await this.authCommonService.verifyToken(refreshToken, {
+        secret: this.configService.get<string>("auth.refreshTokenSecret"),
+        ignoreExpiration: true,
+      });
+
+    const decodedAccessToken: IAccessTokenPayload =
+      await this.authCommonService.verifyToken(accessToken, {
+        secret: this.configService.get<string>("auth.accessTokenSecret"),
+        ignoreExpiration: true,
+      });
+
+    // Check if access token and refresh token belong to the same user
+    if (decodedRefreshToken.userId !== decodedAccessToken.userId) {
+      throw new UnauthorizedException(
+        AUTH_ERROR_MESSAGES.REFRESH_TOKEN_INVALID,
+      );
+    }
+
+    const isRefreshTokenExpired =
+      await this.authCommonService.isTokenHasExpired(refreshToken, {
+        secret: this.configService.get<string>("auth.refreshTokenSecret"),
+        ignoreExpiration: false,
+      });
+
+    // Check if refresh token is expired
+    if (isRefreshTokenExpired) {
+      throw new UnauthorizedException(
+        AUTH_ERROR_MESSAGES.REFRESH_TOKEN_EXPIRED,
+      );
+    }
+
+    const authTokenOfUser = await this.authTokenService.getAuthTokenByUserId(
+      decodedRefreshToken.userId,
+    );
+
+    if (authTokenOfUser.refresh_token !== refreshToken) {
+      throw new UnauthorizedException(
+        AUTH_ERROR_MESSAGES.REFRESH_TOKEN_INVALID,
+      );
+    }
+
+    const user = await this.adminService.getAdminEntityById(
+      decodedRefreshToken.userId,
+    );
+
+    const newAccessToken =
+      this.authCommonService.generateToken<IAccessTokenPayload>(
+        {
+          userId: user.id,
+          isAdmin: user.is_admin,
+          role: user.role_id,
+        },
+        {
+          secret: this.configService.get<string>("auth.accessTokenSecret"),
+          expiresIn: this.configService.get<string>(
+            "auth.accessTokenExpiresIn",
+          ),
+        },
+      );
+
+    return { newAccessToken };
+  }
+
+  async forgotPassword(
+    data: ForgotPasswordRequestDto,
+  ): Promise<ForgotPasswordResponseDto> {
+    // check user is exited
+    const user = await this.adminService.getAdminEntityByEmail(data.email);
+
+    const newOtp = generateOTP();
+    const otpHash = await this.authCommonService.hashData(newOtp);
+
+    const otpExpireConfig = this.configService.get<string>(
+      "forgotPassword.expiresIn",
+    );
+
+    const otpExpiresIn = dayjs()
+      .add(Number(otpExpireConfig), "minutes")
+      .toISOString();
+
+    // Update forgot otp and expire of otp
+    this.authTokenService.updateForgotOtp(user.id, {
+      forgotOtp: otpHash,
+      forgotOtpExpireAt: otpExpiresIn,
+    });
+
+    return { otp: newOtp, expireAt: otpExpiresIn };
+  }
+
+  async confirmOtpForgotPassword(
+    data: ConfirmOtpForgotPasswordRequestDto,
+  ): Promise<void> {
+    // check user is exited
+    const user = await this.adminService.getAdminEntityByEmail(data.email);
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
+
+    const isOtpCorrect = await this.authCommonService.compareHashData(
+      data.otp,
+      authToken.forgot_otp,
+    );
+
+    if (!isOtpCorrect) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+    }
+
+    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+    }
+  }
+
+  async resetPassword(data: ResetPasswordRequestDto): Promise<void> {
+    // check user is exited
+    const user = await this.adminService.getAdminEntityByEmail(data.email);
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
+
+    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+    }
+
+    const isOtpCorrect = await this.authCommonService.compareHashData(
+      data.otp,
+      authToken.forgot_otp,
+    );
+
+    if (!isOtpCorrect) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+    }
+
+    await this.adminService.resetPassword(user.id, {
+      newPassword: data.newPassword,
+    });
+
+    // reset forgot otp
+    this.authTokenService.updateForgotOtp(user.id, {
+      forgotOtp: "",
+      forgotOtpExpireAt: "",
+    });
   }
 }

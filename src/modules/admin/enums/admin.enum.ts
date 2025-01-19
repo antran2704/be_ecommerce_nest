@@ -1,0 +1,4 @@
+export enum ENUM_ADMIN_STATUS {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+}

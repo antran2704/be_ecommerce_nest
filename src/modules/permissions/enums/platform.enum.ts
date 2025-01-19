@@ -1,0 +1,4 @@
+export enum ENUM_PLATFORM_PERMISSION {
+  ADMIN = "ADMIN",
+  USER = "USER",
+}

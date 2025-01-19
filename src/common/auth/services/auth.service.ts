@@ -1,37 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import bcrypt from 'bcrypt';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { JwtService, JwtSignOptions, JwtVerifyOptions } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthCommonService {
-  constructor(
-    private jwtService: JwtService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private jwtService: JwtService) {}
 
-  generateToken(payload: any, options?: JwtSignOptions) {
-    return this.jwtService.sign(payload, options);
+  generateToken<T>(payload: T, options?: JwtSignOptions) {
+    return this.jwtService.sign(payload as any, options);
   }
 
-  async hashPassword(password: string) {
+  async verifyToken(token: string, options?: JwtVerifyOptions) {
+    try {
+      return await this.jwtService.verifyAsync(token, options);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async isTokenHasExpired(token: string, options?: JwtVerifyOptions) {
+    try {
+      await this.jwtService.verifyAsync(token, options);
+      return false;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      return true;
+    }
+  }
+
+  async hashData(data: string) {
     const saltRounds = 10;
-    const passwordHash = await bcrypt
-      .hash(password, saltRounds)
-      .then(function (hash) {
-        return hash;
-      });
+    const dataHash = await bcrypt.hash(data, saltRounds).then(function (hash) {
+      return hash;
+    });
 
-    return passwordHash;
+    return dataHash;
   }
 
-  async comparePassword(password: string, hashPassword: string) {
+  async compareHashData(data: string, hashData: string) {
     const isValid = await bcrypt
-      .compare(password, hashPassword)
+      .compare(data, hashData)
       .then(function (result) {
         return result;
       });
-      
+
     return isValid;
   }
 }

@@ -1,8 +1,9 @@
-import APP_CONFIG from './app.config';
-import MIDDLEWARE_CONFIG from './middleware.config';
-import SWAGGER_CONFIG from './swagger.config';
-import DATABASE_CONFIG from './database.config';
-import AUTH_CONFIG from './auth.config';
+import APP_CONFIG from "./app.config";
+import MIDDLEWARE_CONFIG from "./middleware.config";
+import SWAGGER_CONFIG from "./swagger.config";
+import DATABASE_CONFIG from "./database.config";
+import AUTH_CONFIG from "./auth.config";
+import FORGOT_PASSWORD_CONFIG from "./forgot_password.config";
 
 export default [
   APP_CONFIG,
@@ -10,4 +11,5 @@ export default [
   SWAGGER_CONFIG,
   DATABASE_CONFIG,
   AUTH_CONFIG,
+  FORGOT_PASSWORD_CONFIG,
 ];
