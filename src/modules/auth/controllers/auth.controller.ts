@@ -14,6 +14,7 @@ import {
 import {
   GetSuccessResponse,
   SuccessResponse,
+  UpdatedSuccessResponse,
 } from "src/common/response/success.response";
 import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
 import { AUTH_SUCCESS_MESSAGES } from "../messages/auth.success";
@@ -88,13 +89,14 @@ export class AuthController {
     type: ResetPasswordRequestDto,
   })
   @ApiResponse({
-    type: SuccessResponse,
+    status: 201,
+    example: new UpdatedSuccessResponse(),
   })
   async resetPassword(
     @Body() payload: ResetPasswordRequestDto,
   ): Promise<SuccessResponse> {
     await this.authService.resetPassword(payload);
 
-    return new SuccessResponse();
+    return new UpdatedSuccessResponse();
   }
 }

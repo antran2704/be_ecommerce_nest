@@ -226,10 +226,6 @@ export class AuthService implements IAuthService {
 
     const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
 
-    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
-    }
-
     const isOtpCorrect = await this.authCommonService.compareHashData(
       data.otp,
       authToken.forgot_otp,
@@ -237,6 +233,10 @@ export class AuthService implements IAuthService {
 
     if (!isOtpCorrect) {
       throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+    }
+
+    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
     }
   }
 
