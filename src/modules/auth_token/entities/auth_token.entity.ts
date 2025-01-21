@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-@Entity({ name: "auth_token" })
+@Entity({ name: "auth_tokens" })
 export class AuthTokenEntity {
   @PrimaryGeneratedColumn()
   @AutoMap()

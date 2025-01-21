@@ -7,12 +7,14 @@ import { AuthCommonModule } from "src/common/auth/auth.module";
 import { GetUserReponseMapper } from "./mappers/get_user_response.mapper";
 import { UserRepository } from "./repositories/user.repository";
 import { AuthTokenModule } from "../auth_token/auth_token.module";
+import { AuthProviderModule } from "../auth_provider/auth_provider.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
     AuthCommonModule,
     AuthTokenModule,
+    AuthProviderModule,
   ],
   providers: [UserService, GetUserReponseMapper, UserRepository],
   exports: [UserService],
