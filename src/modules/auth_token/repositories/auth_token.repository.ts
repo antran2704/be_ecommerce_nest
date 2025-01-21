@@ -8,7 +8,8 @@ import {
   UpdateForgotOtpAuthTokenDto,
   UpdateRefreshTokenAuthTokenDto,
 } from "../dtos";
-import { AuthTokenEntity } from "../entities/auth_admin_token.entity";
+import { AuthTokenEntity } from "../entities/auth_token.entity";
+import { UserEntity } from "src/modules/user/entities/user.entity";
 
 @Injectable()
 export class AuthTokenRepository implements IAuthTokenRepository {
@@ -17,16 +18,16 @@ export class AuthTokenRepository implements IAuthTokenRepository {
     private readonly authTokenEntity: Repository<AuthTokenEntity>,
   ) {}
 
-  async create(data: AdminEntity): Promise<void> {
+  async create(data: AdminEntity | UserEntity): Promise<void> {
     const adminAuthToken = this.authTokenEntity.create({
-      user: data,
+      admin: data,
     });
 
     await this.authTokenEntity.save(adminAuthToken);
   }
 
   async getAuthToken(id: string): Promise<AuthTokenEntity> {
-    return await this.authTokenEntity.findOne({ where: { user: { id } } });
+    return await this.authTokenEntity.findOne({ where: { admin: { id } } });
   }
 
   async updateForgotOtp(
@@ -34,7 +35,7 @@ export class AuthTokenRepository implements IAuthTokenRepository {
     data: UpdateForgotOtpAuthTokenDto,
   ): Promise<void> {
     await this.authTokenEntity.update(
-      { user: { id: userId } },
+      { admin: { id: userId } },
       {
         forgot_otp: data.forgotOtp,
         forgot_otp_expire_at: data.forgotOtpExpireAt,
@@ -47,7 +48,7 @@ export class AuthTokenRepository implements IAuthTokenRepository {
     data: UpdateRefreshTokenAuthTokenDto,
   ): Promise<void> {
     await this.authTokenEntity.update(
-      { user: { id: userId } },
+      { admin: { id: userId } },
       {
         refresh_token: data.refreshToken,
       },

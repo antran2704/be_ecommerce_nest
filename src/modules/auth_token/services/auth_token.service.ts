@@ -7,14 +7,15 @@ import {
 } from "../dtos";
 import { IAuthTokenService } from "../interfaces/auth_token_service.interface";
 import { AuthTokenRepository } from "../repositories/auth_token.repository";
-import { AuthTokenEntity } from "../entities/auth_admin_token.entity";
+import { AuthTokenEntity } from "../entities/auth_token.entity";
 import { AUTH_TOKEN_ERROR_MESSAGES } from "../messages/auth_token.error";
+import { UserEntity } from "src/modules/user/entities/user.entity";
 
 @Injectable()
 export class AuthTokenService implements IAuthTokenService {
   constructor(private readonly authTokenRepository: AuthTokenRepository) {}
 
-  async create(data: AdminEntity): Promise<void> {
+  async create(data: AdminEntity | UserEntity): Promise<void> {
     await this.authTokenRepository.create(data);
   }
 

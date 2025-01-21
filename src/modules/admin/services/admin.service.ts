@@ -29,7 +29,7 @@ import { AuthTokenService } from "src/modules/auth_token/services/auth_token.ser
 export class AdminService implements IAdminService {
   constructor(
     private readonly adminRepository: AdminRepository,
-    private readonly authAdminTokenService: AuthTokenService,
+    private readonly authTokenService: AuthTokenService,
     private readonly roleService: RoleService,
 
     private readonly authCommonService: AuthCommonService,
@@ -59,7 +59,7 @@ export class AdminService implements IAdminService {
     const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenService.create(newUser);
+    await this.authTokenService.create(newUser);
   }
 
   async createSuperUser(payload: CreateSuperAdminRequestDto): Promise<void> {
@@ -92,7 +92,7 @@ export class AdminService implements IAdminService {
     const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenService.create(newUser);
+    await this.authTokenService.create(newUser);
   }
 
   async getAdmins(

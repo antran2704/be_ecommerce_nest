@@ -1,5 +1,6 @@
 import { AutoMap } from "@automapper/classes";
 import { AdminEntity } from "src/modules/admin/entities/admin.entity";
+import { UserEntity } from "src/modules/user/entities/user.entity";
 import {
   Entity,
   Column,
@@ -26,9 +27,17 @@ export class AuthTokenEntity {
   @AutoMap()
   forgot_otp_expire_at: string;
 
-  @OneToOne(() => AdminEntity, (admin) => admin.authAdminToken, {
+  // Relations with AdminEntity
+  @OneToOne(() => AdminEntity, (entity) => entity.authToken, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "admin_id" })
+  admin: AdminEntity;
+
+  // Relations with UserEntity
+  @OneToOne(() => UserEntity, (entity) => entity.authToken, {
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "user_id" })
-  user: AdminEntity;
+  user: UserEntity;
 }
