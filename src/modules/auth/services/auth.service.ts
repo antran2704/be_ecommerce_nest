@@ -23,7 +23,7 @@ import { IAuthService } from "../interfaces/auth_service.interface";
 import { IAccessTokenPayload } from "../interfaces/access_token_payload.interface";
 import { IRefreshTokenPayload } from "../interfaces/refresh_token_payload.interface";
 import { AdminService } from "src/modules/admin/services/admin.service";
-import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
+import { AdminAuthTokenService } from "src/modules/auth_token/services";
 import { generateOTP } from "src/helpers/OTP";
 import { MailService } from "src/common/mail/services/mail.service";
 
@@ -32,7 +32,7 @@ export class AuthService implements IAuthService {
   constructor(
     private authCommonService: AuthCommonService,
     private adminService: AdminService,
-    private authTokenService: AuthTokenService,
+    private authTokenService: AdminAuthTokenService,
     private configService: ConfigService,
     private readonly mailService: MailService,
   ) {}

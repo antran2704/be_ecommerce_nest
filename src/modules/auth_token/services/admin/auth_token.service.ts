@@ -1,21 +1,20 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 
-import { AdminEntity } from "../../admin/entities/admin.entity";
+import { AdminEntity } from "../../../admin/entities/admin.entity";
 import {
   UpdateForgotOtpAuthTokenDto,
   UpdateRefreshTokenAuthTokenDto,
-} from "../dtos";
-import { IAuthTokenService } from "../interfaces/auth_token_service.interface";
-import { AuthTokenRepository } from "../repositories/auth_token.repository";
-import { AuthTokenEntity } from "../entities/auth_token.entity";
-import { AUTH_TOKEN_ERROR_MESSAGES } from "../messages/auth_token.error";
-import { UserEntity } from "src/modules/user/entities/user.entity";
+} from "../../dtos";
+import { IAuthTokenService } from "../../interfaces/auth_token_service.interface";
+import { AdminAuthTokenRepository } from "../../repositories";
+import { AuthTokenEntity } from "../../entities/auth_token.entity";
+import { AUTH_TOKEN_ERROR_MESSAGES } from "../../messages/auth_token.error";
 
 @Injectable()
-export class AuthTokenService implements IAuthTokenService {
-  constructor(private readonly authTokenRepository: AuthTokenRepository) {}
+export default class AuthTokenService implements IAuthTokenService {
+  constructor(private readonly authTokenRepository: AdminAuthTokenRepository) {}
 
-  async create(data: AdminEntity | UserEntity): Promise<void> {
+  async create(data: AdminEntity): Promise<void> {
     await this.authTokenRepository.create(data);
   }
 

@@ -23,13 +23,13 @@ import {
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 import { RoleService } from "src/modules/role/services/role.service";
 import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
-import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
+import { AdminAuthTokenService } from "src/modules/auth_token/services";
 
 @Injectable()
 export class AdminService implements IAdminService {
   constructor(
     private readonly adminRepository: AdminRepository,
-    private readonly authTokenService: AuthTokenService,
+    private readonly authTokenService: AdminAuthTokenService,
     private readonly roleService: RoleService,
 
     private readonly authCommonService: AuthCommonService,

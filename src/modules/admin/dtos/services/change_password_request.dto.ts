@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString } from "class-validator";
 export default class ChangePasswordAdminRequestDto {
   @ApiProperty({
     required: true,
-    example: "123456",
+    example: "123456@Abc",
   })
   @IsNotEmpty()
   @IsString()

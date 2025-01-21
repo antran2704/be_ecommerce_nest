@@ -5,7 +5,7 @@ import { InjectMapper } from "@automapper/nestjs";
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
-import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
+import { UserAuthTokenService } from "src/modules/auth_token/services";
 import { IUserService } from "../interfaces/user_service.interface";
 import { UserRepository } from "../repositories/user.repository";
 import {
@@ -25,7 +25,7 @@ import { UserEntity } from "../entities/user.entity";
 export class UserService implements IUserService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly authTokenService: AuthTokenService,
+    private readonly authTokenService: UserAuthTokenService,
 
     private readonly authCommonService: AuthCommonService,
     @InjectMapper() private readonly mapper: Mapper,
