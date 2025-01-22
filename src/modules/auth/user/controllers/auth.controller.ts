@@ -1,30 +1,30 @@
 import { Body, Controller, Get, Post, Render } from "@nestjs/common";
-import { AuthService } from "../services/auth.service";
 import { ApiBody, ApiOkResponse, ApiResponse, ApiTags } from "@nestjs/swagger";
-import {
-  ForgotPasswordRequestDto,
-  ForgotPasswordResponseDto,
-  LoginRequestDto,
-  LoginResponseDto,
-  LogoutRequestDto,
-  NewAccessTokenRequestDto,
-  NewAccessTokenResponseDto,
-  ResetPasswordRequestDto,
-} from "../dtos";
 import {
   GetSuccessResponse,
   SuccessResponse,
   UpdatedSuccessResponse,
 } from "src/common/response/success.response";
 import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
-import { AUTH_SUCCESS_MESSAGES } from "../messages/auth.success";
-import ConfirmForgotForgotPasswordRequestDto from "../dtos/services/confirm_otp_forgot_password_request.dto";
+import { AUTH_SUCCESS_MESSAGES } from "../../messages/auth.success";
+import ConfirmForgotPasswordRequestDto from "../dtos/services/confirm_otp_forgot_password_request.dto";
 import TEMPLATE_EMAIL from "src/common/mail/common/template";
+import { AuthUserService } from "../services/auth.service";
+import {
+  ForgotPasswordUserRequestDto,
+  ForgotPasswordUserResponseDto,
+  LoginUserRequestDto,
+  LoginUserResponseDto,
+  LogoutUserRequestDto,
+  ResetPasswordUserRequestDto,
+} from "../dtos";
+import NewAccessTokenRequestDto from "../../dtos/new_access_token_request.dto";
+import NewAccessTokenResponseDto from "../../dtos/new_access_token_response.dto";
 
-@Controller("auth")
-@ApiTags("Auth.Admin")
-export class AuthController {
-  constructor(private authService: AuthService) {}
+@Controller("auth/user")
+@ApiTags("Auth.User")
+export class AuthUserController {
+  constructor(private authService: AuthUserService) {}
 
   @Get("/test/template")
   @Render(TEMPLATE_EMAIL.OTP_FORGOT_PASSWORD)
@@ -34,12 +34,12 @@ export class AuthController {
 
   @Post("/login")
   @ApiBody({
-    type: LoginRequestDto,
+    type: LoginUserRequestDto,
   })
-  @ApiOkResponseDecorator(LoginResponseDto)
+  @ApiOkResponseDecorator(LoginUserResponseDto)
   async login(
-    @Body() payload: LoginRequestDto,
-  ): Promise<GetSuccessResponse<LoginResponseDto>> {
+    @Body() payload: LoginUserRequestDto,
+  ): Promise<GetSuccessResponse<LoginUserResponseDto>> {
     const data = await this.authService.login(payload);
 
     return new GetSuccessResponse(data);
@@ -47,12 +47,14 @@ export class AuthController {
 
   @Post("/logout")
   @ApiBody({
-    type: LogoutRequestDto,
+    type: LogoutUserRequestDto,
   })
   @ApiOkResponse({
     type: SuccessResponse,
   })
-  async logout(@Body() payload: LogoutRequestDto): Promise<SuccessResponse> {
+  async logout(
+    @Body() payload: LogoutUserRequestDto,
+  ): Promise<SuccessResponse> {
     await this.authService.logout(payload);
 
     return new SuccessResponse(AUTH_SUCCESS_MESSAGES.LOGOUT_SUCCESS);
@@ -69,22 +71,22 @@ export class AuthController {
 
   @Post("/fotgot-password")
   @ApiBody({
-    type: ForgotPasswordRequestDto,
+    type: ForgotPasswordUserRequestDto,
   })
-  @ApiOkResponseDecorator(ForgotPasswordResponseDto)
-  async forgotPassword(@Body() payload: ForgotPasswordRequestDto) {
+  @ApiOkResponseDecorator(ForgotPasswordUserResponseDto)
+  async forgotPassword(@Body() payload: ForgotPasswordUserRequestDto) {
     return await this.authService.forgotPassword(payload);
   }
 
   @Post("/confirm-otp-forgot-password")
   @ApiBody({
-    type: ConfirmForgotForgotPasswordRequestDto,
+    type: ConfirmForgotPasswordRequestDto,
   })
   @ApiResponse({
     type: SuccessResponse,
   })
   async confirmOtpForgotPassword(
-    @Body() payload: ConfirmForgotForgotPasswordRequestDto,
+    @Body() payload: ConfirmForgotPasswordRequestDto,
   ): Promise<SuccessResponse> {
     await this.authService.confirmOtpForgotPassword(payload);
 
@@ -93,14 +95,14 @@ export class AuthController {
 
   @Post("/reset-password")
   @ApiBody({
-    type: ResetPasswordRequestDto,
+    type: ResetPasswordUserRequestDto,
   })
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
   async resetPassword(
-    @Body() payload: ResetPasswordRequestDto,
+    @Body() payload: ResetPasswordUserRequestDto,
   ): Promise<SuccessResponse> {
     await this.authService.resetPassword(payload);
 

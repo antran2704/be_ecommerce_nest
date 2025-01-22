@@ -76,7 +76,7 @@ export class UserController {
   async createUser(
     @Body() payload: CreateUserRequestDto,
   ): Promise<CreateSuccessResponse> {
-    await this.userService.createUser(payload);
+    await this.userService.createUserWithSystem(payload);
     return new CreateSuccessResponse();
   }
 

@@ -9,7 +9,8 @@ import { UserEntity } from "../entities/user.entity";
 import { ResetPasswordRequestDto } from "src/modules/admin/dtos";
 
 export interface IUserService {
-  createUser(payload: CreateUserRequestDto): Promise<void>;
+  createUserWithSystem(payload: CreateUserRequestDto): Promise<void>;
+  createUserWithProvider(payload: CreateUserRequestDto): Promise<void>;
   getUsers(
     params: SearchUserRequestDto,
   ): Promise<IEntitesAndPaginationReponse<GetUserResponseDto>>;

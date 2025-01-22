@@ -16,14 +16,13 @@ export class AuthProviderRepository implements IAuthProviderRepository {
 
   async createAuthProvider(payload: CreateAuthProviderDto): Promise<void> {
     const user = this.authProviderEntity.create(payload);
-
     // save user
     await this.authProviderEntity.save(user);
   }
 
   async getAuthProvider(data: GetAuthProviderDto): Promise<AuthProviderEntity> {
     return await this.authProviderEntity.findOneBy({
-      providerId: data.providerId,
+      provider_id: data.providerId,
     });
   }
 }

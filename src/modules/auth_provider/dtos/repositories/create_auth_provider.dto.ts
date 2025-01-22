@@ -8,5 +8,9 @@ export default class CreateAuthProviderDto {
 
   @IsOptional()
   @IsString()
-  providerId: string;
+  provider_id?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  user_id: string;
 }

@@ -7,37 +7,37 @@ import { ConfigService } from "@nestjs/config";
 import * as dayjs from "dayjs";
 
 import { AuthCommonService } from "src/common/auth/services/auth.service";
-import {
-  ConfirmOtpForgotPasswordRequestDto,
-  ForgotPasswordRequestDto,
-  ForgotPasswordResponseDto,
-  LoginRequestDto,
-  LoginResponseDto,
-  LogoutRequestDto,
-  NewAccessTokenRequestDto,
-  NewAccessTokenResponseDto,
-  ResetPasswordRequestDto,
-} from "../dtos";
-import { AUTH_ERROR_MESSAGES } from "../messages/auth.error";
-import { IAuthService } from "../interfaces/auth_service.interface";
-import { IAccessTokenPayload } from "../interfaces/access_token_payload.interface";
-import { IRefreshTokenPayload } from "../interfaces/refresh_token_payload.interface";
+import { AUTH_ERROR_MESSAGES } from "../../messages/auth.error";
 import { AdminService } from "src/modules/admin/services/admin.service";
-import { AdminAuthTokenService } from "src/modules/auth_token/services";
 import { generateOTP } from "src/helpers/OTP";
 import { MailService } from "src/common/mail/services/mail.service";
+import { IAuthUserService } from "../interfaces/auth_service.interface";
+import { IAccessTokenUserPayload } from "../interfaces/access_token_payload.interface";
+import { IRefreshTokenUserPayload } from "../interfaces/refresh_token_payload.interface";
+import { UserAuthTokenService } from "src/modules/auth_token/services";
+import LoginSystemUserRequestDto from "../dtos/services/login_system_request.dto";
+import LoginUserResponseDto from "../dtos/services/login_response.dto";
+import LogoutUserRequestDto from "../dtos/services/logout_request.dto";
+import NewAccessTokenRequestDto from "../../dtos/new_access_token_request.dto";
+import NewAccessTokenResponseDto from "../../dtos/new_access_token_response.dto";
+import ForgotPasswordUserRequestDto from "../dtos/services/forgot_password_request.dto";
+import ForgotPasswordUserResponseDto from "../dtos/services/forgot_password_response.dto";
+import {
+  ConfirmOtpForgotPasswordUserRequestDto,
+  ResetPasswordUserRequestDto,
+} from "../dtos";
 
 @Injectable()
-export class AuthService implements IAuthService {
+export class AuthUserService implements IAuthUserService {
   constructor(
     private authCommonService: AuthCommonService,
     private adminService: AdminService,
-    private authTokenService: AdminAuthTokenService,
+    private authTokenService: UserAuthTokenService,
     private configService: ConfigService,
     private readonly mailService: MailService,
   ) {}
 
-  async login(data: LoginRequestDto): Promise<LoginResponseDto> {
+  async login(data: LoginSystemUserRequestDto): Promise<LoginUserResponseDto> {
     const { email, password } = data;
 
     const user = await this.adminService.getAdminEntityByEmail(email);
@@ -63,11 +63,9 @@ export class AuthService implements IAuthService {
     }
 
     const accessToken =
-      this.authCommonService.generateToken<IAccessTokenPayload>(
+      this.authCommonService.generateToken<IAccessTokenUserPayload>(
         {
           userId: user.id,
-          isAdmin: user.is_admin,
-          role: user.role_id,
         },
         {
           secret: this.configService.get<string>("auth.accessTokenSecret"),
@@ -78,7 +76,7 @@ export class AuthService implements IAuthService {
       );
 
     const refreshToken =
-      this.authCommonService.generateToken<IRefreshTokenPayload>(
+      this.authCommonService.generateToken<IRefreshTokenUserPayload>(
         {
           userId: user.id,
         },
@@ -98,7 +96,7 @@ export class AuthService implements IAuthService {
     return { accessToken, refreshToken };
   }
 
-  async logout(payload: LogoutRequestDto): Promise<void> {
+  async logout(payload: LogoutUserRequestDto): Promise<void> {
     const user = await this.adminService.getAdminEntityById(payload.userId);
 
     if (!user) {
@@ -130,13 +128,13 @@ export class AuthService implements IAuthService {
   ): Promise<NewAccessTokenResponseDto> {
     const { accessToken, refreshToken } = payload;
 
-    const decodedRefreshToken: IRefreshTokenPayload =
+    const decodedRefreshToken: IRefreshTokenUserPayload =
       await this.authCommonService.verifyToken(refreshToken, {
         secret: this.configService.get<string>("auth.refreshTokenSecret"),
         ignoreExpiration: true,
       });
 
-    const decodedAccessToken: IAccessTokenPayload =
+    const decodedAccessToken: IAccessTokenUserPayload =
       await this.authCommonService.verifyToken(accessToken, {
         secret: this.configService.get<string>("auth.accessTokenSecret"),
         ignoreExpiration: true,
@@ -177,11 +175,9 @@ export class AuthService implements IAuthService {
     );
 
     const newAccessToken =
-      this.authCommonService.generateToken<IAccessTokenPayload>(
+      this.authCommonService.generateToken<IAccessTokenUserPayload>(
         {
           userId: user.id,
-          isAdmin: user.is_admin,
-          role: user.role_id,
         },
         {
           secret: this.configService.get<string>("auth.accessTokenSecret"),
@@ -195,8 +191,8 @@ export class AuthService implements IAuthService {
   }
 
   async forgotPassword(
-    data: ForgotPasswordRequestDto,
-  ): Promise<ForgotPasswordResponseDto> {
+    data: ForgotPasswordUserRequestDto,
+  ): Promise<ForgotPasswordUserResponseDto> {
     // check user is exited
     const user = await this.adminService.getAdminEntityByEmail(data.email);
 
@@ -227,7 +223,7 @@ export class AuthService implements IAuthService {
   }
 
   async confirmOtpForgotPassword(
-    data: ConfirmOtpForgotPasswordRequestDto,
+    data: ConfirmOtpForgotPasswordUserRequestDto,
   ): Promise<void> {
     // check user is exited
     const user = await this.adminService.getAdminEntityByEmail(data.email);
@@ -248,7 +244,7 @@ export class AuthService implements IAuthService {
     }
   }
 
-  async resetPassword(data: ResetPasswordRequestDto): Promise<void> {
+  async resetPassword(data: ResetPasswordUserRequestDto): Promise<void> {
     // check user is exited
     const user = await this.adminService.getAdminEntityByEmail(data.email);
 

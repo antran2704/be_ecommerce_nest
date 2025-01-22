@@ -20,6 +20,7 @@ import {
 } from "../dtos";
 import { USER_MESSAGES } from "../messages/user.error";
 import { UserEntity } from "../entities/user.entity";
+import { AuthProviderService } from "src/modules/auth_provider/services/auth_provider.service";
 
 @Injectable()
 export class UserService implements IUserService {
@@ -28,10 +29,11 @@ export class UserService implements IUserService {
     private readonly authTokenService: UserAuthTokenService,
 
     private readonly authCommonService: AuthCommonService,
+    private readonly authProviderService: AuthProviderService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
-  async createUser(payload: CreateUserRequestDto): Promise<void> {
+  async createUserWithSystem(payload: CreateUserRequestDto): Promise<void> {
     const isExitUser = await this.userRepository.findByEmail(payload.email);
 
     if (isExitUser) {
@@ -52,6 +54,18 @@ export class UserService implements IUserService {
 
     // save auth token of user
     await this.authTokenService.create(newUser);
+
+    // save auth provider of user
+    this.authProviderService.createAuthProviderSystem({ userId: newUser.id });
+  }
+
+  // TODO: implement this function
+  async createUserWithProvider(payload: CreateUserRequestDto): Promise<void> {
+    const isExitUser = await this.userRepository.findByEmail(payload.email);
+
+    if (isExitUser) {
+      throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
+    }
   }
 
   async getUsers(

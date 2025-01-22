@@ -26,9 +26,13 @@ export class UserEntity extends DatabaseModifierEntity {
   @AutoMap()
   is_active: boolean;
 
-  @OneToOne(() => AuthTokenEntity, (entity) => entity.admin)
+  @OneToOne(() => AuthTokenEntity, (entity) => entity.admin, {
+    cascade: true,
+  })
   authToken: AuthTokenEntity;
 
-  @OneToMany(() => AuthProviderEntity, (entity) => entity.user)
+  @OneToMany(() => AuthProviderEntity, (entity) => entity.user, {
+    cascade: true,
+  })
   authProviders: AuthProviderEntity[];
 }

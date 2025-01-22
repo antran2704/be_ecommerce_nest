@@ -1,14 +1,22 @@
 import { Module } from "@nestjs/common";
 
-import { AuthService } from "./services/auth.service";
 import { AuthCommonModule } from "src/common/auth/auth.module";
 import { AdminModule } from "../admin/admin.module";
 import { AuthTokenModule } from "../auth_token/auth_token.module";
 import { MailModule } from "src/common/mail/mail.module";
+import { AuthAdminService } from "./admin/services/auth.service";
+import { UserModule } from "../user/user.module";
+import { AuthUserService } from "./user/services/auth.service";
 
 @Module({
-  imports: [AuthCommonModule, AdminModule, AuthTokenModule, MailModule],
-  providers: [AuthService],
-  exports: [AuthService],
+  imports: [
+    AuthCommonModule,
+    AdminModule,
+    UserModule,
+    AuthTokenModule,
+    MailModule,
+  ],
+  providers: [AuthAdminService, AuthUserService],
+  exports: [AuthAdminService, AuthUserService],
 })
 export class AuthModule {}
