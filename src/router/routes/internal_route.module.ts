@@ -10,10 +10,14 @@ import { RoleController } from "src/modules/role/controllers/role.controller";
 import { RoleModule } from "src/modules/role/role.module";
 import { UserController } from "src/modules/user/controller/user.controller";
 import { UserModule } from "src/modules/user/user.module";
+import { UserMeController } from "src/modules/user/controller/user_me.controller";
+import { AdminMeController } from "src/modules/admin/controller/admin_me.controller";
 
 @Module({
   controllers: [
+    AdminMeController,
     AdminController,
+    UserMeController,
     UserController,
     PermissionController,
     GroupRoleController,

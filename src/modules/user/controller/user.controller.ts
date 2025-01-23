@@ -33,6 +33,7 @@ import {
   SearchUserRequestDto,
   UpdateUserRequestDto,
 } from "../dtos";
+import { ResetPasswordRequestDto } from "src/modules/admin/dtos";
 
 @ApiBearerAuth()
 @Controller("users")
@@ -95,19 +96,19 @@ export class UserController {
     return await this.userService.updateUser(userId, payload);
   }
 
-  // change password
-  @Patch("/:user_id/change-password")
+  // reset password
+  @Patch("/:user_id/reset-password")
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
   @Permissions([ENUM_PERMISSION.USER_UPDATE])
   @UseGuards(PermissionGuard)
-  async changePassword(
+  async resetPassword(
     @Param("user_id") userId: string,
-    @Body() payload: ChangePasswordUserRequestDto,
+    @Body() payload: ResetPasswordRequestDto,
   ): Promise<UpdatedSuccessResponse> {
-    await this.userService.changePassword(userId, payload);
+    await this.userService.resetPassword(userId, payload);
     return new UpdatedSuccessResponse();
   }
 

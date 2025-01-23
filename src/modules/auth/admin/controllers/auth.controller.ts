@@ -22,7 +22,7 @@ import NewAccessTokenRequestDto from "../../dtos/new_access_token_request.dto";
 import NewAccessTokenResponseDto from "../../dtos/new_access_token_response.dto";
 
 @Controller("auth/admin")
-@ApiTags("Auth.Admin")
+@ApiTags("Admin.Auth")
 export class AuthAdminController {
   constructor(private authService: AuthAdminService) {}
 
