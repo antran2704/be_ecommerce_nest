@@ -8,7 +8,6 @@ import * as dayjs from "dayjs";
 
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import { AUTH_ERROR_MESSAGES } from "../../messages/auth.error";
-import { AdminService } from "src/modules/admin/services/admin.service";
 import { generateOTP } from "src/helpers/OTP";
 import { MailService } from "src/common/mail/services/mail.service";
 import { IAuthUserService } from "../interfaces/auth_service.interface";
@@ -24,15 +23,25 @@ import ForgotPasswordUserRequestDto from "../dtos/services/forgot_password_reque
 import ForgotPasswordUserResponseDto from "../dtos/services/forgot_password_response.dto";
 import {
   ConfirmOtpForgotPasswordUserRequestDto,
+  ConfirmSignupOtpRequestDto,
   ResetPasswordUserRequestDto,
+  SendSignupOtpRequestDto,
+  SendSignupOtpResponseDto,
+  SignupUserRequestDto,
 } from "../dtos";
+import { UserService } from "src/modules/user/services/user.service";
+import { AuthProviderService } from "src/modules/auth_provider/services/auth_provider.service";
+import { ENUM_AUTH_PROVIDER } from "src/modules/auth_provider/enums/provider.enum";
 
 @Injectable()
 export class AuthUserService implements IAuthUserService {
   constructor(
+    private userService: UserService,
+
     private authCommonService: AuthCommonService,
-    private adminService: AdminService,
     private authTokenService: UserAuthTokenService,
+    private authProviderService: AuthProviderService,
+
     private configService: ConfigService,
     private readonly mailService: MailService,
   ) {}
@@ -40,7 +49,7 @@ export class AuthUserService implements IAuthUserService {
   async login(data: LoginSystemUserRequestDto): Promise<LoginUserResponseDto> {
     const { email, password } = data;
 
-    const user = await this.adminService.getAdminEntityByEmail(email);
+    const user = await this.userService.getUserEntityByEmail(email);
     if (!user) {
       throw new UnauthorizedException(
         AUTH_ERROR_MESSAGES.EMAIL_OR_PASSWORD_INCORRECT,
@@ -48,6 +57,10 @@ export class AuthUserService implements IAuthUserService {
     }
 
     if (!user.is_active) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_NOT_EXIST);
+    }
+
+    if (user.is_banned) {
       throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_WAS_DISABLED);
     }
 
@@ -96,8 +109,115 @@ export class AuthUserService implements IAuthUserService {
     return { accessToken, refreshToken };
   }
 
+  async signup(data: SignupUserRequestDto): Promise<void> {
+    const user = await this.userService.getUserEntityByEmail(data.email);
+
+    if (!user) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_NOT_EXIST);
+    }
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
+
+    const isOtpCorrect = await this.authCommonService.compareHashData(
+      data.otp,
+      authToken.signup_otp,
+    );
+
+    if (!isOtpCorrect) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_INVALID);
+    }
+
+    if (dayjs(authToken.signup_otp_expire_at).isBefore(dayjs())) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
+    }
+
+    // update password for user
+    await this.userService.signupPassword(user.id, { password: data.password });
+
+    // active user
+    await this.userService.activeUser(user.id);
+
+    // reset signup otp
+    this.authTokenService.updateSignupOtp(user.id, {
+      signupOtp: "",
+      signupOtpExpireAt: "",
+    });
+  }
+
+  async sendSignupOtp(
+    data: SendSignupOtpRequestDto,
+  ): Promise<SendSignupOtpResponseDto> {
+    // check user and provider are exited
+    const user = await this.userService.getUserEntityByEmail(data.email);
+    let userId: string;
+
+    if (!user) {
+      userId = await this.userService.createUserWithSystem(data);
+    } else {
+      userId = user.id;
+    }
+
+    const authProvider = await this.authProviderService.getAuthProvider({
+      userId,
+      provider: ENUM_AUTH_PROVIDER.SYSTEM,
+    });
+
+    if (authProvider && user.is_active) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_EXISTED);
+    }
+
+    const newOtp = generateOTP();
+    const otpHash = await this.authCommonService.hashData(newOtp);
+
+    const otpExpireConfig = this.configService.get<string>(
+      "forgotPassword.expiresIn",
+    );
+
+    const otpExpiresIn = dayjs()
+      .add(Number(otpExpireConfig), "minutes")
+      .toISOString();
+
+    // Send email
+    this.mailService.sendOtpSignupUser({
+      otp: newOtp,
+      toEmail: data.email,
+    });
+
+    // Update forgot otp and expire of otp
+    this.authTokenService.updateSignupOtp(userId, {
+      signupOtp: otpHash,
+      signupOtpExpireAt: otpExpiresIn,
+    });
+
+    return { otp: newOtp, expireAt: otpExpiresIn };
+  }
+
+  async confirmSignupOtp(data: ConfirmSignupOtpRequestDto): Promise<void> {
+    // check user is exited
+    const user = await this.userService.getUserEntityByEmail(data.email);
+
+    if (!user) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_NOT_EXIST);
+    }
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
+
+    const isOtpCorrect = await this.authCommonService.compareHashData(
+      data.otp,
+      authToken.signup_otp,
+    );
+
+    if (!isOtpCorrect) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_INVALID);
+    }
+
+    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
+    }
+  }
+
   async logout(payload: LogoutUserRequestDto): Promise<void> {
-    const user = await this.adminService.getAdminEntityById(payload.userId);
+    const user = await this.userService.getUserEntityById(payload.userId);
 
     if (!user) {
       throw new UnauthorizedException(
@@ -105,7 +225,7 @@ export class AuthUserService implements IAuthUserService {
       );
     }
 
-    if (!user.is_active) {
+    if (user.is_banned) {
       throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_WAS_DISABLED);
     }
 
@@ -170,7 +290,7 @@ export class AuthUserService implements IAuthUserService {
       );
     }
 
-    const user = await this.adminService.getAdminEntityById(
+    const user = await this.userService.getUserEntityById(
       decodedRefreshToken.userId,
     );
 
@@ -194,7 +314,11 @@ export class AuthUserService implements IAuthUserService {
     data: ForgotPasswordUserRequestDto,
   ): Promise<ForgotPasswordUserResponseDto> {
     // check user is exited
-    const user = await this.adminService.getAdminEntityByEmail(data.email);
+    const user = await this.userService.getUserEntityByEmail(data.email);
+
+    if (!user || !user.is_active || user.is_banned) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_NOT_EXIST);
+    }
 
     const newOtp = generateOTP();
     const otpHash = await this.authCommonService.hashData(newOtp);
@@ -226,7 +350,11 @@ export class AuthUserService implements IAuthUserService {
     data: ConfirmOtpForgotPasswordUserRequestDto,
   ): Promise<void> {
     // check user is exited
-    const user = await this.adminService.getAdminEntityByEmail(data.email);
+    const user = await this.userService.getUserEntityByEmail(data.email);
+
+    if (!user || !user.is_active || user.is_banned) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_NOT_EXIST);
+    }
 
     const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
 
@@ -236,22 +364,26 @@ export class AuthUserService implements IAuthUserService {
     );
 
     if (!isOtpCorrect) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_INVALID);
     }
 
     if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
     }
   }
 
   async resetPassword(data: ResetPasswordUserRequestDto): Promise<void> {
     // check user is exited
-    const user = await this.adminService.getAdminEntityByEmail(data.email);
+    const user = await this.userService.getUserEntityByEmail(data.email);
+
+    if (!user || !user.is_active || user.is_banned) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_NOT_EXIST);
+    }
 
     const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
 
     if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
     }
 
     const isOtpCorrect = await this.authCommonService.compareHashData(
@@ -260,10 +392,10 @@ export class AuthUserService implements IAuthUserService {
     );
 
     if (!isOtpCorrect) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_INVALID);
     }
 
-    await this.adminService.resetPassword(user.id, {
+    await this.userService.resetPassword(user.id, {
       newPassword: data.newPassword,
     });
 

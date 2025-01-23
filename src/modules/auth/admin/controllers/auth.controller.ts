@@ -78,14 +78,14 @@ export class AuthAdminController {
     return await this.authService.forgotPassword(payload);
   }
 
-  @Post("/confirm-otp-forgot-password")
+  @Post("/confirm-forgot-password-otp")
   @ApiBody({
     type: ConfirmForgotPasswordRequestDto,
   })
   @ApiResponse({
     type: SuccessResponse,
   })
-  async confirmOtpForgotPassword(
+  async confirmForgotPasswordOtp(
     @Body() payload: ConfirmForgotPasswordRequestDto,
   ): Promise<SuccessResponse> {
     await this.authService.confirmOtpForgotPassword(payload);

@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
-export default class CreateSuperAdminRequestDto {
+export default class ConfirmSignupOtpRequestDto {
   @ApiProperty({
     required: true,
-    example: "admin@gmail.com",
+    example: "phamtrangiaan27@gmail.com",
   })
   @IsNotEmpty()
   @IsEmail()
@@ -12,17 +12,9 @@ export default class CreateSuperAdminRequestDto {
 
   @ApiProperty({
     required: true,
-    example: "admin",
+    example: "150603",
   })
   @IsNotEmpty()
   @IsString()
-  name: string;
-
-  @ApiProperty({
-    required: true,
-    example: "xyz123",
-  })
-  @IsNotEmpty()
-  @IsString()
-  godKey: string;
+  otp: string;
 }

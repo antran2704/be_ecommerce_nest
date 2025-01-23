@@ -27,6 +27,14 @@ export class AuthTokenEntity {
   @AutoMap()
   forgot_otp_expire_at: string;
 
+  @Column({ default: "" })
+  @AutoMap()
+  signup_otp: string;
+
+  @Column({ default: "" })
+  @AutoMap()
+  signup_otp_expire_at: string;
+
   // Relations with AdminEntity
   @OneToOne(() => AdminEntity, (entity) => entity.authToken, {
     onDelete: "CASCADE",

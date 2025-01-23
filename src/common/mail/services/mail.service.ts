@@ -5,7 +5,8 @@ import { ConfigService } from "@nestjs/config";
 import {
   IInitContextMail,
   IMailService,
-  IOtpForgotPassword,
+  IForgotPasswordOtp,
+  ISignupUserOtp,
 } from "../interfaces";
 import TEMPLATE_EMAIL from "../common/template";
 
@@ -36,12 +37,26 @@ export class MailService implements IMailService {
     };
   }
 
-  async sendOtpForgotPassword(data: IOtpForgotPassword): Promise<void> {
+  async sendOtpForgotPassword(data: IForgotPasswordOtp): Promise<void> {
     this.nestMailService.sendMail({
       from: "Antran",
       to: data.toEmail,
       subject: "Forgot password",
       template: TEMPLATE_EMAIL.OTP_FORGOT_PASSWORD,
+      context: {
+        otp: data.otp,
+        email: data.toEmail,
+        ...this.getDefaultContext(),
+      },
+    });
+  }
+
+  async sendOtpSignupUser(data: ISignupUserOtp): Promise<void> {
+    this.nestMailService.sendMail({
+      from: "Antran",
+      to: data.toEmail,
+      subject: "Signup",
+      template: TEMPLATE_EMAIL.OTP_SIGNUP_USER,
       context: {
         otp: data.otp,
         email: data.toEmail,

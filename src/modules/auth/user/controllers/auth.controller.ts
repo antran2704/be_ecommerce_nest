@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Render } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { ApiBody, ApiOkResponse, ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
+  CreateSuccessResponse,
   GetSuccessResponse,
   SuccessResponse,
   UpdatedSuccessResponse,
@@ -8,15 +9,17 @@ import {
 import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
 import { AUTH_SUCCESS_MESSAGES } from "../../messages/auth.success";
 import ConfirmForgotPasswordRequestDto from "../dtos/services/confirm_otp_forgot_password_request.dto";
-import TEMPLATE_EMAIL from "src/common/mail/common/template";
 import { AuthUserService } from "../services/auth.service";
 import {
+  ConfirmSignupOtpRequestDto,
   ForgotPasswordUserRequestDto,
   ForgotPasswordUserResponseDto,
   LoginUserRequestDto,
   LoginUserResponseDto,
   LogoutUserRequestDto,
   ResetPasswordUserRequestDto,
+  SendSignupOtpRequestDto,
+  SignupUserRequestDto,
 } from "../dtos";
 import NewAccessTokenRequestDto from "../../dtos/new_access_token_request.dto";
 import NewAccessTokenResponseDto from "../../dtos/new_access_token_response.dto";
@@ -25,12 +28,6 @@ import NewAccessTokenResponseDto from "../../dtos/new_access_token_response.dto"
 @ApiTags("Auth.User")
 export class AuthUserController {
   constructor(private authService: AuthUserService) {}
-
-  @Get("/test/template")
-  @Render(TEMPLATE_EMAIL.OTP_FORGOT_PASSWORD)
-  testTemplate() {
-    return { email: "phamtrangiaan27@gmail.com", otp: "123456" };
-  }
 
   @Post("/login")
   @ApiBody({
@@ -43,6 +40,38 @@ export class AuthUserController {
     const data = await this.authService.login(payload);
 
     return new GetSuccessResponse(data);
+  }
+
+  @Post("/signup")
+  @ApiBody({
+    type: SignupUserRequestDto,
+  })
+  @ApiResponse({
+    status: 201,
+    example: new CreateSuccessResponse(),
+  })
+  async signup(
+    @Body() payload: SignupUserRequestDto,
+  ): Promise<CreateSuccessResponse> {
+    await this.authService.signup(payload);
+
+    return new CreateSuccessResponse();
+  }
+
+  @Post("/signup-otp")
+  @ApiBody({
+    type: SendSignupOtpRequestDto,
+  })
+  @ApiResponse({
+    status: 201,
+    example: new CreateSuccessResponse(),
+  })
+  async signupOtp(
+    @Body() payload: SendSignupOtpRequestDto,
+  ): Promise<CreateSuccessResponse> {
+    await this.authService.sendSignupOtp(payload);
+
+    return new CreateSuccessResponse();
   }
 
   @Post("/logout")
@@ -78,14 +107,29 @@ export class AuthUserController {
     return await this.authService.forgotPassword(payload);
   }
 
-  @Post("/confirm-otp-forgot-password")
+  @Post("/confirm-signup-otp")
+  @ApiBody({
+    type: ConfirmSignupOtpRequestDto,
+  })
+  @ApiResponse({
+    type: SuccessResponse,
+  })
+  async confirmSignupOtp(
+    @Body() payload: ConfirmSignupOtpRequestDto,
+  ): Promise<SuccessResponse> {
+    await this.authService.confirmSignupOtp(payload);
+
+    return new SuccessResponse();
+  }
+
+  @Post("/confirm-forgot-password-otp")
   @ApiBody({
     type: ConfirmForgotPasswordRequestDto,
   })
   @ApiResponse({
     type: SuccessResponse,
   })
-  async confirmOtpForgotPassword(
+  async confirmForgotPasswordOtp(
     @Body() payload: ConfirmForgotPasswordRequestDto,
   ): Promise<SuccessResponse> {
     await this.authService.confirmOtpForgotPassword(payload);

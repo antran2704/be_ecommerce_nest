@@ -15,6 +15,9 @@ import {
   GetUserResponseDto,
   ResetPasswordRequestDto,
   SearchUserRequestDto,
+  SignupUserDto,
+  SignupUserPasswordRequestDto,
+  SignupUserRequestDto,
   UpdateUserDto,
   UpdateUserRequestDto,
 } from "../dtos";
@@ -33,7 +36,7 @@ export class UserService implements IUserService {
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
-  async createUserWithSystem(payload: CreateUserRequestDto): Promise<void> {
+  async createUserByAdmin(payload: CreateUserRequestDto): Promise<void> {
     const isExitUser = await this.userRepository.findByEmail(payload.email);
 
     if (isExitUser) {
@@ -47,6 +50,7 @@ export class UserService implements IUserService {
     const dataForSave: CreateUserDto = {
       ...payload,
       password: hashPassword,
+      isActive: true,
     };
 
     // save user
@@ -57,6 +61,30 @@ export class UserService implements IUserService {
 
     // save auth provider of user
     this.authProviderService.createAuthProviderSystem({ userId: newUser.id });
+  }
+
+  async createUserWithSystem(payload: SignupUserRequestDto): Promise<string> {
+    const isExitUser = await this.userRepository.findByEmail(payload.email);
+
+    if (isExitUser) {
+      throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
+    }
+
+    const dataForSave: SignupUserDto = {
+      email: payload.email,
+      isActive: false,
+    };
+
+    // save user
+    const newUser = await this.userRepository.createUser(dataForSave);
+
+    // save auth token of user
+    await this.authTokenService.create(newUser);
+
+    // save auth provider of user
+    this.authProviderService.createAuthProviderSystem({ userId: newUser.id });
+
+    return newUser.id;
   }
 
   // TODO: implement this function
@@ -109,13 +137,7 @@ export class UserService implements IUserService {
   }
 
   async getUserEntityByEmail(email: string): Promise<UserEntity> {
-    const user = await this.userRepository.findByEmail(email);
-
-    if (!user) {
-      throw new BadRequestException(USER_MESSAGES.USER_NOT_FOUND);
-    }
-
-    return user;
+    return await this.userRepository.findByEmail(email);
   }
 
   async updateUser(id: string, payload: UpdateUserRequestDto): Promise<void> {
@@ -170,6 +192,18 @@ export class UserService implements IUserService {
     await this.userRepository.changePassword(id, hashPassword);
   }
 
+  async signupPassword(id: string, data: SignupUserPasswordRequestDto) {
+    const user = await this.userRepository.findByUserId(id);
+
+    if (!user) {
+      throw new BadRequestException(USER_MESSAGES.USER_NOT_FOUND);
+    }
+
+    const hashPassword = await this.authCommonService.hashData(data.password);
+
+    await this.userRepository.changePassword(id, hashPassword);
+  }
+
   async enableUser(id: string): Promise<void> {
     const user = await this.userRepository.findByUserId(id);
 
@@ -177,7 +211,7 @@ export class UserService implements IUserService {
       throw new BadRequestException(USER_MESSAGES.USER_NOT_FOUND);
     }
 
-    if (user.is_active) {
+    if (!user.is_banned) {
       throw new BadRequestException(USER_MESSAGES.USER_WAS_ENABLED);
     }
 
@@ -191,11 +225,39 @@ export class UserService implements IUserService {
       throw new BadRequestException(USER_MESSAGES.USER_NOT_FOUND);
     }
 
-    if (!user.is_active) {
+    if (user.is_banned) {
       throw new BadRequestException(USER_MESSAGES.USER_WAS_DISABLED);
     }
 
     await this.userRepository.disableUser(id);
+  }
+
+  async activeUser(id: string): Promise<void> {
+    const user = await this.userRepository.findByUserId(id);
+
+    if (!user) {
+      throw new BadRequestException(USER_MESSAGES.USER_NOT_FOUND);
+    }
+
+    if (user.is_active) {
+      throw new BadRequestException(USER_MESSAGES.USER_WAS_ACTIVED);
+    }
+
+    await this.userRepository.activeUser(id);
+  }
+
+  async inactiveUser(id: string): Promise<void> {
+    const user = await this.userRepository.findByUserId(id);
+
+    if (!user) {
+      throw new BadRequestException(USER_MESSAGES.USER_NOT_FOUND);
+    }
+
+    if (!user.is_active) {
+      throw new BadRequestException(USER_MESSAGES.USER_WAS_INACTIVED);
+    }
+
+    await this.userRepository.inactiveUser(id);
   }
 
   async deleteUser(id: string): Promise<void> {

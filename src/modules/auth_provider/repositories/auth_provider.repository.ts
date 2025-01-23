@@ -22,7 +22,8 @@ export class AuthProviderRepository implements IAuthProviderRepository {
 
   async getAuthProvider(data: GetAuthProviderDto): Promise<AuthProviderEntity> {
     return await this.authProviderEntity.findOneBy({
-      provider_id: data.providerId,
+      provider: data.provider,
+      user_id: data.userId,
     });
   }
 }

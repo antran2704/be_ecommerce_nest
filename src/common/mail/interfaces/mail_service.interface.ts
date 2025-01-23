@@ -1,8 +1,9 @@
-import { IInitContextMail, IOtpForgotPassword } from "./index";
+import { IInitContextMail, IForgotPasswordOtp, ISignupUserOtp } from "./index";
 
 interface IMailService {
   getDefaultContext(): IInitContextMail;
-  sendOtpForgotPassword(data: IOtpForgotPassword): Promise<void>;
+  sendOtpForgotPassword(data: IForgotPasswordOtp): Promise<void>;
+  sendOtpSignupUser(data: ISignupUserOtp): Promise<void>;
 }
 
 export default IMailService;

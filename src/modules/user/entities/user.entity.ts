@@ -11,7 +11,7 @@ export class UserEntity extends DatabaseModifierEntity {
   @AutoMap()
   id: string;
 
-  @Column()
+  @Column({ default: "" })
   @AutoMap()
   name: string;
 
@@ -22,9 +22,13 @@ export class UserEntity extends DatabaseModifierEntity {
   @Column({ nullable: true })
   password: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   @AutoMap()
   is_active: boolean;
+
+  @Column({ default: false })
+  @AutoMap()
+  is_banned: boolean;
 
   @OneToOne(() => AuthTokenEntity, (entity) => entity.admin, {
     cascade: true,

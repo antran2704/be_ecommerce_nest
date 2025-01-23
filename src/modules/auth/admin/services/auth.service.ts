@@ -240,11 +240,11 @@ export class AuthAdminService implements IAuthAdminService {
     );
 
     if (!isOtpCorrect) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_INVALID);
     }
 
     if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
     }
   }
 
@@ -255,7 +255,7 @@ export class AuthAdminService implements IAuthAdminService {
     const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
 
     if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_EXPIRED);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
     }
 
     const isOtpCorrect = await this.authCommonService.compareHashData(
@@ -264,7 +264,7 @@ export class AuthAdminService implements IAuthAdminService {
     );
 
     if (!isOtpCorrect) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_FOGOT_INVALID);
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_INVALID);
     }
 
     await this.adminService.resetPassword(user.id, {

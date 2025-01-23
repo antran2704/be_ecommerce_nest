@@ -45,8 +45,6 @@ export class AuthProviderService implements IAuthProviderService {
   async getAuthProvider(
     data: GetAuthProviderRequestDto,
   ): Promise<AuthProviderEntity> {
-    return await this.authProviderRepository.getAuthProvider({
-      providerId: data.providerId,
-    });
+    return await this.authProviderRepository.getAuthProvider(data);
   }
 }

@@ -2,16 +2,17 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { IAuthTokenRepository } from "../../interfaces/auth_token_repositoty.interface";
 import {
   UpdateForgotOtpAuthTokenDto,
   UpdateRefreshTokenAuthTokenDto,
+  UpdateSignupOtpAuthTokenDto,
 } from "../../dtos";
 import { AuthTokenEntity } from "../../entities/auth_token.entity";
 import { UserEntity } from "src/modules/user/entities/user.entity";
+import { IUserAuthTokenRepository } from "../../interfaces/user_auth_token_repository.interface";
 
 @Injectable()
-export default class AuthTokenRepository implements IAuthTokenRepository {
+export default class AuthTokenRepository implements IUserAuthTokenRepository {
   constructor(
     @InjectRepository(AuthTokenEntity)
     private readonly authTokenEntity: Repository<AuthTokenEntity>,
@@ -50,6 +51,19 @@ export default class AuthTokenRepository implements IAuthTokenRepository {
       { user: { id: userId } },
       {
         refresh_token: data.refreshToken,
+      },
+    );
+  }
+
+  async updateSignupOtp(
+    userId: string,
+    data: UpdateSignupOtpAuthTokenDto,
+  ): Promise<void> {
+    await this.authTokenEntity.update(
+      { user: { id: userId } },
+      {
+        signup_otp: data.signupOtp,
+        signup_otp_expire_at: data.signupOtpExpireAt,
       },
     );
   }
