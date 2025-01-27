@@ -15,9 +15,9 @@ import {
   GetUserResponseDto,
   ResetPasswordRequestDto,
   SearchUserRequestDto,
-  SignupUserDto,
   SignupUserPasswordRequestDto,
   SignupUserRequestDto,
+  SignupUserWithProviderRequestDto,
   UpdateUserDto,
   UpdateUserRequestDto,
 } from "../dtos";
@@ -47,14 +47,14 @@ export class UserService implements IUserService {
       payload.password,
     );
 
-    const dataForSave: CreateUserDto = {
+    const formatData: CreateUserDto = {
       ...payload,
       password: hashPassword,
-      isActive: true,
+      is_active: true,
     };
 
     // save user
-    const newUser = await this.userRepository.createUser(dataForSave);
+    const newUser = await this.userRepository.createUser(formatData);
 
     // save auth token of user
     await this.authTokenService.create(newUser);
@@ -70,13 +70,13 @@ export class UserService implements IUserService {
       throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
     }
 
-    const dataForSave: SignupUserDto = {
+    const formatData: CreateUserDto = {
       email: payload.email,
-      isActive: false,
+      is_active: false,
     };
 
     // save user
-    const newUser = await this.userRepository.createUser(dataForSave);
+    const newUser = await this.userRepository.createUser(formatData);
 
     // save auth token of user
     await this.authTokenService.create(newUser);
@@ -87,13 +87,28 @@ export class UserService implements IUserService {
     return newUser.id;
   }
 
-  // TODO: implement this function
-  async createUserWithProvider(payload: CreateUserRequestDto): Promise<void> {
-    const isExitUser = await this.userRepository.findByEmail(payload.email);
+  async createUserWithProvider(
+    payload: SignupUserWithProviderRequestDto,
+  ): Promise<string> {
+    const formatData: CreateUserDto = {
+      email: payload.email,
+      is_active: true,
+    };
 
-    if (isExitUser) {
-      throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
-    }
+    // save user
+    const newUser = await this.userRepository.createUser(formatData);
+
+    // save auth token of user
+    await this.authTokenService.create(newUser);
+
+    // save auth provider of user
+    this.authProviderService.createAuthProvider({
+      provider: payload.provider,
+      userId: newUser.id,
+      providerId: payload.providerId,
+    });
+
+    return newUser.id;
   }
 
   async getUsers(
@@ -147,11 +162,11 @@ export class UserService implements IUserService {
       throw new BadRequestException(USER_MESSAGES.USER_NOT_FOUND);
     }
 
-    const dataForSave: UpdateUserDto = {
+    const formatData: UpdateUserDto = {
       ...payload,
     };
 
-    await this.userRepository.updateUser(id, dataForSave);
+    await this.userRepository.updateUser(id, formatData);
   }
 
   async changePassword(

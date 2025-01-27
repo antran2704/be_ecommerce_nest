@@ -20,12 +20,10 @@ export class AuthProviderService implements IAuthProviderService {
   async createAuthProvider(
     payload: CreateAuthProviderRequestDto,
   ): Promise<void> {
-    // TODO: call api to get information from provider
-
     const data: CreateAuthProviderDto = {
-      provider: ENUM_AUTH_PROVIDER.GOOGLE,
-      provider_id: "123",
-      user_id: "123",
+      provider: payload.provider,
+      provider_id: payload.providerId,
+      user_id: payload.userId,
     };
 
     await this.authProviderRepository.createAuthProvider(data);

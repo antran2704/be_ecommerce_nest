@@ -5,6 +5,7 @@ import {
   SearchUserRequestDto,
   SignupUserPasswordRequestDto,
   SignupUserRequestDto,
+  SignupUserWithProviderRequestDto,
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 import { UserEntity } from "../entities/user.entity";
@@ -12,7 +13,9 @@ import { ResetPasswordRequestDto } from "src/modules/admin/dtos";
 
 export interface IUserService {
   createUserWithSystem(payload: SignupUserRequestDto): Promise<string>;
-  createUserWithProvider(payload: CreateUserRequestDto): Promise<void>;
+  createUserWithProvider(
+    payload: SignupUserWithProviderRequestDto,
+  ): Promise<string>;
   createUserByAdmin(payload: CreateUserRequestDto): Promise<void>;
   getUsers(
     params: SearchUserRequestDto,

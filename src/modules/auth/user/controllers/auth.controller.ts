@@ -16,6 +16,7 @@ import {
   ForgotPasswordUserResponseDto,
   LoginUserRequestDto,
   LoginUserResponseDto,
+  LoginWithProviderRequestDto,
   LogoutUserRequestDto,
   ResetPasswordUserRequestDto,
   SendSignupOtpRequestDto,
@@ -40,6 +41,19 @@ export class AuthUserController {
     const data = await this.authService.login(payload);
 
     return new GetSuccessResponse(data);
+  }
+
+  @Post("/login/provider")
+  @ApiBody({
+    type: LoginWithProviderRequestDto,
+  })
+  @ApiOkResponseDecorator(LoginUserResponseDto)
+  async loginWithProvider(
+    @Body() payload: LoginWithProviderRequestDto,
+  ): Promise<SuccessResponse> {
+    const data = await this.authService.loginWithProvider(payload);
+
+    return new SuccessResponse(data);
   }
 
   @Post("/signup")

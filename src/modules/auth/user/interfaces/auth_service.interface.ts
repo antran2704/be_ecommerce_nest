@@ -3,6 +3,7 @@ import {
   ForgotPasswordUserResponseDto,
   LoginUserRequestDto,
   LoginUserResponseDto,
+  LoginWithProviderRequestDto,
   LogoutUserRequestDto,
   NewAccessTokenUserResponseDto,
   ResetPasswordUserRequestDto,
@@ -14,6 +15,9 @@ import ConfirmForgotPasswordRequestDto from "../dtos/services/confirm_otp_forgot
 
 export interface IAuthUserService {
   login(data: LoginUserRequestDto): Promise<LoginUserResponseDto>;
+  loginWithProvider(
+    data: LoginWithProviderRequestDto,
+  ): Promise<LoginUserResponseDto>;
   signup(data: SignupUserRequestDto): Promise<void>;
   logout(payload: LogoutUserRequestDto): Promise<void>;
 

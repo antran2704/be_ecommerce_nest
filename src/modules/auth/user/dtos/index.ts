@@ -1,4 +1,5 @@
 export { default as LoginUserRequestDto } from "./services/login_system_request.dto";
+export { default as LoginWithProviderRequestDto } from "./services/login_with_provider_request.dto";
 export { default as SignupUserRequestDto } from "./services/signup_request.dto";
 export { default as LogoutUserRequestDto } from "./services/logout_request.dto";
 export { default as NewAccessTokenUserRequestDto } from "../../dtos/new_access_token_request.dto";

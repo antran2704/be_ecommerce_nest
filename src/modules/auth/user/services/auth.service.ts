@@ -1,10 +1,12 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as dayjs from "dayjs";
+import { ClerkClient, User, verifyToken } from "@clerk/backend";
 
 import { AuthCommonService } from "src/common/auth/services/auth.service";
 import { AUTH_ERROR_MESSAGES } from "../../messages/auth.error";
@@ -24,6 +26,7 @@ import ForgotPasswordUserResponseDto from "../dtos/services/forgot_password_resp
 import {
   ConfirmOtpForgotPasswordUserRequestDto,
   ConfirmSignupOtpRequestDto,
+  LoginWithProviderRequestDto,
   ResetPasswordUserRequestDto,
   SendSignupOtpRequestDto,
   SendSignupOtpResponseDto,
@@ -36,6 +39,9 @@ import { ENUM_AUTH_PROVIDER } from "src/modules/auth_provider/enums/provider.enu
 @Injectable()
 export class AuthUserService implements IAuthUserService {
   constructor(
+    @Inject("ClerkClient")
+    private readonly clerkClient: ClerkClient,
+
     private userService: UserService,
 
     private authCommonService: AuthCommonService,
@@ -109,6 +115,89 @@ export class AuthUserService implements IAuthUserService {
     return { accessToken, refreshToken };
   }
 
+  async loginWithProvider(data: LoginWithProviderRequestDto): Promise<any> {
+    try {
+      const tokenPayload = await verifyToken(data.accessToken, {
+        secretKey: this.configService.get("clerk.secretKey"),
+      });
+      const userClerk: User = await this.clerkClient.users.getUser(
+        tokenPayload.sub,
+      );
+      const externalAccount = userClerk.externalAccounts.find((account) => {
+        return account.verification.strategy.includes(data.provider);
+      });
+
+      if (!externalAccount)
+        throw new BadRequestException(
+          AUTH_ERROR_MESSAGES.EXTERNAL_ACCOUNT_NOT_FOUND,
+        );
+
+      const user = await this.userService.getUserEntityByEmail(
+        externalAccount.emailAddress,
+      );
+
+      let userId: string;
+
+      if (user) {
+        userId = user.id;
+
+        const isExitProvider = await this.authProviderService.getAuthProvider({
+          provider: data.provider,
+          userId: user.id,
+        });
+
+        if (!isExitProvider) {
+          this.authProviderService.createAuthProvider({
+            provider: data.provider,
+            userId: user.id,
+            providerId: externalAccount.id,
+          });
+        }
+      } else {
+        userId = await this.userService.createUserWithProvider({
+          email: externalAccount.emailAddress,
+          provider: data.provider,
+          providerId: externalAccount.id,
+        });
+      }
+
+      const accessToken =
+        this.authCommonService.generateToken<IAccessTokenUserPayload>(
+          {
+            userId,
+          },
+          {
+            secret: this.configService.get<string>("auth.accessTokenSecret"),
+            expiresIn: this.configService.get<string>(
+              "auth.accessTokenExpiresIn",
+            ),
+          },
+        );
+
+      const refreshToken =
+        this.authCommonService.generateToken<IRefreshTokenUserPayload>(
+          {
+            userId,
+          },
+          {
+            secret: this.configService.get<string>("auth.refreshTokenSecret"),
+            expiresIn: this.configService.get<string>(
+              "auth.refreshTokenExpiresIn",
+            ),
+          },
+        );
+
+      // Update refresh token
+      await this.authTokenService.updateRefreshToken(userId, {
+        refreshToken,
+      });
+
+      return { accessToken, refreshToken };
+    } catch (error) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.TOKEN_INVALID);
+    }
+  }
+
   async signup(data: SignupUserRequestDto): Promise<void> {
     const user = await this.userService.getUserEntityByEmail(data.email);
 
@@ -118,6 +207,7 @@ export class AuthUserService implements IAuthUserService {
 
     const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
 
+    // check otp
     const isOtpCorrect = await this.authCommonService.compareHashData(
       data.otp,
       authToken.signup_otp,
@@ -127,6 +217,7 @@ export class AuthUserService implements IAuthUserService {
       throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_INVALID);
     }
 
+    // check otp expired
     if (dayjs(authToken.signup_otp_expire_at).isBefore(dayjs())) {
       throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
     }

@@ -13,13 +13,13 @@ export default class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
   @IsOptional()
   @IsBoolean()
-  isActive: boolean;
+  is_active: boolean;
 }

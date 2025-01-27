@@ -1,15 +1,9 @@
 import { UserEntity } from "../entities/user.entity";
-import {
-  CreateUserDto,
-  SearchUserRequestDto,
-  SignupUserDto,
-  UpdateUserDto,
-} from "../dtos";
+import { CreateUserDto, SearchUserRequestDto, UpdateUserDto } from "../dtos";
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 
 export interface IUserRepository {
-  createUserByAdmin(payload: CreateUserDto): Promise<UserEntity>;
-  createUser(payload: SignupUserDto): Promise<UserEntity>;
+  createUser(payload: CreateUserDto): Promise<UserEntity>;
 
   findByUserId(id: string): Promise<UserEntity>;
   findByEmail(email: string): Promise<UserEntity>;
