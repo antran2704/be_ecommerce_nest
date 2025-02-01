@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { RoleEntity } from "src/modules/role/entities/role.entity";
+import { RoleEntity } from "~/modules/role/entities/role.entity";
 
 export default class UpdateAdminDto {
   @IsNotEmpty()

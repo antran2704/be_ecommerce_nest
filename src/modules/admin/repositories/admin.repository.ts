@@ -3,17 +3,17 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { IAdminRepository } from "../interfaces/admin_repository.interface";
-import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
+import { getEntitesAndPagination } from "~/common/pagination/helpers/pagination";
 import { AdminEntity } from "../entities/admin.entity";
-import { GetDatabaseDefaultID } from "src/helpers/database";
+import { GetDatabaseDefaultID } from "~/helpers/database";
 import {
   CreateAdminDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
 } from "../dtos";
 import { ENUM_ADMIN_STATUS } from "../enums/admin.enum";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
-import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 @Injectable()
 export class AdminRepository implements IAdminRepository {

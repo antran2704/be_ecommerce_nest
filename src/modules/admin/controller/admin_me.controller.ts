@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Patch,
   Request,
   UseGuards,
@@ -13,14 +12,14 @@ import { AdminService } from "../services/admin.service";
 import {
   GetSuccessResponse,
   UpdatedSuccessResponse,
-} from "src/common/response/success.response";
-import { JwtAuthGuard } from "src/common/auth/guards";
+} from "~/common/response/success.response";
+import { JwtAuthGuard } from "~/common/auth/guards";
 import {
   ChangePasswordAdminRequestDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
 } from "../dtos";
-import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
+import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 
 @ApiBearerAuth()
 @Controller("admins/me")

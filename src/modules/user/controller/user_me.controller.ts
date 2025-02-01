@@ -12,10 +12,10 @@ import { UserService } from "../services/user.service";
 import {
   GetSuccessResponse,
   UpdatedSuccessResponse,
-} from "src/common/response/success.response";
-import { JwtAuthGuard } from "src/common/auth/guards";
+} from "~/common/response/success.response";
+import { JwtAuthGuard } from "~/common/auth/guards";
 
-import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
+import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 import { ChangePasswordUserRequestDto, GetUserResponseDto } from "../dtos";
 
 @ApiBearerAuth()

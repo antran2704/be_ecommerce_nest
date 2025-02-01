@@ -8,7 +8,7 @@ import {
 import { UserAuthTokenRepository } from "../../repositories";
 import { AuthTokenEntity } from "../../entities/auth_token.entity";
 import { AUTH_TOKEN_ERROR_MESSAGES } from "../../messages/auth_token.error";
-import { UserEntity } from "src/modules/user/entities/user.entity";
+import { UserEntity } from "~/modules/user/entities/user.entity";
 import { IUserAuthTokenService } from "../../interfaces/user_auth_token_service.interface";
 
 @Injectable()

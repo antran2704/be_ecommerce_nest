@@ -12,11 +12,11 @@ import {
   GetSuccessResponse,
   SuccessResponse,
   UpdatedSuccessResponse,
-} from "src/common/response/success.response";
-import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
+} from "~/common/response/success.response";
+import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 import { AUTH_SUCCESS_MESSAGES } from "../../messages/auth.success";
 import ConfirmForgotPasswordRequestDto from "../dtos/services/confirm_otp_forgot_password_request.dto";
-import TEMPLATE_EMAIL from "src/common/mail/common/template";
+import TEMPLATE_EMAIL from "~/common/mail/common/template";
 import { AuthAdminService } from "../services/auth.service";
 import NewAccessTokenRequestDto from "../../dtos/new_access_token_request.dto";
 import NewAccessTokenResponseDto from "../../dtos/new_access_token_response.dto";

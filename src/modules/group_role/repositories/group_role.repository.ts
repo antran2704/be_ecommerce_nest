@@ -4,12 +4,12 @@ import { Repository } from "typeorm";
 
 import { IGroupRoleRepository } from "../interfaces";
 import { GroupRoleEntity } from "../entities/group_role.entity";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
-import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
-import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
+import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
+import { getEntitesAndPagination } from "~/common/pagination/helpers/pagination";
 import { CreateGroupRoleRequestDto, UpdateGroupRoleRequestDto } from "../dtos";
-import { GetDatabaseDefaultID } from "src/helpers/database";
-import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
+import { GetDatabaseDefaultID } from "~/helpers/database";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 @Injectable()
 export default class GroupRoleRepository implements IGroupRoleRepository {

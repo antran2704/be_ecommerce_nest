@@ -8,9 +8,9 @@ import {
   OneToMany,
 } from "typeorm";
 
-import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
-import { GroupRoleEntity } from "src/modules/group_role/entities/group_role.entity";
-import { AdminEntity } from "src/modules/admin/entities/admin.entity";
+import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
+import { GroupRoleEntity } from "~/modules/group_role/entities/group_role.entity";
+import { AdminEntity } from "~/modules/admin/entities/admin.entity";
 
 @Entity({ name: "roles" })
 export class RoleEntity extends DatabaseModifierEntity {

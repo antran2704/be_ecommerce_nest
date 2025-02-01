@@ -8,7 +8,7 @@ import { Mapper } from "@automapper/core";
 
 import { IGroupRoleService } from "../interfaces";
 import { GroupRoleEntity } from "../entities/group_role.entity";
-import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
+import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
 import { GROUP_ROLE_MESSAGES } from "../messages/group_role.error";
 import {
   CreateGroupRoleRequestDto,
@@ -16,7 +16,7 @@ import {
   UpdateGroupRoleRequestDto,
 } from "../dtos";
 import GroupRoleRepository from "../repositories/group_role.repository";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 
 @Injectable()
 export class GroupRoleService implements IGroupRoleService {

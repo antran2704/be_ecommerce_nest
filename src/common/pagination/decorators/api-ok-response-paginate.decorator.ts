@@ -1,6 +1,6 @@
 import { applyDecorators, Type } from "@nestjs/common";
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from "@nestjs/swagger";
-import { GetSuccessWithPaginationResponse } from "src/common/response/success.response";
+import { GetSuccessWithPaginationResponse } from "~/common/response/success.response";
 import PaginationResponseDto from "../dtos/pagination_response.dto";
 
 export const ApiOkResponsePaginateDecorator = <DataDto extends Type<unknown>>(

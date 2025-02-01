@@ -1,11 +1,11 @@
-import { PaginationSearchRequestDto } from "src/common/pagination/dtos";
+import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
 
 import {
   CreateGroupRoleRequestDto,
   GetGroupRoleResponeDto,
   UpdateGroupRoleRequestDto,
 } from "../dtos";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { GroupRoleEntity } from "../entities/group_role.entity";
 
 export default interface IGroupRoleService {

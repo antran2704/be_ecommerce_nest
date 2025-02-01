@@ -3,8 +3,8 @@ import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 
 import { PermissionService } from "../services/permission.service";
 import { ENUM_PERMISSION } from "../enums/permission.enum";
-import { Permissions } from "src/common/auth/decorators/permission.decorator";
-import { PermissionGuard } from "src/common/auth/guards";
+import { Permissions } from "~/common/auth/decorators/permission.decorator";
+import { PermissionGuard } from "~/common/auth/guards";
 
 @Controller("permission")
 @ApiBearerAuth()

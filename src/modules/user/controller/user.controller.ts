@@ -18,22 +18,21 @@ import {
   GetSuccessResponse,
   GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
-} from "src/common/response/success.response";
-import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators/api-ok-response-paginate.decorator";
-import { PaginationRequestPipe } from "src/common/request/pipes/pagination_request.pipe";
-import { Permissions } from "src/common/auth/decorators/permission.decorator";
-import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
-import { PermissionGuard } from "src/common/auth/guards";
+} from "~/common/response/success.response";
+import { ApiOkResponsePaginateDecorator } from "~/common/pagination/decorators/api-ok-response-paginate.decorator";
+import { PaginationRequestPipe } from "~/common/request/pipes/pagination_request.pipe";
+import { Permissions } from "~/common/auth/decorators/permission.decorator";
+import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
+import { PermissionGuard } from "~/common/auth/guards";
 
-import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
+import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 import {
-  ChangePasswordUserRequestDto,
   CreateUserRequestDto,
   GetUserResponseDto,
   SearchUserRequestDto,
   UpdateUserRequestDto,
 } from "../dtos";
-import { ResetPasswordRequestDto } from "src/modules/admin/dtos";
+import { ResetPasswordRequestDto } from "~/modules/admin/dtos";
 
 @ApiBearerAuth()
 @Controller("users")

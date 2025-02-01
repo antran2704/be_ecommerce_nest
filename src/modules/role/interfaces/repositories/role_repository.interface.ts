@@ -1,11 +1,11 @@
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { RoleEntity } from "../../entities/role.entity";
 import {
   CreateRoleRequestDto,
   SearchRolesRequestDto,
   UpdateRoleRequestDto,
 } from "../../dtos";
-import { GroupRoleEntity } from "src/modules/group_role/entities/group_role.entity";
+import { GroupRoleEntity } from "~/modules/group_role/entities/group_role.entity";
 
 export default interface IRoleRepository {
   getRoles(

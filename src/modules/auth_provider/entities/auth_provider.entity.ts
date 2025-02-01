@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
+import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
 import { ENUM_AUTH_PROVIDER } from "../enums/provider.enum";
-import { UserEntity } from "src/modules/user/entities/user.entity";
+import { UserEntity } from "~/modules/user/entities/user.entity";
 
 @Entity({ name: "auth_providers" })
 export class AuthProviderEntity extends DatabaseModifierEntity {

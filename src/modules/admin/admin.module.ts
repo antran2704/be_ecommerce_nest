@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { AdminService } from "./services/admin.service";
 import { AdminEntity } from "./entities/admin.entity";
-import { AuthCommonModule } from "src/common/auth/auth.module";
+import { AuthCommonModule } from "~/common/auth/auth.module";
 import { GetAdminReponseMapper } from "./mappers/get_admin_response.mapper";
 import { AdminRepository } from "./repositories/admin.repository";
 import { RoleModule } from "../role/role.module";

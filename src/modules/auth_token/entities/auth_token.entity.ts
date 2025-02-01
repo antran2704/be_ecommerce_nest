@@ -1,6 +1,6 @@
 import { AutoMap } from "@automapper/classes";
-import { AdminEntity } from "src/modules/admin/entities/admin.entity";
-import { UserEntity } from "src/modules/user/entities/user.entity";
+import { AdminEntity } from "~/modules/admin/entities/admin.entity";
+import { UserEntity } from "~/modules/user/entities/user.entity";
 import {
   Entity,
   Column,

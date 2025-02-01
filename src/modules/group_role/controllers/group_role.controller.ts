@@ -17,20 +17,20 @@ import {
   GetSuccessResponse,
   GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
-} from "src/common/response/success.response";
-import { ApiOkResponsePaginateDecorator } from "src/common/pagination/decorators/api-ok-response-paginate.decorator";
-import { PaginationRequestPipe } from "src/common/request/pipes/pagination_request.pipe";
-import { Permissions } from "src/common/auth/decorators/permission.decorator";
-import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
-import { PermissionGuard } from "src/common/auth/guards";
+} from "~/common/response/success.response";
+import { ApiOkResponsePaginateDecorator } from "~/common/pagination/decorators/api-ok-response-paginate.decorator";
+import { PaginationRequestPipe } from "~/common/request/pipes/pagination_request.pipe";
+import { Permissions } from "~/common/auth/decorators/permission.decorator";
+import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
+import { PermissionGuard } from "~/common/auth/guards";
 import { GroupRoleService } from "../services/group_role.service";
 import {
   CreateGroupRoleRequestDto,
   GetGroupRoleResponeDto,
   UpdateGroupRoleRequestDto,
 } from "../dtos";
-import { SearchAdminsRequestDto } from "src/modules/admin/dtos";
-import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
+import { SearchAdminsRequestDto } from "~/modules/admin/dtos";
+import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 
 @ApiBearerAuth()
 @Controller("group-roles")

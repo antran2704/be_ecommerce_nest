@@ -4,7 +4,7 @@ import {
   SearchAdminsRequestDto,
   UpdateAdminDto,
 } from "../dtos";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 
 export interface IAdminRepository {
   createAdmin(payload: CreateAdminDto): Promise<AdminEntity>;

@@ -1,6 +1,6 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
-import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
+import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
 
 export default class GetAdminPermissionResponseDto {
   @ApiProperty({

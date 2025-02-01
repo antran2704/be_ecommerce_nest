@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { ENUM_AUTH_PROVIDER } from "src/modules/auth_provider/enums/provider.enum";
+import { ENUM_AUTH_PROVIDER } from "~/modules/auth_provider/enums/provider.enum";
 
 export default class SignupUserWithProviderRequestDto {
   @ApiProperty({

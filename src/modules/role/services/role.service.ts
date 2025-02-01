@@ -8,7 +8,7 @@ import { Mapper } from "@automapper/core";
 
 import { RoleRepository } from "../repositories";
 import { IRoleService } from "../interfaces/services";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import {
   SearchRolesRequestDto,
   CreateRoleRequestDto,
@@ -17,7 +17,7 @@ import {
 } from "../dtos";
 import { RoleEntity } from "../entities/role.entity";
 import { ROLE_MESSAGES } from "../messages/role.error";
-import { GroupRoleService } from "src/modules/group_role/services/group_role.service";
+import { GroupRoleService } from "~/modules/group_role/services/group_role.service";
 
 @Injectable()
 export class RoleService implements IRoleService {

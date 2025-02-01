@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
+import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
 
 export default class UpdateRoleRequestDto {
   @ApiProperty({

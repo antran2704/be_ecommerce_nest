@@ -1,4 +1,4 @@
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import {
   CreateRoleRequestDto,
   GetRoleResponeDto,

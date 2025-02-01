@@ -1,8 +1,8 @@
 import { AutoMap } from "@automapper/classes";
 import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 
-import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
-import { RoleEntity } from "src/modules/role/entities/role.entity";
+import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
+import { RoleEntity } from "~/modules/role/entities/role.entity";
 
 @Entity({ name: "group_roles" })
 export class GroupRoleEntity extends DatabaseModifierEntity {

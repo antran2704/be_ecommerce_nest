@@ -1,7 +1,7 @@
 import { Repository, SelectQueryBuilder } from "typeorm";
 import PaginationRequestDto from "../dtos/pagination_request.dto";
 import { ENUM_PAGINATION_ORDER } from "../enums/order.enum";
-import { CREATED_AT_FIELD } from "src/common/database/constants/fields.constant";
+import { CREATED_AT_FIELD } from "~/common/database/constants/fields.constant";
 import PaginationResponseDto from "../dtos/pagination_response.dto";
 import { IEntitesAndPaginationReponse } from "../interfaces/pagination.interface";
 

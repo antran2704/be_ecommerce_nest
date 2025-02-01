@@ -2,10 +2,10 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 
-import { AuthCommonService } from "src/common/auth/services/auth.service";
+import { AuthCommonService } from "~/common/auth/services/auth.service";
 
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
-import { UserAuthTokenService } from "src/modules/auth_token/services";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
+import { UserAuthTokenService } from "~/modules/auth_token/services";
 import { IUserService } from "../interfaces/user_service.interface";
 import { UserRepository } from "../repositories/user.repository";
 import {
@@ -23,7 +23,7 @@ import {
 } from "../dtos";
 import { USER_MESSAGES } from "../messages/user.error";
 import { UserEntity } from "../entities/user.entity";
-import { AuthProviderService } from "src/modules/auth_provider/services/auth_provider.service";
+import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
 
 @Injectable()
 export class UserService implements IUserService {

@@ -7,9 +7,9 @@ import {
   SignupUserRequestDto,
   SignupUserWithProviderRequestDto,
 } from "../dtos";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { UserEntity } from "../entities/user.entity";
-import { ResetPasswordRequestDto } from "src/modules/admin/dtos";
+import { ResetPasswordRequestDto } from "~/modules/admin/dtos";
 
 export interface IUserService {
   createUserWithSystem(payload: SignupUserRequestDto): Promise<string>;

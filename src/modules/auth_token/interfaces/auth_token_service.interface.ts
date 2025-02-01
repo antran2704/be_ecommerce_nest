@@ -1,10 +1,10 @@
-import { AdminEntity } from "src/modules/admin/entities/admin.entity";
+import { AdminEntity } from "~/modules/admin/entities/admin.entity";
 import { AuthTokenEntity } from "../entities/auth_token.entity";
 import {
   UpdateForgotOtpAuthTokenDto,
   UpdateRefreshTokenAuthTokenDto,
 } from "../dtos";
-import { UserEntity } from "src/modules/user/entities/user.entity";
+import { UserEntity } from "~/modules/user/entities/user.entity";
 
 export interface IAuthTokenService {
   getAuthTokenByUserId(userId: string): Promise<AuthTokenEntity>;
