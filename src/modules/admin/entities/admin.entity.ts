@@ -10,7 +10,7 @@ import {
 
 import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
 import { RoleEntity } from "src/modules/role/entities/role.entity";
-import { AuthTokenEntity } from "src/modules/auth_token/entities/auth_admin_token.entity";
+import { AuthTokenEntity } from "src/modules/auth_token/entities/auth_token.entity";
 
 @Entity({ name: "admins" })
 export class AdminEntity extends DatabaseModifierEntity {
@@ -37,8 +37,8 @@ export class AdminEntity extends DatabaseModifierEntity {
   @AutoMap()
   is_admin: boolean;
 
-  @OneToOne(() => AuthTokenEntity, (entity) => entity.user)
-  authAdminToken: AuthTokenEntity;
+  @OneToOne(() => AuthTokenEntity, (entity) => entity.admin)
+  authToken: AuthTokenEntity;
 
   @ManyToOne(() => RoleEntity, (role) => role.users, { nullable: true })
   @JoinColumn({ name: "role_id" })

@@ -1,13 +1,21 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { AuthTokenService } from "./services/auth_token.service";
-import { AuthTokenRepository } from "./repositories/auth_token.repository";
-import { AuthTokenEntity } from "./entities/auth_admin_token.entity";
+import { AuthTokenEntity } from "./entities/auth_token.entity";
+import { AdminAuthTokenService, UserAuthTokenService } from "./services";
+import {
+  AdminAuthTokenRepository,
+  UserAuthTokenRepository,
+} from "./repositories";
 
 @Module({
   imports: [TypeOrmModule.forFeature([AuthTokenEntity])],
-  providers: [AuthTokenService, AuthTokenRepository],
-  exports: [AuthTokenService],
+  providers: [
+    AdminAuthTokenService,
+    UserAuthTokenService,
+    AdminAuthTokenRepository,
+    UserAuthTokenRepository,
+  ],
+  exports: [UserAuthTokenService, AdminAuthTokenService],
 })
 export class AuthTokenModule {}

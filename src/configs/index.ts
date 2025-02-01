@@ -4,6 +4,8 @@ import SWAGGER_CONFIG from "./swagger.config";
 import DATABASE_CONFIG from "./database.config";
 import AUTH_CONFIG from "./auth.config";
 import FORGOT_PASSWORD_CONFIG from "./forgot_password.config";
+import MAIL_CONFIG from "./mail.config";
+import CLERK_CONFIG from "./clerk.config";
 
 export default [
   APP_CONFIG,
@@ -12,4 +14,6 @@ export default [
   DATABASE_CONFIG,
   AUTH_CONFIG,
   FORGOT_PASSWORD_CONFIG,
+  MAIL_CONFIG,
+  CLERK_CONFIG,
 ];

@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
 import { AuthModule } from "../../modules/auth/auth.module";
-import { AuthController } from "../../modules/auth/controllers/auth.controller";
+import { AuthAdminController } from "../../modules/auth/admin/controllers/auth.controller";
+import { AuthUserController } from "src/modules/auth/user/controllers/auth.controller";
 
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthAdminController, AuthUserController],
   imports: [AuthModule],
 })
 export class PublicRouteModule {}

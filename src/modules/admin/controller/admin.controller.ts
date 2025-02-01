@@ -30,6 +30,7 @@ import {
   CreateSuperAdminRequestDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
+  ResetPasswordRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminRequestDto,
 } from "../dtos";
@@ -62,18 +63,6 @@ export class AdminController {
     @Param("user_id") userId: string,
   ): Promise<GetSuccessResponse<GetAdminResponseDto>> {
     const data = await this.userService.getAdminById(userId);
-
-    return new GetSuccessResponse(data);
-  }
-
-  // get permission of admin
-  @Get("/:user_id/permissions")
-  @UseGuards(JwtAuthGuard)
-  @ApiOkResponseDecorator(GetAdminPermissionResponseDto)
-  async getPermissions(
-    @Param("user_id") userId: string,
-  ): Promise<GetSuccessResponse<GetAdminPermissionResponseDto>> {
-    const data = await this.userService.getAdminPermissions(userId);
 
     return new GetSuccessResponse(data);
   }
@@ -121,19 +110,19 @@ export class AdminController {
     return await this.userService.updateAdmin(userId, payload);
   }
 
-  // change password
-  @Patch("/:user_id/change-password")
+  // reset password
+  @Patch("/:user_id/reset-password")
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
   @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
   @UseGuards(PermissionGuard)
-  async changePassword(
+  async resetPassword(
     @Param("user_id") userId: string,
-    @Body() payload: ChangePasswordAdminRequestDto,
+    @Body() payload: ResetPasswordRequestDto,
   ): Promise<UpdatedSuccessResponse> {
-    await this.userService.changePassword(userId, payload);
+    await this.userService.resetPassword(userId, payload);
     return new UpdatedSuccessResponse();
   }
 

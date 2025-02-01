@@ -23,13 +23,13 @@ import {
 import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
 import { RoleService } from "src/modules/role/services/role.service";
 import { ENUM_PERMISSION } from "src/modules/permissions/enums/permission.enum";
-import { AuthTokenService } from "src/modules/auth_token/services/auth_token.service";
+import { AdminAuthTokenService } from "src/modules/auth_token/services";
 
 @Injectable()
 export class AdminService implements IAdminService {
   constructor(
     private readonly adminRepository: AdminRepository,
-    private readonly authAdminTokenService: AuthTokenService,
+    private readonly authTokenService: AdminAuthTokenService,
     private readonly roleService: RoleService,
 
     private readonly authCommonService: AuthCommonService,
@@ -59,7 +59,7 @@ export class AdminService implements IAdminService {
     const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenService.create(newUser);
+    await this.authTokenService.create(newUser);
   }
 
   async createSuperUser(payload: CreateSuperAdminRequestDto): Promise<void> {
@@ -92,7 +92,7 @@ export class AdminService implements IAdminService {
     const newUser = await this.adminRepository.createAdmin(dataForSave);
 
     // save auth token of user
-    await this.authAdminTokenService.create(newUser);
+    await this.authTokenService.create(newUser);
   }
 
   async getAdmins(

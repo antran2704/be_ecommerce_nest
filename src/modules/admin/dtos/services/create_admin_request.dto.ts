@@ -20,7 +20,7 @@ export default class CreateAdminRequestDto {
 
   @ApiProperty({
     required: true,
-    example: "123456",
+    example: "123456@Abc",
   })
   @IsNotEmpty()
   @IsString()
