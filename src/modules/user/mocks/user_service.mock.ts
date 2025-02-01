@@ -3,7 +3,7 @@ import { UserEntity } from "../entities/user.entity";
 const createUserByAdminMock: UserEntity = {
   id: "1",
   name: "antran",
-  email: "phamtrangiaan27@gmail.com",
+  email: "phamtrangiaan30@gmail.com",
   password: "123456",
   is_active: true,
   is_banned: false,

@@ -15,7 +15,6 @@ import { AuthProviderModule } from "../auth_provider/auth_provider.module";
     AuthCommonModule,
     AuthTokenModule,
     AuthProviderModule,
-    AuthProviderModule,
   ],
   providers: [UserService, GetUserReponseMapper, UserRepository],
   exports: [UserService],

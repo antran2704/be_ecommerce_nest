@@ -5,27 +5,56 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { UserService } from "../services/user.service";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "../repositories/user.repository";
-import { AuthCommonModule } from "../../../common/auth/auth.module";
-import { AuthTokenModule } from "../../auth_token/auth_token.module";
-import { AuthProviderModule } from "../../auth_provider/auth_provider.module";
 import { createUserByAdminMock } from "../mocks/user_service.mock";
+import { JwtStrategy } from "~/common/auth/strategies/jwt.strategy";
+import { UserAuthTokenService } from "~/modules/auth_token/services";
+import { AuthCommonService } from "~/common/auth/services/auth.service";
+import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
+import { GetUserReponseMapper } from "../mappers/get_user_response.mapper";
+import { createMapper } from "@automapper/core";
+import { AutomapperModule, getMapperToken } from "@automapper/nestjs";
+import { classes } from "@automapper/classes";
+import { AuthTokenEntity } from "~/modules/auth_token/entities/auth_token.entity";
+import { UserAuthTokenRepository } from "~/modules/auth_token/repositories";
+import { JwtService } from "@nestjs/jwt";
+import { AuthProviderRepository } from "~/modules/auth_provider/repositories/auth_provider.repository";
+import { AuthProviderEntity } from "~/modules/auth_provider/entities/auth_provider.entity";
 
-describe("UserService", () => {
+describe("UserService test case", () => {
   let userService: UserService;
   let repository: Repository<UserEntity>;
 
+  const mockUserRepository = {
+    findOneBy: jest.fn().mockResolvedValue(null),
+    create: jest.fn().mockReturnValue(createUserByAdminMock),
+    save: jest.fn().mockResolvedValue(createUserByAdminMock),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        AuthCommonModule,
-        AuthTokenModule,
-        AuthProviderModule,
-        AuthProviderModule,
-      ],
+      imports: [AutomapperModule],
       providers: [
         UserService,
         UserRepository,
-        { provide: getRepositoryToken(UserEntity), useClass: Repository },
+        UserAuthTokenService,
+        UserAuthTokenRepository,
+        AuthCommonService,
+        JwtService,
+        AuthProviderService,
+        AuthProviderRepository,
+        GetUserReponseMapper,
+        {
+          provide: getRepositoryToken(UserEntity),
+          useValue: mockUserRepository,
+        },
+        { provide: getRepositoryToken(AuthTokenEntity), useValue: {} },
+        { provide: getRepositoryToken(AuthProviderEntity), useValue: {} },
+        {
+          provide: getMapperToken(),
+          useValue: createMapper({
+            strategyInitializer: classes(),
+          }),
+        },
       ],
     }).compile();
 
@@ -35,12 +64,16 @@ describe("UserService", () => {
     );
   });
 
+  it("should be defined", () => {
+    expect(userService).toBeDefined();
+  });
+
   it("createUserByAdmin", async () => {
-    jest.spyOn(repository, "save").mockResolvedValue(createUserByAdminMock);
+    // jest.spyOn(repository, "save").mockResolvedValue(createUserByAdminMock);
 
     expect(
       await userService.createUserByAdmin({
-        email: "phamtrangiaan27@gmail.com",
+        email: "phamtrangiaan30@gmail.com",
         password: "123456",
         name: "antran",
       }),
