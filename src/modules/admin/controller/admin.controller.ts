@@ -41,7 +41,7 @@ export class AdminController {
 
   // get all admins
   @Get()
-  @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
+  @Permissions([ENUM_PERMISSION.STAFF_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetAdminResponseDto)
   async getUsers(
@@ -54,7 +54,7 @@ export class AdminController {
 
   // get an admin
   @Get("/:user_id")
-  @Permissions([ENUM_PERMISSION.ADMIN_VIEW])
+  @Permissions([ENUM_PERMISSION.STAFF_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(GetAdminResponseDto)
   async getUser(
@@ -71,7 +71,7 @@ export class AdminController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ADMIN_CREATE])
+  @Permissions([ENUM_PERMISSION.STAFF_CREATE])
   @UseGuards(PermissionGuard)
   async createAdmin(
     @Body() payload: CreateAdminRequestDto,
@@ -99,7 +99,7 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async updateAdmin(
     @Param("user_id") userId: string,
@@ -114,7 +114,7 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async resetPassword(
     @Param("user_id") userId: string,
@@ -130,7 +130,7 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async enable(
     @Param("user_id") userId: string,
@@ -145,7 +145,7 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ADMIN_UPDATE])
+  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async disable(
     @Param("user_id") userId: string,
@@ -156,7 +156,7 @@ export class AdminController {
 
   // delete admin
   @Delete("/:user_id")
-  @Permissions([ENUM_PERMISSION.ADMIN_DELETE])
+  @Permissions([ENUM_PERMISSION.STAFF_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

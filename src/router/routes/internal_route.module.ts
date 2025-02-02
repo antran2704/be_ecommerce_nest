@@ -12,6 +12,8 @@ import { UserController } from "~/modules/user/controller/user.controller";
 import { UserModule } from "~/modules/user/user.module";
 import { UserMeController } from "~/modules/user/controller/user_me.controller";
 import { AdminMeController } from "~/modules/admin/controller/admin_me.controller";
+import { AdminCategoryModule } from "~/modules/category/admin_category.module";
+import { AdminCategoryController } from "~/modules/category/controllers/admin_category.controller";
 
 @Module({
   controllers: [
@@ -22,6 +24,7 @@ import { AdminMeController } from "~/modules/admin/controller/admin_me.controlle
     PermissionController,
     GroupRoleController,
     RoleController,
+    AdminCategoryController,
   ],
   imports: [
     AdminModule,
@@ -29,6 +32,7 @@ import { AdminMeController } from "~/modules/admin/controller/admin_me.controlle
     PermissionModule,
     GroupRoleModule,
     RoleModule,
+    AdminCategoryModule,
   ],
 })
 export class InternalRouteModule {}

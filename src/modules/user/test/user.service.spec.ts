@@ -6,7 +6,6 @@ import { UserService } from "../services/user.service";
 import { UserEntity } from "../entities/user.entity";
 import { UserRepository } from "../repositories/user.repository";
 import { createUserByAdminMock } from "../mocks/user_service.mock";
-import { JwtStrategy } from "~/common/auth/strategies/jwt.strategy";
 import { UserAuthTokenService } from "~/modules/auth_token/services";
 import { AuthCommonService } from "~/common/auth/services/auth.service";
 import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
