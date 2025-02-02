@@ -5,8 +5,8 @@ import {
   GetSuccessResponse,
   SuccessResponse,
   UpdatedSuccessResponse,
-} from "src/common/response/success.response";
-import { ApiOkResponseDecorator } from "src/common/pagination/decorators/api-ok-response.decorator";
+} from "~/common/response/success.response";
+import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 import { AUTH_SUCCESS_MESSAGES } from "../../messages/auth.success";
 import ConfirmForgotPasswordRequestDto from "../dtos/services/confirm_otp_forgot_password_request.dto";
 import { AuthUserService } from "../services/auth.service";

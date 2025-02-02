@@ -2,13 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
+import { getEntitesAndPagination } from "~/common/pagination/helpers/pagination";
 import { UserEntity } from "../entities/user.entity";
-import { GetDatabaseDefaultID } from "src/helpers/database";
+import { GetDatabaseDefaultID } from "~/helpers/database";
 import { CreateUserDto, SearchUserRequestDto, UpdateUserDto } from "../dtos";
 import { ENUM_USER_STATUS } from "../enums/user.enum";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
-import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import { IUserRepository } from "../interfaces/user_repository.interface";
 
 @Injectable()

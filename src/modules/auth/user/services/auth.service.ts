@@ -8,14 +8,14 @@ import { ConfigService } from "@nestjs/config";
 import * as dayjs from "dayjs";
 import { ClerkClient, User, verifyToken } from "@clerk/backend";
 
-import { AuthCommonService } from "src/common/auth/services/auth.service";
+import { AuthCommonService } from "~/common/auth/services/auth.service";
 import { AUTH_ERROR_MESSAGES } from "../../messages/auth.error";
-import { generateOTP } from "src/helpers/OTP";
-import { MailService } from "src/common/mail/services/mail.service";
+import { generateOTP } from "~/helpers/OTP";
+import { MailService } from "~/common/mail/services/mail.service";
 import { IAuthUserService } from "../interfaces/auth_service.interface";
 import { IAccessTokenUserPayload } from "../interfaces/access_token_payload.interface";
 import { IRefreshTokenUserPayload } from "../interfaces/refresh_token_payload.interface";
-import { UserAuthTokenService } from "src/modules/auth_token/services";
+import { UserAuthTokenService } from "~/modules/auth_token/services";
 import LoginSystemUserRequestDto from "../dtos/services/login_system_request.dto";
 import LoginUserResponseDto from "../dtos/services/login_response.dto";
 import LogoutUserRequestDto from "../dtos/services/logout_request.dto";
@@ -32,9 +32,9 @@ import {
   SendSignupOtpResponseDto,
   SignupUserRequestDto,
 } from "../dtos";
-import { UserService } from "src/modules/user/services/user.service";
-import { AuthProviderService } from "src/modules/auth_provider/services/auth_provider.service";
-import { ENUM_AUTH_PROVIDER } from "src/modules/auth_provider/enums/provider.enum";
+import { UserService } from "~/modules/user/services/user.service";
+import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
+import { ENUM_AUTH_PROVIDER } from "~/modules/auth_provider/enums/provider.enum";
 
 @Injectable()
 export class AuthUserService implements IAuthUserService {

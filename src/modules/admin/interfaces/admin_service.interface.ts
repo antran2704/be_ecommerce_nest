@@ -7,7 +7,7 @@ import {
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
 } from "../dtos";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { AdminEntity } from "../entities/admin.entity";
 
 export interface IAdminService {

@@ -1,5 +1,5 @@
 import { Injectable, PipeTransform } from "@nestjs/common";
-import PaginationRequestDto from "src/common/pagination/dtos/pagination_request.dto";
+import PaginationRequestDto from "~/common/pagination/dtos/pagination_request.dto";
 
 @Injectable()
 export class PaginationRequestPipe implements PipeTransform<any> {

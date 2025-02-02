@@ -4,15 +4,15 @@ import { Repository } from "typeorm";
 
 import { IRoleRepository } from "../interfaces/repositories";
 import { RoleEntity } from "../entities/role.entity";
-import { getEntitesAndPagination } from "src/common/pagination/helpers/pagination";
+import { getEntitesAndPagination } from "~/common/pagination/helpers/pagination";
 import {
   CreateRoleRequestDto,
   SearchRolesRequestDto,
   UpdateRoleRequestDto,
 } from "../dtos";
-import { GetDatabaseDefaultID } from "src/helpers/database";
-import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
-import { GroupRoleEntity } from "src/modules/group_role/entities/group_role.entity";
+import { GetDatabaseDefaultID } from "~/helpers/database";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
+import { GroupRoleEntity } from "~/modules/group_role/entities/group_role.entity";
 
 @Injectable()
 export default class RoleRepository implements IRoleRepository {

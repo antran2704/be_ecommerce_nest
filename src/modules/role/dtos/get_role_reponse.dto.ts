@@ -1,7 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
-import { ENUM_PREFIX_DATABASE } from "src/common/database/enums/perfix.enum";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 export default class GetRoleResponeDto {
   @ApiProperty({

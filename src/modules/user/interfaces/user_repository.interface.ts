@@ -1,6 +1,6 @@
 import { UserEntity } from "../entities/user.entity";
 import { CreateUserDto, SearchUserRequestDto, UpdateUserDto } from "../dtos";
-import { IEntitesAndPaginationReponse } from "src/common/pagination/interfaces/pagination.interface";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 
 export interface IUserRepository {
   createUser(payload: CreateUserDto): Promise<UserEntity>;

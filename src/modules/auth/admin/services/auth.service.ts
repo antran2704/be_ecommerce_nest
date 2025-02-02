@@ -6,7 +6,7 @@ import {
 import { ConfigService } from "@nestjs/config";
 import * as dayjs from "dayjs";
 
-import { AuthCommonService } from "src/common/auth/services/auth.service";
+import { AuthCommonService } from "~/common/auth/services/auth.service";
 import {
   ConfirmOtpForgotPasswordAdminRequestDto,
   ForgotPasswordAdminRequestDto,
@@ -17,10 +17,10 @@ import {
   ResetPasswordAdminRequestDto,
 } from "../dtos";
 import { AUTH_ERROR_MESSAGES } from "../../messages/auth.error";
-import { AdminService } from "src/modules/admin/services/admin.service";
-import { AdminAuthTokenService } from "src/modules/auth_token/services";
-import { generateOTP } from "src/helpers/OTP";
-import { MailService } from "src/common/mail/services/mail.service";
+import { AdminService } from "~/modules/admin/services/admin.service";
+import { AdminAuthTokenService } from "~/modules/auth_token/services";
+import { generateOTP } from "~/helpers/OTP";
+import { MailService } from "~/common/mail/services/mail.service";
 import { IAuthAdminService } from "../interfaces/auth_service.interface";
 import { IAccessTokenAdminPayload } from "../interfaces/access_token_payload.interface";
 import { IRefreshTokenAdminPayload } from "../interfaces/refresh_token_payload.interface";

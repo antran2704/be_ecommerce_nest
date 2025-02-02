@@ -1,17 +1,17 @@
 import { Module } from "@nestjs/common";
 
 import { AdminModule } from "../../modules/admin/admin.module";
-import { AdminController } from "src/modules/admin/controller/admin.controller";
-import { PermissionModule } from "src/modules/permissions/permission.module";
-import { PermissionController } from "src/modules/permissions/controllers/permission.controller";
-import { GroupRoleModule } from "src/modules/group_role/group_role.module";
-import { GroupRoleController } from "src/modules/group_role/controllers/group_role.controller";
-import { RoleController } from "src/modules/role/controllers/role.controller";
-import { RoleModule } from "src/modules/role/role.module";
-import { UserController } from "src/modules/user/controller/user.controller";
-import { UserModule } from "src/modules/user/user.module";
-import { UserMeController } from "src/modules/user/controller/user_me.controller";
-import { AdminMeController } from "src/modules/admin/controller/admin_me.controller";
+import { AdminController } from "~/modules/admin/controller/admin.controller";
+import { PermissionModule } from "~/modules/permissions/permission.module";
+import { PermissionController } from "~/modules/permissions/controllers/permission.controller";
+import { GroupRoleModule } from "~/modules/group_role/group_role.module";
+import { GroupRoleController } from "~/modules/group_role/controllers/group_role.controller";
+import { RoleController } from "~/modules/role/controllers/role.controller";
+import { RoleModule } from "~/modules/role/role.module";
+import { UserController } from "~/modules/user/controller/user.controller";
+import { UserModule } from "~/modules/user/user.module";
+import { UserMeController } from "~/modules/user/controller/user_me.controller";
+import { AdminMeController } from "~/modules/admin/controller/admin_me.controller";
 
 @Module({
   controllers: [

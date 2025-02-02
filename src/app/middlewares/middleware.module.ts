@@ -7,7 +7,7 @@ import {
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 
 import { HelmetMiddleware } from "./helmet.middleware";
-import { HttpExceptionFilter } from "src/common/exceptionFilter/http-exception.filter";
+import { HttpExceptionFilter } from "~/common/exceptionFilter/http-exception.filter";
 
 @Module({
   providers: [

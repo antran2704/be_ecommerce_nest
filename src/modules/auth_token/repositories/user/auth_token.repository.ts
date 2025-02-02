@@ -8,7 +8,7 @@ import {
   UpdateSignupOtpAuthTokenDto,
 } from "../../dtos";
 import { AuthTokenEntity } from "../../entities/auth_token.entity";
-import { UserEntity } from "src/modules/user/entities/user.entity";
+import { UserEntity } from "~/modules/user/entities/user.entity";
 import { IUserAuthTokenRepository } from "../../interfaces/user_auth_token_repository.interface";
 
 @Injectable()

@@ -8,9 +8,9 @@ import {
   JoinColumn,
 } from "typeorm";
 
-import { DatabaseModifierEntity } from "src/common/database/mySQL/bases/database_modifier.entity";
-import { RoleEntity } from "src/modules/role/entities/role.entity";
-import { AuthTokenEntity } from "src/modules/auth_token/entities/auth_token.entity";
+import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
+import { RoleEntity } from "~/modules/role/entities/role.entity";
+import { AuthTokenEntity } from "~/modules/auth_token/entities/auth_token.entity";
 
 @Entity({ name: "admins" })
 export class AdminEntity extends DatabaseModifierEntity {
