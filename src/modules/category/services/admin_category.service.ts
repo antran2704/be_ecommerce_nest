@@ -6,12 +6,14 @@ import {
   AdminCreateCategoryRequestDto,
   AdminGetCategoriesRequestDto,
   AdminGetCategoryResponseDto,
+  AdminGetChildCategoryResponseDto,
 } from "../dtos/services";
 import { CategoryEntity } from "../entities/category.entity";
 import { GetDatabaseDefaultID } from "~/helpers/database";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import {
   AdminCreateCategoryDto,
+  AdminGetChildCategoryDto,
   AdminUpdateCategoryDto,
 } from "../dtos/repositories";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
@@ -38,12 +40,12 @@ export class AdminCategoryService implements ICategoryService {
     return { data: formatData, pagination };
   }
 
-  async getChildren(id: string): Promise<AdminGetCategoryResponseDto[]> {
+  async getChildren(id: string): Promise<AdminGetChildCategoryResponseDto[]> {
     const data = await this.categoryRepository.findChildren(id);
     const formatData = this.mapper.mapArray(
       data,
-      CategoryEntity,
-      AdminGetCategoryResponseDto,
+      AdminGetChildCategoryDto,
+      AdminGetChildCategoryResponseDto,
     );
 
     return formatData;
@@ -108,8 +110,8 @@ export class AdminCategoryService implements ICategoryService {
 
       this.categoryRepository.updateCategory(child.id, formatChildData);
 
-      if (child.children.length > 0) {
-        this.updateIndexChildren(child.id, formatChildData.category_index + 1);
+      if (child.children_count > 0) {
+        this.updateIndexChildren(child.id, indexParent + 1);
       }
     }
   }
@@ -146,17 +148,19 @@ export class AdminCategoryService implements ICategoryService {
       formatData.category_index = categoryParent.category_index + 1;
 
       // update category index for child category
-      const children = await this.categoryRepository.findChildren(id);
-      /*
-        A - 0
-      * */
-      for (const child of children) {
-        const formatChildData: AdminUpdateCategoryDto = {
-          category_index: categoryParent.category_index + 1,
-        };
+      this.updateIndexChildren(id, formatData.category_index);
+    }
 
-        this.categoryRepository.updateCategory(child.id, formatChildData);
-      }
+    // check if old data have parentId and update parentId === null
+    if (payload.categoryParentId === null && category.parent_id) {
+      // set parentId
+      formatData.parent_id = null;
+
+      // set category index
+      formatData.category_index = 0;
+
+      // update category index for child category
+      this.updateIndexChildren(id, formatData.category_index);
     }
 
     await this.categoryRepository.updateCategory(id, formatData);

@@ -8,6 +8,7 @@ import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pag
 import { getEntitesAndPagination } from "~/common/pagination/helpers/pagination";
 import {
   AdminCreateCategoryDto,
+  AdminGetChildCategoryDto,
   AdminUpdateCategoryDto,
 } from "../dtos/repositories";
 
@@ -54,8 +55,28 @@ export class AdminCategoryRepository implements ICategoryRepository {
     return this.categoryEntity.findOneBy({ id });
   }
 
-  async findChildren(id: string): Promise<CategoryEntity[]> {
-    return this.categoryEntity.findBy({ children: { parent_id: id } });
+  async findChildren(id: string): Promise<AdminGetChildCategoryDto[]> {
+    // return this.categoryEntity.findBy({ parent_id: id });
+    // return this.categoryEntity.find({ where: {parent_id: id}, relations: ['children'], });
+    const data: AdminGetChildCategoryDto[] = await this.categoryEntity
+      .createQueryBuilder("c1")
+      .leftJoin(CategoryEntity, "c2", "c1.id = c2.parent_id")
+      .where("c1.parent_id = :id", { id })
+      .select([
+        "c1.id AS id",
+        "c1.name AS name",
+        "c1.parent_id AS parent_id",
+        "c1.category_index AS category_index",
+        "c1.created_at AS created_at",
+        "COUNT(c2.id) AS children_count",
+      ])
+      .groupBy("c1.id")
+      .getRawMany();
+
+    return data.map((item) => ({
+      ...item,
+      children_count: Number(item.children_count),
+    }));
   }
 
   async findCategoryByName(name: string): Promise<CategoryEntity> {

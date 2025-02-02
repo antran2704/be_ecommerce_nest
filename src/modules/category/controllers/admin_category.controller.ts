@@ -105,7 +105,9 @@ export class AdminCategoryController {
     @Param("category_id") id: string,
     @Body() payload: AdminUpdateCategoryRequestDto,
   ) {
-    return await this.categoryService.updateCategory(id, payload);
+    await this.categoryService.updateCategory(id, payload);
+
+    return new UpdatedSuccessResponse();
   }
 
   // delete category

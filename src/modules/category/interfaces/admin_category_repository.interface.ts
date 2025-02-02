@@ -1,6 +1,7 @@
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import {
   AdminCreateCategoryDto,
+  AdminGetChildCategoryDto,
   AdminUpdateCategoryDto,
 } from "../dtos/repositories";
 import { AdminGetCategoriesRequestDto } from "../dtos/services";
@@ -12,7 +13,7 @@ export interface ICategoryRepository {
   ): Promise<IEntitesAndPaginationReponse<CategoryEntity>>;
   findCategoryById(id: string): Promise<CategoryEntity>;
   findCategoryByName(name: string): Promise<CategoryEntity>;
-  findChildren(id: string): Promise<CategoryEntity[]>;
+  findChildren(id: string): Promise<AdminGetChildCategoryDto[]>;
   createCategory(payload: AdminCreateCategoryDto): Promise<any>;
   updateCategory(id: string, payload: AdminUpdateCategoryDto): Promise<any>;
   deleteCategory(id: string): Promise<any>;

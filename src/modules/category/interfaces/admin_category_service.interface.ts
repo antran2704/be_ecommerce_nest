@@ -3,6 +3,7 @@ import {
   AdminCreateCategoryRequestDto,
   AdminGetCategoriesRequestDto,
   AdminGetCategoryResponseDto,
+  AdminGetChildCategoryResponseDto,
   AdminUpdateCategoryRequestDto,
 } from "../dtos/services";
 
@@ -10,7 +11,7 @@ export interface ICategoryService {
   getCategories(
     payload: AdminGetCategoriesRequestDto,
   ): Promise<IEntitesAndPaginationReponse<AdminGetCategoryResponseDto>>;
-  getChildren(id: string): Promise<AdminGetCategoryResponseDto[]>;
+  getChildren(id: string): Promise<AdminGetChildCategoryResponseDto[]>;
   getCategoryById(id: string): Promise<AdminGetCategoryResponseDto>;
   createCategory(payload: AdminCreateCategoryRequestDto): Promise<void>;
   updateCategory(
