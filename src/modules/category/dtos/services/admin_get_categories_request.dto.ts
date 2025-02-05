@@ -7,5 +7,5 @@ export default class AdminGetCategoriesRequestDto extends PaginationSearchReques
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  parentId: string;
+  parentId?: string;
 }

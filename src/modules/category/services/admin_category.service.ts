@@ -70,7 +70,7 @@ export class AdminCategoryService implements IAdminCategoryService {
       throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_EXISTED);
 
     const categoryId = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.CA);
-    let categoryIndex: number = 0;
+    const categoryIndex: number = 0;
 
     const formatData: AdminCreateCategoryDto = {
       id: categoryId,
