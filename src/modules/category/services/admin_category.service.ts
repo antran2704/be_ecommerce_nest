@@ -94,7 +94,7 @@ export class AdminCategoryService implements IAdminCategoryService {
       formatData.parent_id = payload.categoryParentId;
 
       // set category index
-      categoryIndex = categoryParent.category_index + 1;
+      formatData.category_index = categoryParent.category_index + 1;
     }
 
     return this.categoryRepository.createCategory(formatData);

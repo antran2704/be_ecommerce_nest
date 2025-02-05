@@ -35,7 +35,7 @@ export class UserCategoryService implements IUserCategoryService {
     const category = await this.categoryRepository.findCategoryById(id);
 
     if (category) {
-      data.push(category);
+      data.unshift(category);
     }
 
     if (category.parent_id) {
