@@ -1,5 +1,5 @@
 import { Mapper } from "@automapper/core";
-import { ICategoryService } from "../interfaces/admin_category_service.interface";
+import { IAdminCategoryService } from "../interfaces/admin_category_service.interface";
 import { AdminCategoryRepository } from "../repositories/admin_category.repository";
 import { InjectMapper } from "@automapper/nestjs";
 import {
@@ -20,7 +20,7 @@ import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pag
 import { BadRequestException } from "@nestjs/common";
 import { CATEGORY_ERROR_MESSAGES } from "../messages/category.error";
 
-export class AdminCategoryService implements ICategoryService {
+export class AdminCategoryService implements IAdminCategoryService {
   constructor(
     private readonly categoryRepository: AdminCategoryRepository,
     @InjectMapper() private readonly mapper: Mapper,

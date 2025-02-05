@@ -1,7 +1,7 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { ICategoryRepository } from "../interfaces/admin_category_repository.interface";
+import { IAdminCategoryRepository } from "../interfaces/admin_category_repository.interface";
 import { CategoryEntity } from "../entities/category.entity";
 import { AdminGetCategoriesRequestDto } from "../dtos/services";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
@@ -12,7 +12,7 @@ import {
   AdminUpdateCategoryDto,
 } from "../dtos/repositories";
 
-export class AdminCategoryRepository implements ICategoryRepository {
+export class AdminCategoryRepository implements IAdminCategoryRepository {
   constructor(
     @InjectRepository(CategoryEntity)
     private readonly categoryEntity: Repository<CategoryEntity>,

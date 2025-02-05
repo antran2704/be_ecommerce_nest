@@ -7,7 +7,7 @@ import {
   AdminUpdateCategoryRequestDto,
 } from "../dtos/services";
 
-export interface ICategoryService {
+export interface IAdminCategoryService {
   getCategories(
     payload: AdminGetCategoriesRequestDto,
   ): Promise<IEntitesAndPaginationReponse<AdminGetCategoryResponseDto>>;

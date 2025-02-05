@@ -7,7 +7,7 @@ import {
 import { AdminGetCategoriesRequestDto } from "../dtos/services";
 import { CategoryEntity } from "../entities/category.entity";
 
-export interface ICategoryRepository {
+export interface IAdminCategoryRepository {
   findCategories(
     payload: AdminGetCategoriesRequestDto,
   ): Promise<IEntitesAndPaginationReponse<CategoryEntity>>;
