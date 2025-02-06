@@ -1,7 +1,7 @@
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 
-import { AdminGetCategoryResponseDto } from "../dtos/services";
+import { UserGetCategoryResponseDto } from "../dtos/services";
 import { CategoryEntity } from "../entities/category.entity";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { IUserCategoryService } from "../interfaces/user_category_service.interface";
@@ -16,13 +16,13 @@ export class UserCategoryService implements IUserCategoryService {
 
   async getCategories(
     payload: PaginationSearchRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<AdminGetCategoryResponseDto>> {
+  ): Promise<IEntitesAndPaginationReponse<UserGetCategoryResponseDto>> {
     const { data, pagination } =
       await this.categoryRepository.findCategories(payload);
     const formatData = this.mapper.mapArray(
       data,
       CategoryEntity,
-      AdminGetCategoryResponseDto,
+      UserGetCategoryResponseDto,
     );
 
     return { data: formatData, pagination };
@@ -45,14 +45,12 @@ export class UserCategoryService implements IUserCategoryService {
     return data;
   }
 
-  async getParentCategories(
-    id: string,
-  ): Promise<AdminGetCategoryResponseDto[]> {
+  async getParentCategories(id: string): Promise<UserGetCategoryResponseDto[]> {
     const categories = await this.getCategoriesByParentId(id, []);
     const formatData = this.mapper.mapArray(
       categories,
       CategoryEntity,
-      AdminGetCategoryResponseDto,
+      UserGetCategoryResponseDto,
     );
 
     return formatData;

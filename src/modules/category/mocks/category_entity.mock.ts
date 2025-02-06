@@ -1,7 +1,7 @@
 import { AdminGetChildCategoryDto } from "../dtos/repositories";
 import { CategoryEntity } from "../entities/category.entity";
 
-const mockDataCategoryEntity: CategoryEntity = {
+const mockCategoryEntity: CategoryEntity = {
   id: "CA0502258197",
   name: "Clothes",
   category_index: 0,
@@ -12,7 +12,7 @@ const mockDataCategoryEntity: CategoryEntity = {
   updated_at: "2025-02-05T16:33:17.338Z",
 };
 
-const mockDataChildCategoryEntity: AdminGetChildCategoryDto = {
+const mockChildCategoryEntity: AdminGetChildCategoryDto = {
   id: "CA0502258197",
   name: "Clothes",
   category_index: 0,
@@ -21,4 +21,4 @@ const mockDataChildCategoryEntity: AdminGetChildCategoryDto = {
   children_count: 0,
 };
 
-export { mockDataCategoryEntity, mockDataChildCategoryEntity };
+export { mockCategoryEntity, mockChildCategoryEntity };

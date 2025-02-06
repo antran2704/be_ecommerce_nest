@@ -57,7 +57,7 @@ describe("AdminCategoryService test case", () => {
     ).toEqual(mockAdminGetCategoriesResponse);
   });
 
-  it("getCategory successfully", async () => {
+  it("getCategoryById successfully", async () => {
     expect(await categoryService.getCategoryById("CA0502258197")).toEqual(
       mockAdminGetCategoryResponse,
     );
