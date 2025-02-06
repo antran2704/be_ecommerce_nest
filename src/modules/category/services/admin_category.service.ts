@@ -122,6 +122,13 @@ export class AdminCategoryService implements IAdminCategoryService {
     if (!category)
       throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_NOT_FOUND);
 
+    const categoryName = await this.categoryRepository.findCategoryByName(
+      payload.categoryName,
+    );
+
+    if (categoryName && categoryName.id !== id)
+      throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_EXISTED);
+
     const formatData: AdminUpdateCategoryDto = {
       name: payload.categoryName,
     };
