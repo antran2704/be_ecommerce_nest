@@ -22,7 +22,7 @@ export default class CreateRoleRequestDto {
   @ApiProperty({
     enum: ENUM_PERMISSION,
     required: true,
-    example: [ENUM_PERMISSION.ADMIN_CREATE],
+    example: [ENUM_PERMISSION.STAFF_CREATE],
     type: "array",
   })
   @IsArray()

@@ -10,4 +10,7 @@ export enum ENUM_PREFIX_DATABASE {
 
   // Role
   RO = "RO",
+
+  // Category
+  CA = "CA",
 }

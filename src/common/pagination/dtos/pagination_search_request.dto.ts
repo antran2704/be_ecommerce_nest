@@ -6,7 +6,7 @@ class PaginationSearchRequestDto extends PaginationRequestDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  search: string;
+  search?: string;
 }
 
 export default PaginationSearchRequestDto;
