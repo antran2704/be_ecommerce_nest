@@ -97,7 +97,7 @@ export class AdminCategoryService implements IAdminCategoryService {
       formatData.category_index = categoryParent.category_index + 1;
     }
 
-    return this.categoryRepository.createCategory(formatData);
+    await this.categoryRepository.createCategory(formatData);
   }
 
   async updateIndexChildren(id: string, indexParent: number): Promise<void> {
@@ -167,6 +167,11 @@ export class AdminCategoryService implements IAdminCategoryService {
   }
 
   async deleteCategory(id: string): Promise<void> {
+    const category = await this.categoryRepository.findCategoryById(id);
+
+    if (!category)
+      throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_NOT_FOUND);
+
     await this.categoryRepository.deleteCategory(id);
   }
 }

@@ -1,12 +1,12 @@
 import { IAdminCategoryRepository } from "../interfaces/admin_category_repository.interface";
 import {
-  mockCategoryEntity,
-  mockChildCategoryEntity,
+  mockDataCategoryEntity,
+  mockDataChildCategoryEntity,
 } from "./admin_category_entity.mock";
 
 const mockAdminCategoryRepository: IAdminCategoryRepository = {
   findCategories: jest.fn().mockReturnValue({
-    data: [mockCategoryEntity],
+    data: [mockDataCategoryEntity],
     pagination: {
       page: 1,
       take: 10,
@@ -14,11 +14,13 @@ const mockAdminCategoryRepository: IAdminCategoryRepository = {
       totalPages: 1,
     },
   }),
-  findCategoryById: jest.fn().mockReturnValue(mockCategoryEntity),
-  findCategoryByName: jest.fn().mockReturnValue(mockCategoryEntity),
-  findChildren: jest.fn().mockReturnValue([mockChildCategoryEntity]),
+  findCategoryById: jest.fn().mockReturnValue(mockDataCategoryEntity),
+  findCategoryByName: jest.fn().mockReturnValue(null),
+  findChildren: jest.fn().mockReturnValue([mockDataChildCategoryEntity]),
 
   createCategory: jest.fn().mockResolvedValue(null),
   updateCategory: jest.fn().mockResolvedValue(null),
   deleteCategory: jest.fn().mockResolvedValue(null),
 };
+
+export { mockAdminCategoryRepository };

@@ -5,9 +5,10 @@ import {
   AdminGetCategoryRequestDto,
   AdminGetCategoryResponseDto,
 } from "../dtos/services";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 
 const mockAdminCreateCategoryRequest: AdminCreateCategoryRequestDto = {
-  categoryName: "Clothes",
+  categoryName: "Category Test",
   categoryParentId: null,
 };
 
@@ -28,9 +29,21 @@ const mockAdminGetCategoryResponse: AdminGetCategoryResponseDto = {
   createdAt: "2025-02-05T16:33:17.338Z",
 };
 
+const mockAdminGetCategoriesResponse: IEntitesAndPaginationReponse<AdminGetCategoryResponseDto> =
+  {
+    data: [mockAdminGetCategoryResponse],
+    pagination: {
+      take: 10,
+      page: 1,
+      total: 10,
+      totalPages: 1,
+    },
+  };
+
 export {
   mockAdminCreateCategoryRequest,
   mockAdminGetCategoriesRequest,
   mockAdminGetCategoryRequest,
+  mockAdminGetCategoriesResponse,
   mockAdminGetCategoryResponse,
 };
