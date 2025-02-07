@@ -8,9 +8,12 @@ export enum ENUM_PREFIX_DATABASE {
   // GROUP ROLE
   GR = "GR",
 
-  // Role
+  // ROLE
   RO = "RO",
 
-  // Category
+  // CATEGORY
   CA = "CA",
+
+  // VARIANT TYPE
+  VT = "VT",
 }

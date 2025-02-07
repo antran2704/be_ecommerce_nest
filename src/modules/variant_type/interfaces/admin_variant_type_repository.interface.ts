@@ -12,7 +12,7 @@ export interface IAdminVariantTypeRepository {
   ): Promise<IEntitesAndPaginationReponse<VariantTypeEntity>>;
   findVariantTypeById(id: string): Promise<VariantTypeEntity>;
   findVariantTypeByName(name: string): Promise<VariantTypeEntity>;
-  createVariantType(payload: CreateVariantTypeDto): Promise<any>;
-  updateVariantType(id: string, payload: UpdateVariantTypeDto): Promise<any>;
-  deleteVariantType(id: string): Promise<any>;
+  create(payload: CreateVariantTypeDto): Promise<void>;
+  update(id: string, payload: UpdateVariantTypeDto): Promise<void>;
+  delete(id: string): Promise<void>;
 }

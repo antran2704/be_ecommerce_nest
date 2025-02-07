@@ -3,7 +3,7 @@ import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { VariantTypeEntity } from "../entities/variant_type.entity";
 import { AdminGetVariantTypeResponseDto } from "../dtos/services";
 
-export class AdminGetVariantTypeReponseMapper extends AutomapperProfile {
+export class AdminVariantTypeReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
