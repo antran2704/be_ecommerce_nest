@@ -44,9 +44,16 @@ export class AdminVariantTypeService implements IAdminVariantTypeService {
   async getVariantTypeById(
     id: string,
   ): Promise<AdminGetVariantTypeResponseDto> {
-    const category = await this.variantTypeRepository.findVariantTypeById(id);
+    const data = await this.variantTypeRepository.findVariantTypeById(id);
+
+    if (!data) {
+      throw new BadRequestException(
+        VARIANT_TYPE_ERROR_MESSAGES.VARIANT_TYPE_NOT_FOUND,
+      );
+    }
+
     const formatData = this.mapper.map(
-      category,
+      data,
       VariantTypeEntity,
       AdminGetVariantTypeResponseDto,
     );
@@ -82,10 +89,11 @@ export class AdminVariantTypeService implements IAdminVariantTypeService {
     const variantType =
       await this.variantTypeRepository.findVariantTypeById(id);
 
-    if (!variantType)
+    if (!variantType) {
       throw new BadRequestException(
         VARIANT_TYPE_ERROR_MESSAGES.VARIANT_TYPE_NOT_FOUND,
       );
+    }
 
     const variantTypeName =
       await this.variantTypeRepository.findVariantTypeByName(
