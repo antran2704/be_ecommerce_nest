@@ -6,8 +6,6 @@ import {
   AdminUpdateVariantTypeRequestDto,
 } from "../dtos/services";
 import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
-import { GetDatabaseDefaultID } from "~/helpers/database";
-import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 const mockAdminCreateVariantTypeRequest: AdminCreateVariantTypeRequestDto = {
   variantTypeName: "Color",
@@ -24,8 +22,9 @@ const mockAdminGetVariantTypesRequest: PaginationSearchRequestDto = {
 };
 
 const mockAdminGetVariantTypeResponse: AdminGetVariantTypeResponseDto = {
-  variantTypeId: GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.VT) + "123",
+  variantTypeId: "VT123",
   variantTypeName: "Colors",
+  createdAt: "2025-02-05T16:33:17.338Z",
 };
 
 const mockAdminGetVariantTypesResponse: IEntitesAndPaginationReponse<AdminGetVariantTypeResponseDto> =

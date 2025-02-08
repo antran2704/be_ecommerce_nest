@@ -13,8 +13,6 @@ import {
   mockAdminGetVariantTypesResponse,
   mockAdminUpdateVariantTypeRequest,
 } from "../mocks/admin_variant_type_service.mock";
-import { GetDatabaseDefaultID } from "~/helpers/database";
-import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 describe("AdminVariantTypeService test case", () => {
   let variantTypeService: AdminVariantTypeService;
@@ -62,11 +60,9 @@ describe("AdminVariantTypeService test case", () => {
   });
 
   it("getVariantTypeById successfully", async () => {
-    expect(
-      await variantTypeService.getVariantTypeById(
-        GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.VT) + "123",
-      ),
-    ).toEqual(mockAdminGetVariantTypeResponse);
+    expect(await variantTypeService.getVariantTypeById("VT123")).toEqual(
+      mockAdminGetVariantTypeResponse,
+    );
   });
 
   it("createVariantType successfully", async () => {
@@ -80,17 +76,13 @@ describe("AdminVariantTypeService test case", () => {
   it("updateVariantType successfully", async () => {
     expect(
       await variantTypeService.updateVariantType(
-        GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.VT) + "123",
+        "VT123",
         mockAdminUpdateVariantTypeRequest,
       ),
     ).toBeUndefined();
   });
 
   it("deleteVariantType successfully", async () => {
-    expect(
-      await variantTypeService.deleteVariantType(
-        GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.VT) + "123",
-      ),
-    ).toBeUndefined();
+    expect(await variantTypeService.deleteVariantType("VT123")).toBeUndefined();
   });
 });
