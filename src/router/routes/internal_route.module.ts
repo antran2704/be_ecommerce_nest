@@ -16,6 +16,8 @@ import { AdminCategoryModule } from "~/modules/category/admin_category.module";
 import { AdminCategoryController } from "~/modules/category/controllers/admin_category.controller";
 import { AdminVariantTypeModule } from "~/modules/variant_type/admin_variant_type.module";
 import { AdminVariantTypeController } from "~/modules/variant_type/controllers/admin_variant_type.controller";
+import { AdminVariantTypeValueModule } from "~/modules/variant_type_value/admin_variant_type.module";
+import { AdminVariantTypeValueController } from "~/modules/variant_type_value/controllers/admin_variant_type.controller";
 
 @Module({
   controllers: [
@@ -28,6 +30,7 @@ import { AdminVariantTypeController } from "~/modules/variant_type/controllers/a
     RoleController,
     AdminCategoryController,
     AdminVariantTypeController,
+    AdminVariantTypeValueController,
   ],
   imports: [
     AdminModule,
@@ -37,6 +40,7 @@ import { AdminVariantTypeController } from "~/modules/variant_type/controllers/a
     RoleModule,
     AdminCategoryModule,
     AdminVariantTypeModule,
+    AdminVariantTypeValueModule,
   ],
 })
 export class InternalRouteModule {}
