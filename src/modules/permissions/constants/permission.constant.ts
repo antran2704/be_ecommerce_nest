@@ -152,6 +152,32 @@ categoryPagePermission.addChild(
   ENUM_PERMISSION.CATEGORY_DELETE,
 );
 
+// Variant Type Page Permission
+const variantTypePagePermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.VARIANT_TYPE,
+  ENUM_PERMISSION_SUBJECT.VARIANT_TYPE,
+);
+
+variantTypePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_VIEW,
+  ENUM_PERMISSION.VARIANT_TYPE_VIEW,
+);
+
+variantTypePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_CREATE,
+  ENUM_PERMISSION.VARIANT_TYPE_CREATE,
+);
+
+variantTypePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_UPDATE,
+  ENUM_PERMISSION.VARIANT_TYPE_UPDATE,
+);
+
+variantTypePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_DELETE,
+  ENUM_PERMISSION.VARIANT_TYPE_DELETE,
+);
+
 export function setPermissionDictionary() {
   // Home Page
   PermissionDictionary.addPermission(

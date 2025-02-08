@@ -7,6 +7,7 @@ import {
   AdminGetCategoriesRequestDto,
   AdminGetCategoryResponseDto,
   AdminGetChildCategoryResponseDto,
+  AdminUpdateCategoryRequestDto,
 } from "../dtos/services";
 import { CategoryEntity } from "../entities/category.entity";
 import { GetDatabaseDefaultID } from "~/helpers/database";
@@ -67,7 +68,9 @@ export class AdminCategoryService implements IAdminCategoryService {
     );
 
     if (category)
-      throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_EXISTED);
+      throw new BadRequestException(
+        CATEGORY_ERROR_MESSAGES.CATEGORY_NAME_EXISTED,
+      );
 
     const categoryId = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.CA);
     const categoryIndex: number = 0;
@@ -116,11 +119,20 @@ export class AdminCategoryService implements IAdminCategoryService {
     }
   }
 
-  async updateCategory(id: string, payload: AdminCreateCategoryRequestDto) {
+  async updateCategory(id: string, payload: AdminUpdateCategoryRequestDto) {
     const category = await this.categoryRepository.findCategoryById(id);
 
     if (!category)
       throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_NOT_FOUND);
+
+    const categoryName = await this.categoryRepository.findCategoryByName(
+      payload.categoryName,
+    );
+
+    if (categoryName && categoryName.id !== id)
+      throw new BadRequestException(
+        CATEGORY_ERROR_MESSAGES.CATEGORY_NAME_EXISTED,
+      );
 
     const formatData: AdminUpdateCategoryDto = {
       name: payload.categoryName,
