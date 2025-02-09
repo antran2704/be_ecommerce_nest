@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
-import { VariantTypeValueEntity } from "~/modules/variant_type_value/entities/variant_type.entity";
+import { VariantTypeValueEntity } from "~/modules/variant_type_value/entities/variant_type_value.entity";
 
 @Entity("variant_types")
 export class VariantTypeEntity extends DatabaseModifierEntity {

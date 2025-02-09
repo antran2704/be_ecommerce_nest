@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToOne, JoinColumn } from "typeorm";
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
 import { VariantTypeEntity } from "~/modules/variant_type/entities/variant_type.entity";
 
@@ -13,6 +13,7 @@ export class VariantTypeValueEntity extends DatabaseModifierEntity {
   @ManyToOne(() => VariantTypeEntity, (entity) => entity.values, {
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "variant_type_id" })
   variant_type: VariantTypeEntity;
 
   @Column()

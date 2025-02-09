@@ -21,22 +21,23 @@ const mockAdminGetVariantTypesRequest: PaginationSearchRequestDto = {
   page: 1,
 };
 
-const mockAdminGetVariantTypeResponse: AdminGetVariantTypeResponseDto = {
-  variantTypeId: "VT123",
-  variantTypeName: "Colors",
-  createdAt: "2025-02-05T16:33:17.338Z",
-};
-
-const mockAdminGetVariantTypesResponse: IEntitesAndPaginationReponse<AdminGetVariantTypeResponseDto> =
+const mockAdminGetVariantTypeResponse: Partial<AdminGetVariantTypeResponseDto> =
   {
-    data: [mockAdminGetVariantTypeResponse],
-    pagination: {
-      take: 10,
-      page: 1,
-      total: 10,
-      totalPages: 1,
-    },
+    variantTypeId: "VT123",
+    variantTypeName: "Colors",
   };
+
+const mockAdminGetVariantTypesResponse: IEntitesAndPaginationReponse<
+  Partial<AdminGetVariantTypeResponseDto>
+> = {
+  data: [mockAdminGetVariantTypeResponse],
+  pagination: {
+    take: 10,
+    page: 1,
+    total: 10,
+    totalPages: 1,
+  },
+};
 
 export {
   mockAdminCreateVariantTypeRequest,

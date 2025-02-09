@@ -1,35 +1,39 @@
 import { ENUM_PAGINATION_ORDER } from "~/common/pagination/enums/order.enum";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import {
-  AdminCreateVariantTypeRequestDto,
-  AdminGetVariantTypeResponseDto,
-  AdminUpdateVariantTypeRequestDto,
+  AdminCreateVariantTypeValueRequestDto,
+  AdminGetVariantTypeValueResponseDto,
+  AdminGetVariantTypeValuesRequestDto,
+  AdminUpdateVariantTypeValueRequestDto,
 } from "../dtos/services";
-import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
-const mockAdminCreateVariantTypeRequest: AdminCreateVariantTypeRequestDto = {
-  variantTypeName: "Color",
-};
+const mockAdminCreateVariantValueRequest: AdminCreateVariantTypeValueRequestDto =
+  {
+    variantValueName: "Blue",
+    variantTypeId: ENUM_PREFIX_DATABASE.VT + "123",
+  };
 
-const mockAdminUpdateVariantTypeRequest: AdminUpdateVariantTypeRequestDto = {
-  variantTypeName: "Color",
-};
+const mockAdminUpdateVariantValueRequest: AdminUpdateVariantTypeValueRequestDto =
+  {
+    variantValueName: "Blue",
+  };
 
-const mockAdminGetVariantTypesRequest: PaginationSearchRequestDto = {
+const mockAdminGetVariantValuesRequest: AdminGetVariantTypeValuesRequestDto = {
   limit: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
+  variantTypeId: ENUM_PREFIX_DATABASE.VT + "123",
 };
 
-const mockAdminGetVariantTypeResponse: AdminGetVariantTypeResponseDto = {
-  variantTypeId: "VT123",
-  variantTypeName: "Colors",
-  createdAt: "2025-02-05T16:33:17.338Z",
+const mockAdminGetVariantValueResponse: AdminGetVariantTypeValueResponseDto = {
+  variantTypeValueId: ENUM_PREFIX_DATABASE.VTE + "123",
+  variantTypeValueName: "Blue",
 };
 
-const mockAdminGetVariantTypesResponse: IEntitesAndPaginationReponse<AdminGetVariantTypeResponseDto> =
+const mockAdminGetVariantValuesResponse: IEntitesAndPaginationReponse<AdminGetVariantTypeValueResponseDto> =
   {
-    data: [mockAdminGetVariantTypeResponse],
+    data: [mockAdminGetVariantValueResponse],
     pagination: {
       take: 10,
       page: 1,
@@ -39,9 +43,9 @@ const mockAdminGetVariantTypesResponse: IEntitesAndPaginationReponse<AdminGetVar
   };
 
 export {
-  mockAdminCreateVariantTypeRequest,
-  mockAdminUpdateVariantTypeRequest,
-  mockAdminGetVariantTypesRequest,
-  mockAdminGetVariantTypesResponse,
-  mockAdminGetVariantTypeResponse,
+  mockAdminCreateVariantValueRequest,
+  mockAdminUpdateVariantValueRequest,
+  mockAdminGetVariantValuesRequest,
+  mockAdminGetVariantValueResponse,
+  mockAdminGetVariantValuesResponse,
 };

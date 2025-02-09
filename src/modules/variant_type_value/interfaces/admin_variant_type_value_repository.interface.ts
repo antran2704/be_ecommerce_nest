@@ -1,6 +1,6 @@
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { AdminGetVariantTypeValuesRequestDto } from "../dtos/services";
-import { VariantTypeValueEntity } from "../entities/variant_type.entity";
+import { VariantTypeValueEntity } from "../entities/variant_type_value.entity";
 import {
   CreateVariantTypeValueDto,
   UpdateVariantTypeValueDto,

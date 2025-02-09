@@ -15,17 +15,19 @@ import {
   AdminGetVariantTypeValuesRequestDto,
   AdminUpdateVariantTypeValueRequestDto,
 } from "../dtos/services";
-import { VariantTypeValueEntity } from "../entities/variant_type.entity";
+import { VariantTypeValueEntity } from "../entities/variant_type_value.entity";
 import {
   CreateVariantTypeValueDto,
   UpdateVariantTypeValueDto,
 } from "../dtos/repositories";
+import { AdminVariantTypeService } from "~/modules/variant_type/services/admin_variant_type.service";
 
 export class AdminVariantTypeValueService
   implements IAdminVariantTypeValueService
 {
   constructor(
     private readonly variantValueRepository: AdminVariantTypeValueRepository,
+    private readonly variantTypeService: AdminVariantTypeService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -68,6 +70,9 @@ export class AdminVariantTypeValueService
   async createVariantValue(
     payload: AdminCreateVariantTypeValueRequestDto,
   ): Promise<void> {
+    // check variant type
+    await this.variantTypeService.getVariantTypeById(payload.variantTypeId);
+
     const exitRecord = await this.variantValueRepository.findByName(
       payload.variantValueName,
       payload.variantTypeId,
@@ -102,7 +107,7 @@ export class AdminVariantTypeValueService
     }
 
     const variantTypeName = await this.variantValueRepository.findByName(
-      payload.variantTypeValueName,
+      payload.variantValueName,
       variantValue.variant_type_id,
     );
 
@@ -112,7 +117,7 @@ export class AdminVariantTypeValueService
       );
 
     const formatData: UpdateVariantTypeValueDto = {
-      name: payload.variantTypeValueName,
+      name: payload.variantValueName,
     };
 
     await this.variantValueRepository.update(id, formatData);

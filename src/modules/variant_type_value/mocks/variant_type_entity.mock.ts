@@ -1,14 +1,10 @@
-import { VariantTypeEntity } from "../entities/variant_type.entity";
-import {
-  CREATED_AT_FIELD,
-  UPDATED_AT_FIELD,
-} from "~/common/database/constants/fields.constant";
+import { VariantTypeValueEntity } from "../entities/variant_type_value.entity";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
-const mockVariantTypeEntity: VariantTypeEntity = {
-  id: "VT123",
-  name: "Colors",
-  [CREATED_AT_FIELD]: "2025-02-05T16:33:17.338Z",
-  [UPDATED_AT_FIELD]: "2025-02-05T16:33:17.338Z",
+const mockVariantTypeValueEntity: Partial<VariantTypeValueEntity> = {
+  id: ENUM_PREFIX_DATABASE.VTE + "123",
+  name: "Blue",
+  variant_type_id: ENUM_PREFIX_DATABASE.VT + "123",
 };
 
-export { mockVariantTypeEntity };
+export { mockVariantTypeValueEntity };

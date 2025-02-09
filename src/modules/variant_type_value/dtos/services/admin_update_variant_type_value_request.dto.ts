@@ -8,5 +8,5 @@ export default class UpdateVariantTypeRequestDto {
   })
   @IsNotEmpty()
   @IsString()
-  variantTypeValueName: string;
+  variantValueName: string;
 }

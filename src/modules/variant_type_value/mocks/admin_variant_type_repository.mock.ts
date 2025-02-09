@@ -1,9 +1,9 @@
-import { IAdminVariantTypeRepository } from "../interfaces/admin_variant_type_value_repository.interface";
-import { mockVariantTypeEntity } from "./variant_type_entity.mock";
+import { IAdminVariantTypeValueRepository } from "../interfaces/admin_variant_type_value_repository.interface";
+import { mockVariantTypeValueEntity } from "./variant_type_entity.mock";
 
-const mockAdminVariantTypeRepository: IAdminVariantTypeRepository = {
-  findVariantTypes: jest.fn().mockReturnValue({
-    data: [mockVariantTypeEntity],
+const mockAdminVariantTypeValueRepository: IAdminVariantTypeValueRepository = {
+  findValues: jest.fn().mockReturnValue({
+    data: [mockVariantTypeValueEntity],
     pagination: {
       page: 1,
       take: 10,
@@ -11,12 +11,12 @@ const mockAdminVariantTypeRepository: IAdminVariantTypeRepository = {
       totalPages: 1,
     },
   }),
-  findVariantTypeById: jest.fn().mockReturnValue(mockVariantTypeEntity),
-  findVariantTypeByName: jest.fn().mockReturnValue(null),
+  findById: jest.fn().mockReturnValue(mockVariantTypeValueEntity),
+  findByName: jest.fn().mockReturnValue(null),
 
   create: jest.fn().mockResolvedValue(null),
   update: jest.fn().mockResolvedValue(null),
   delete: jest.fn().mockResolvedValue(null),
 };
 
-export { mockAdminVariantTypeRepository };
+export { mockAdminVariantTypeValueRepository };

@@ -6,7 +6,7 @@ import { getEntitesAndPagination } from "~/common/pagination/helpers/pagination"
 
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { IAdminVariantTypeValueRepository } from "../interfaces/admin_variant_type_value_repository.interface";
-import { VariantTypeValueEntity } from "../entities/variant_type.entity";
+import { VariantTypeValueEntity } from "../entities/variant_type_value.entity";
 import { AdminGetVariantTypeValuesRequestDto } from "../dtos/services";
 import {
   CreateVariantTypeValueDto,
@@ -29,6 +29,13 @@ export class AdminVariantTypeValueRepository
       this.entity,
       params,
       (query, originalNameEntity) => {
+        // filter with variant type id
+        if (params.variantTypeId) {
+          query.andWhere(`${originalNameEntity}.variant_type_id = :id`, {
+            id: params.variantTypeId,
+          });
+        }
+
         // filter with name or id
         if (params.search) {
           query.where(`${originalNameEntity}.id LIKE :id`, {
