@@ -14,7 +14,7 @@ export interface IAdminCategoryRepository {
   findCategoryById(id: string): Promise<CategoryEntity>;
   findCategoryByName(name: string): Promise<CategoryEntity>;
   findChildren(id: string): Promise<AdminGetChildCategoryDto[]>;
-  createCategory(payload: AdminCreateCategoryDto): Promise<any>;
-  updateCategory(id: string, payload: AdminUpdateCategoryDto): Promise<any>;
-  deleteCategory(id: string): Promise<any>;
+  createCategory(payload: AdminCreateCategoryDto): Promise<void>;
+  updateCategory(id: string, payload: AdminUpdateCategoryDto): Promise<void>;
+  deleteCategory(id: string): Promise<void>;
 }

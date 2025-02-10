@@ -7,8 +7,10 @@ import {
   PrimaryColumn,
   Index,
   JoinColumn,
+  ManyToMany,
 } from "typeorm";
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
+import { ProductEntity } from "~/modules/product/entities/product.entity";
 
 @Entity("categories")
 export class CategoryEntity extends DatabaseModifierEntity {
@@ -35,6 +37,12 @@ export class CategoryEntity extends DatabaseModifierEntity {
   @Column({ nullable: true, default: null })
   parent_id: string | null;
 
-  @OneToMany(() => CategoryEntity, (category) => category.parent)
+  @OneToMany(() => CategoryEntity, (entity) => entity.parent)
   children: CategoryEntity[];
+
+  @OneToMany(() => ProductEntity, (entity) => entity.main_category)
+  main_products: ProductEntity[];
+
+  @ManyToMany(() => ProductEntity, (entity) => entity.sub_categories)
+  sub_products: ProductEntity[];
 }
