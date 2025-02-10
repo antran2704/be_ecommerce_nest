@@ -7,9 +7,16 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { AdminCategoryService } from "../services/admin_category.service";
 import { Permissions } from "~/common/auth/decorators/permission.decorator";
@@ -25,12 +32,19 @@ import {
 import { PaginationRequestPipe } from "~/common/request/pipes/pagination_request.pipe";
 import {
   CreateSuccessResponse,
+  CreateSuccessWithDataResponse,
   DeletedSuccessResponse,
   GetSuccessResponse,
   GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
 } from "~/common/response/success.response";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
+import {
+  FileUploadInterceptor,
+  getImagePath,
+} from "~/common/multer/multer_interceptor";
+import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
+import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
 
 @ApiBearerAuth()
 @Controller("admin/categories")
@@ -91,6 +105,20 @@ export class AdminCategoryController {
   ): Promise<CreateSuccessResponse> {
     await this.categoryService.createCategory(payload);
     return new CreateSuccessResponse();
+  }
+
+  // create image
+  @Post("/image")
+  @ApiConsumes("multipart/form-data")
+  @ApiMulterRequestDecorator()
+  @UseInterceptors(FileUploadInterceptor("/categories"))
+  @Permissions([ENUM_PERMISSION.CATEGORY_CREATE])
+  @UseGuards(PermissionGuard)
+  async createImage(
+    @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
+  ): Promise<CreateSuccessWithDataResponse<string>> {
+    console.log("file:::", file);
+    return new CreateSuccessWithDataResponse(getImagePath(file.path));
   }
 
   // update user

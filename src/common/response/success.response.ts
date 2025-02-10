@@ -56,6 +56,16 @@ export class CreateSuccessResponse extends SuccessResponse {
   }
 }
 
+export class CreateSuccessWithDataResponse<T> extends SuccessResponse {
+  @ApiProperty({ description: "Response data" })
+  data: T;
+
+  constructor(data: T, message: string = SUCCESS_RESPONSE_MESSAGES.CREATED) {
+    super(message, 201);
+    this.data = data;
+  }
+}
+
 export class UpdatedSuccessResponse extends SuccessResponse {
   constructor(message: string = SUCCESS_RESPONSE_MESSAGES.UPDATED) {
     super(message, 201);
