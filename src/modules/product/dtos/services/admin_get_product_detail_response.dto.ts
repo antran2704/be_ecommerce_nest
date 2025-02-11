@@ -10,8 +10,17 @@ import {
 
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import AdminGetProductSubCategoryResponseDto from "./admin_get_product_sub_category_response.dto";
+import { ModifierResponseDto } from "~/common/dtos";
 
-export default class AdminGetProductDetailResponseDto {
+export default class AdminGetProductDetailResponseDto extends ModifierResponseDto {
+  @ApiProperty({
+    required: true,
+    example: ENUM_PREFIX_DATABASE.PR + "123",
+  })
+  @IsNotEmpty()
+  @IsString()
+  productId: string;
+
   @ApiProperty({
     required: true,
     example: "Iphone 15 Pro Max",

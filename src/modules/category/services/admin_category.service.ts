@@ -54,12 +54,25 @@ export class AdminCategoryService implements IAdminCategoryService {
 
   async getCategoryById(id: string): Promise<AdminGetCategoryResponseDto> {
     const category = await this.categoryRepository.findCategoryById(id);
+
+    if (!category)
+      throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_NOT_FOUND);
+
     const formatData = this.mapper.map(
       category,
       CategoryEntity,
       AdminGetCategoryResponseDto,
     );
     return formatData;
+  }
+
+  async getCategoryEntityById(id: string): Promise<CategoryEntity> {
+    const category = await this.categoryRepository.findCategoryById(id);
+
+    if (!category)
+      throw new BadRequestException(CATEGORY_ERROR_MESSAGES.CATEGORY_NOT_FOUND);
+
+    return category;
   }
 
   async createCategory(payload: AdminCreateCategoryRequestDto): Promise<void> {

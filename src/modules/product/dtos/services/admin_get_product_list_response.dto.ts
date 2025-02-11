@@ -1,3 +1,4 @@
+import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsArray,
@@ -9,8 +10,17 @@ import {
 } from "class-validator";
 
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
+import { ModifierResponseDto } from "~/common/dtos";
 
-export default class AdminGetProductListResponseDto {
+export default class AdminGetProductListResponseDto extends ModifierResponseDto {
+  @ApiProperty({
+    required: true,
+    example: ENUM_PREFIX_DATABASE.PR + "123",
+  })
+  @IsNotEmpty()
+  @IsString()
+  productId: string;
+
   @ApiProperty({
     required: true,
     example: "Iphone 15 Pro Max",
@@ -33,15 +43,8 @@ export default class AdminGetProductListResponseDto {
   })
   @IsString()
   @IsOptional()
+  @AutoMap()
   thumbnail: string;
-
-  @ApiProperty({
-    required: true,
-    example: ["/path/to/thumbnail"],
-  })
-  @IsArray()
-  @IsString({ each: true })
-  gallery: string[];
 
   @ApiProperty({
     required: true,

@@ -1,5 +1,5 @@
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
-import { AdminGetProductRequestDto } from "../dtos/services";
+import { AdminGetProductsRequestDto } from "../dtos/services";
 import { ProductEntity } from "../entities/product.entity";
 import {
   AdminCreateProductDto,
@@ -7,11 +7,11 @@ import {
 } from "../dtos/repositories";
 
 export interface IAdminProductRepository {
-  findProducts(
-    payload: AdminGetProductRequestDto,
+  find(
+    payload: AdminGetProductsRequestDto,
   ): Promise<IEntitesAndPaginationReponse<ProductEntity>>;
   findById(id: string): Promise<ProductEntity>;
   create(payload: AdminCreateProductDto): Promise<void>;
-  updateCategory(id: string, payload: AdminUpdateProductDto): Promise<void>;
-  deleteCategory(id: string): Promise<void>;
+  update(id: string, payload: AdminUpdateProductDto): Promise<void>;
+  delete(id: string): Promise<void>;
 }

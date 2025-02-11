@@ -19,4 +19,7 @@ export enum ENUM_PREFIX_DATABASE {
 
   // VARIANT TYPE VALUE
   VTE = "VTE",
+
+  // PRODUCT
+  PR = "PR",
 }

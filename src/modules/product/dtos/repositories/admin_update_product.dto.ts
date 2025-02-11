@@ -38,9 +38,11 @@ export default class AdminUpdateProductDto {
   is_active: boolean;
 
   @IsString()
-  main_category_id: string;
+  @IsOptional()
+  main_category_id?: string;
 
   @ValidateNested({ each: true })
   @Type(() => CategoryEntity)
-  sub_categories: CategoryEntity[];
+  @IsOptional()
+  sub_categories?: CategoryEntity[];
 }
