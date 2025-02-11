@@ -26,9 +26,9 @@ export class AdminProductRepository implements IAdminProductRepository {
       params,
       (query, originalNameEntity) => {
         query.leftJoinAndSelect(
-          CategoryEntity,
+          `${originalNameEntity}.main_category`,
           "ca",
-          `${originalNameEntity}.main_category_id = ca.id`,
+          `${originalNameEntity}.main_category = 123`,
         );
 
         // filter with name or id
@@ -47,7 +47,7 @@ export class AdminProductRepository implements IAdminProductRepository {
 
         // filter with category
         if (params.categoryId) {
-          query.andWhere(`${originalNameEntity}.main_category_id = :id`, {
+          query.andWhere(`${originalNameEntity}.main_category = :id`, {
             id: params.categoryId,
           });
         }

@@ -35,7 +35,6 @@ export class AdminProductService implements IAdminProductService {
     payload: AdminGetProductsRequestDto,
   ): Promise<IEntitesAndPaginationReponse<AdminGetProductListResponseDto>> {
     const { data, pagination } = await this.productRepository.find(payload);
-
     const formatData = this.mapper.mapArray(
       data,
       ProductEntity,
@@ -73,7 +72,6 @@ export class AdminProductService implements IAdminProductService {
       base_price: payload.basePrice || 0,
       promotion_price: payload.promotionPrice || 0,
       is_active: payload.isActive,
-      main_category_id: category.id,
       main_category: category,
       sub_categories: subCategories,
     };
@@ -110,7 +108,7 @@ export class AdminProductService implements IAdminProductService {
     };
 
     // check if update mainCategoryId
-    if (payload.mainCategoryId !== product.main_category_id) {
+    if (payload.mainCategoryId !== product.main_category.id) {
       const category = await this.categoryService.getCategoryEntityById(
         payload.mainCategoryId,
       );

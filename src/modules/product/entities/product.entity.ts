@@ -48,9 +48,6 @@ export class ProductEntity extends DatabaseModifierEntity {
   @JoinColumn({ name: "main_category" })
   main_category: CategoryEntity;
 
-  @Column()
-  main_category_id: string;
-
   @ManyToMany(() => CategoryEntity, (entity) => entity.sub_products)
   @JoinTable({
     name: "product_sub_categories",

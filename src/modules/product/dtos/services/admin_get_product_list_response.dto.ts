@@ -1,7 +1,6 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import {
-  IsArray,
   IsBoolean,
   IsNotEmpty,
   IsNumber,

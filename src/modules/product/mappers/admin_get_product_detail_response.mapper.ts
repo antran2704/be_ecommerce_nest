@@ -20,12 +20,12 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
           mapFrom((src: ProductEntity) => src.id),
         ),
         forMember(
-          (dest: AdminGetProductDetailResponseDto) => dest.productName,
-          mapFrom((src: ProductEntity) => src.name),
+          (dest: AdminGetProductDetailResponseDto) => dest.basePrice,
+          mapFrom((src: ProductEntity) => Number(src.base_price)),
         ),
         forMember(
-          (dest: AdminGetProductDetailResponseDto) => dest.basePrice,
-          mapFrom((src: ProductEntity) => src.base_price),
+          (dest: AdminGetProductDetailResponseDto) => dest.promotionPrice,
+          mapFrom((src: ProductEntity) => Number(src.promotion_price)),
         ),
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.promotionPrice,
@@ -33,11 +33,15 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
         ),
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.mainCategoryId,
-          mapFrom((src: ProductEntity) => src.main_category_id),
+          mapFrom((src: ProductEntity) =>
+            src.main_category ? src.main_category.id : null,
+          ),
         ),
         forMember(
-          (dest: AdminGetProductDetailResponseDto) => dest.mainCategoryName, // TODO: check if can't get category
-          mapFrom((src: ProductEntity) => src.main_category.name),
+          (dest: AdminGetProductDetailResponseDto) => dest.mainCategoryName,
+          mapFrom((src: ProductEntity) =>
+            src.main_category ? src.main_category.name : null,
+          ),
         ),
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.subCategories,
@@ -47,6 +51,10 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
               categoryId: subCategory.id,
             })),
           ),
+        ),
+        forMember(
+          (dest: AdminGetProductDetailResponseDto) => dest.isActive,
+          mapFrom((src: ProductEntity) => src.is_active),
         ),
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.createdAt,

@@ -25,19 +25,27 @@ export class AdminGetProductListReponseMapper extends AutomapperProfile {
         ),
         forMember(
           (dest: AdminGetProductListResponseDto) => dest.basePrice,
-          mapFrom((src: ProductEntity) => src.base_price),
+          mapFrom((src: ProductEntity) => Number(src.base_price)),
         ),
         forMember(
           (dest: AdminGetProductListResponseDto) => dest.promotionPrice,
-          mapFrom((src: ProductEntity) => src.promotion_price),
+          mapFrom((src: ProductEntity) => Number(src.promotion_price)),
         ),
         forMember(
           (dest: AdminGetProductListResponseDto) => dest.mainCategoryId,
-          mapFrom((src: ProductEntity) => src.main_category_id),
+          mapFrom((src: ProductEntity) =>
+            src.main_category ? src.main_category.id : null,
+          ),
         ),
         forMember(
-          (dest: AdminGetProductListResponseDto) => dest.mainCategoryName, // TODO: check if can't get category
-          mapFrom((src: ProductEntity) => src.main_category.name),
+          (dest: AdminGetProductListResponseDto) => dest.mainCategoryName,
+          mapFrom((src: ProductEntity) =>
+            src.main_category ? src.main_category.name : null,
+          ),
+        ),
+        forMember(
+          (dest: AdminGetProductListResponseDto) => dest.isActive,
+          mapFrom((src: ProductEntity) => src.is_active),
         ),
         forMember(
           (dest: AdminGetProductListResponseDto) => dest.createdAt,

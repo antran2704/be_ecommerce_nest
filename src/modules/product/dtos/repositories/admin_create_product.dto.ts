@@ -41,9 +41,6 @@ export default class AdminCreateProductDto {
   @IsBoolean()
   is_active: boolean;
 
-  @IsString()
-  main_category_id: string;
-
   @Type(() => CategoryEntity)
   main_category: CategoryEntity;
 
