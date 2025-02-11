@@ -44,6 +44,9 @@ export default class AdminCreateProductDto {
   @IsString()
   main_category_id: string;
 
+  @Type(() => CategoryEntity)
+  main_category: CategoryEntity;
+
   @ValidateNested({ each: true })
   @Type(() => CategoryEntity)
   sub_categories: CategoryEntity[];

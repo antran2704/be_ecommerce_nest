@@ -178,6 +178,58 @@ variantTypePagePermission.addChild(
   ENUM_PERMISSION.VARIANT_TYPE_DELETE,
 );
 
+// Variant Type Value Page Permission
+const variantTypeValuePagePermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.VARIANT_TYPE_VALUE,
+  ENUM_PERMISSION_SUBJECT.VARIANT_TYPE_VALUE,
+);
+
+variantTypeValuePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_VIEW,
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_VIEW,
+);
+
+variantTypeValuePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_CREATE,
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_CREATE,
+);
+
+variantTypeValuePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_UPDATE,
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_UPDATE,
+);
+
+variantTypeValuePagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_DELETE,
+  ENUM_PERMISSION.VARIANT_TYPE_VALUE_DELETE,
+);
+
+// Product Page Permission
+const productPagePermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.PRODUCT,
+  ENUM_PERMISSION_SUBJECT.PRODUCT,
+);
+
+productPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_VIEW,
+  ENUM_PERMISSION.PRODUCT_VIEW,
+);
+
+productPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_CREATE,
+  ENUM_PERMISSION.PRODUCT_CREATE,
+);
+
+productPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_UPDATE,
+  ENUM_PERMISSION.PRODUCT_UPDATE,
+);
+
+productPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_DELETE,
+  ENUM_PERMISSION.PRODUCT_DELETE,
+);
+
 export function setPermissionDictionary() {
   // Home Page
   PermissionDictionary.addPermission(
@@ -213,5 +265,23 @@ export function setPermissionDictionary() {
   PermissionDictionary.addPermission(
     ENUM_PLATFORM_PERMISSION.ADMIN,
     categoryPagePermission,
+  );
+
+  // Variant Type Page
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    variantTypePagePermission,
+  );
+
+  // Variant Type Value Page
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    variantTypeValuePagePermission,
+  );
+
+  // Variant Type Value Page
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    productPagePermission,
   );
 }

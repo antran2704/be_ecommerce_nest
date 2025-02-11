@@ -19,6 +19,7 @@ import { AdminVariantTypeController } from "~/modules/variant_type/controllers/a
 import { AdminVariantTypeValueModule } from "~/modules/variant_type_value/admin_variant_type.module";
 import { AdminVariantTypeValueController } from "~/modules/variant_type_value/controllers/admin_variant_type.controller";
 import { AdminProductModule } from "~/modules/product/admin_product.module";
+import { AdminProductController } from "~/modules/product/controllers/admin_product.controller";
 
 @Module({
   controllers: [
@@ -32,6 +33,7 @@ import { AdminProductModule } from "~/modules/product/admin_product.module";
     AdminCategoryController,
     AdminVariantTypeController,
     AdminVariantTypeValueController,
+    AdminProductController,
   ],
   imports: [
     AdminModule,

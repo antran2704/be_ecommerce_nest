@@ -45,7 +45,7 @@ export class ProductEntity extends DatabaseModifierEntity {
   is_active: boolean;
 
   @ManyToOne(() => CategoryEntity, (entity) => entity.main_products)
-  @JoinColumn({ name: "main_category_id" })
+  @JoinColumn({ name: "main_category" })
   main_category: CategoryEntity;
 
   @Column()

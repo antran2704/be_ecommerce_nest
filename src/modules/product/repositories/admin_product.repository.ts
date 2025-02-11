@@ -10,6 +10,7 @@ import {
   AdminCreateProductDto,
   AdminUpdateProductDto,
 } from "../dtos/repositories";
+import { CategoryEntity } from "~/modules/category/entities/category.entity";
 
 export class AdminProductRepository implements IAdminProductRepository {
   constructor(
@@ -24,6 +25,12 @@ export class AdminProductRepository implements IAdminProductRepository {
       this.productEntity,
       params,
       (query, originalNameEntity) => {
+        query.leftJoinAndSelect(
+          CategoryEntity,
+          "ca",
+          `${originalNameEntity}.main_category_id = ca.id`,
+        );
+
         // filter with name or id
         if (params.search) {
           query.where(`${originalNameEntity}.id LIKE :id`, {

@@ -35,6 +35,7 @@ export class AdminProductService implements IAdminProductService {
     payload: AdminGetProductsRequestDto,
   ): Promise<IEntitesAndPaginationReponse<AdminGetProductListResponseDto>> {
     const { data, pagination } = await this.productRepository.find(payload);
+
     const formatData = this.mapper.mapArray(
       data,
       ProductEntity,
@@ -60,7 +61,7 @@ export class AdminProductService implements IAdminProductService {
       payload.mainCategoryId,
     );
 
-    let subCategories: CategoryEntity[] = [];
+    const subCategories: CategoryEntity[] = [];
     const newId = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.PR);
 
     const formatData: AdminCreateProductDto = {
@@ -72,7 +73,8 @@ export class AdminProductService implements IAdminProductService {
       base_price: payload.basePrice || 0,
       promotion_price: payload.promotionPrice || 0,
       is_active: payload.isActive,
-      main_category_id: payload.mainCategoryId,
+      main_category_id: category.id,
+      main_category: category,
       sub_categories: subCategories,
     };
 
