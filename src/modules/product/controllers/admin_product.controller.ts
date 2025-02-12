@@ -43,7 +43,7 @@ export class AdminProductController {
   @Permissions([ENUM_PERMISSION.PRODUCT_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(AdminGetProductListResponseDto)
-  async getVariantTypes(
+  async getProducts(
     @Query(PaginationRequestPipe) query: AdminGetProductsRequestDto,
   ): Promise<GetSuccessWithPaginationResponse<AdminGetProductListResponseDto>> {
     const { data, pagination } = await this.productService.getProducts(query);
@@ -55,7 +55,7 @@ export class AdminProductController {
   @Permissions([ENUM_PERMISSION.PRODUCT_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetProductDetailResponseDto)
-  async getUser(
+  async getProduct(
     @Param("product_id") id: string,
   ): Promise<GetSuccessResponse<AdminGetProductDetailResponseDto>> {
     const data = await this.productService.getProductById(id);
@@ -70,7 +70,7 @@ export class AdminProductController {
   })
   @Permissions([ENUM_PERMISSION.PRODUCT_CREATE])
   @UseGuards(PermissionGuard)
-  async createUser(
+  async createProduct(
     @Body() payload: AdminCreateProductRequestDto,
   ): Promise<CreateSuccessResponse> {
     await this.productService.createProduct(payload);
@@ -84,11 +84,37 @@ export class AdminProductController {
   })
   @Permissions([ENUM_PERMISSION.PRODUCT_UPDATE])
   @UseGuards(PermissionGuard)
-  async updateAdmin(
+  async updateProduct(
     @Param("product_id") id: string,
     @Body() payload: AdminUpdateProductRequestDto,
   ) {
     await this.productService.updateProduct(id, payload);
+
+    return new UpdatedSuccessResponse();
+  }
+
+  @Patch("/:product_id/enable")
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  @Permissions([ENUM_PERMISSION.PRODUCT_UPDATE])
+  @UseGuards(PermissionGuard)
+  async enableProduct(@Param("product_id") id: string) {
+    await this.productService.enableProduct(id);
+
+    return new UpdatedSuccessResponse();
+  }
+
+  @Patch("/:product_id/disable")
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  @Permissions([ENUM_PERMISSION.PRODUCT_UPDATE])
+  @UseGuards(PermissionGuard)
+  async disableProduct(@Param("product_id") id: string) {
+    await this.productService.disableProduct(id);
 
     return new UpdatedSuccessResponse();
   }

@@ -17,5 +17,7 @@ export interface IAdminProductService {
     id: string,
     payload: AdminUpdateProductRequestDto,
   ): Promise<void>;
+  enableProduct(id: string): Promise<void>;
+  disableProduct(id: string): Promise<void>;
   deleteProduct(id: string): Promise<void>;
 }

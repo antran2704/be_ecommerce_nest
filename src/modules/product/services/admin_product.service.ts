@@ -141,6 +141,30 @@ export class AdminProductService implements IAdminProductService {
     await this.productRepository.save(product);
   }
 
+  async enableProduct(id: string): Promise<void> {
+    const product = await this.productRepository.findById(id);
+
+    if (!product)
+      throw new BadRequestException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
+    if (product.is_active)
+      throw new BadRequestException(PRODUCT_ERROR_MESSAGES.WAS_ENABLED);
+
+    await this.productRepository.enable(id);
+  }
+
+  async disableProduct(id: string): Promise<void> {
+    const product = await this.productRepository.findById(id);
+
+    if (!product)
+      throw new BadRequestException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
+    if (!product.is_active)
+      throw new BadRequestException(PRODUCT_ERROR_MESSAGES.WAS_DISABLED);
+
+    await this.productRepository.disable(id);
+  }
+
   async deleteProduct(id: string): Promise<void> {
     const product = await this.productRepository.findById(id);
 

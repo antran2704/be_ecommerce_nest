@@ -10,6 +10,7 @@ import {
   AdminCreateProductDto,
   AdminUpdateProductDto,
 } from "../dtos/repositories";
+import { ENUM_PRODUCT_STATUS } from "../enums/product.enum";
 
 export class AdminProductRepository implements IAdminProductRepository {
   constructor(
@@ -40,6 +41,13 @@ export class AdminProductRepository implements IAdminProductRepository {
           );
         }
 
+        // filter with status
+        if (params.status) {
+          query.andWhere(`${originalNameEntity}.is_active = :status`, {
+            status: params.status === ENUM_PRODUCT_STATUS.ACTIVE ? true : false,
+          });
+        }
+
         // filter with category
         if (params.categoryId) {
           query.andWhere(`${originalNameEntity}.main_category = :id`, {
@@ -66,6 +74,14 @@ export class AdminProductRepository implements IAdminProductRepository {
 
   async update(id: string, payload: AdminUpdateProductDto): Promise<void> {
     await this.productEntity.update({ id }, payload);
+  }
+
+  async enable(id: string): Promise<void> {
+    await this.productEntity.update({ id }, { is_active: true });
+  }
+
+  async disable(id: string): Promise<void> {
+    await this.productEntity.update({ id }, { is_active: false });
   }
 
   async save(payload: ProductEntity): Promise<void> {
