@@ -105,7 +105,6 @@ export class AdminProductService implements IAdminProductService {
       thumbnail: payload.thumbnail,
       base_price: payload.basePrice || 0,
       promotion_price: payload.promotionPrice || 0,
-      is_active: payload.isActive,
     };
 
     // check if update mainCategoryId

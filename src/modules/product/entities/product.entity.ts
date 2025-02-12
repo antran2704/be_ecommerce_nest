@@ -32,7 +32,6 @@ export class ProductEntity extends DatabaseModifierEntity {
   thumbnail: string;
 
   @Column({ type: "json", default: null })
-  @AutoMap()
   gallery: string[];
 
   @Column({ type: "decimal", default: 0 })

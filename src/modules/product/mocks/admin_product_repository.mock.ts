@@ -3,7 +3,7 @@ import { IAdminProductRepository } from "../interfaces/admin_product_repository.
 import { mockProductEntity } from "./product_entity.mock";
 
 const mockAdminProductRepository: IAdminProductRepository = {
-  find: jest.fn(async () => ({
+  find: jest.fn().mockResolvedValue({
     data: [mockProductEntity as ProductEntity],
     pagination: {
       page: 1,
@@ -11,16 +11,14 @@ const mockAdminProductRepository: IAdminProductRepository = {
       total: 10,
       totalPages: 1,
     },
-  })),
-  findById: jest.fn(async () => {
-    return mockProductEntity as ProductEntity;
   }),
-  create: jest.fn(),
-  update: jest.fn(),
-  save: jest.fn(),
-  delete: jest.fn(),
-  disable: jest.fn(),
-  enable: jest.fn(),
+  findById: jest.fn().mockResolvedValue(mockProductEntity as ProductEntity),
+  create: jest.fn().mockReturnValue(null),
+  update: jest.fn().mockReturnValue(null),
+  save: jest.fn().mockReturnValue(null),
+  delete: jest.fn().mockReturnValue(null),
+  disable: jest.fn().mockReturnValue(null),
+  enable: jest.fn().mockReturnValue(null),
 };
 
 export { mockAdminProductRepository };

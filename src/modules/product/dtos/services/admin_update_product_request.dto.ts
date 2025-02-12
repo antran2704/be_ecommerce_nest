@@ -1,7 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import {
   IsArray,
-  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -56,13 +55,6 @@ export default class AdminUpdateProductRequestDto {
   })
   @IsNumber()
   promotionPrice: number;
-
-  @ApiProperty({
-    required: true,
-    example: true,
-  })
-  @IsBoolean()
-  isActive: boolean;
 
   @ApiProperty({
     required: true,

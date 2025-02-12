@@ -6,6 +6,7 @@ import {
   AdminGetCategoryResponseDto,
 } from "../dtos/services";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 const mockAdminCreateCategoryRequest: AdminCreateCategoryRequestDto = {
   categoryName: "Category Test",
@@ -19,14 +20,14 @@ const mockAdminGetCategoriesRequest: AdminGetCategoriesRequestDto = {
 };
 
 const mockAdminGetCategoryRequest: AdminGetCategoryRequestDto = {
-  categoryId: "CA0502258197",
+  categoryId: ENUM_PREFIX_DATABASE.CA + "123",
 };
 
 const mockAdminGetCategoryResponse: AdminGetCategoryResponseDto = {
-  categoryId: "CA0502258197",
+  categoryId: ENUM_PREFIX_DATABASE.CA + "123",
   categoryName: "Clothes",
   categoryIndex: 0,
-  createdAt: "2025-02-05T16:33:17.338Z",
+  createdAt: "",
 };
 
 const mockAdminGetCategoriesResponse: IEntitesAndPaginationReponse<AdminGetCategoryResponseDto> =

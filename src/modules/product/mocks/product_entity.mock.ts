@@ -5,15 +5,16 @@ import { CategoryEntity } from "~/modules/category/entities/category.entity";
 
 const mockProductEntity: Partial<ProductEntity> = {
   id: ENUM_PREFIX_DATABASE.PR + "123",
-  name: "Product mock",
-  description: "Product mock description",
+  name: "Product name",
+  description: "Product description",
   base_price: 1000,
-  promotion_price: 100,
-  thumbnail: "image1.jpg",
-  gallery: ["image1.jpg", "image2.jpg"],
+  promotion_price: 0,
+  thumbnail: "Product thumbnail",
+  gallery: [],
   is_active: true,
   main_category: mockCategoryEntity as CategoryEntity,
   sub_categories: [],
+  created_at: "",
 };
 
 export { mockProductEntity };

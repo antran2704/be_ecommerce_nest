@@ -30,14 +30,6 @@ export default class AdminGetProductListResponseDto extends ModifierResponseDto 
 
   @ApiProperty({
     required: true,
-    example: "Description product",
-  })
-  @IsNotEmpty()
-  @IsString()
-  description: string;
-
-  @ApiProperty({
-    required: true,
     example: "/path/to/thumbnail",
   })
   @IsString()

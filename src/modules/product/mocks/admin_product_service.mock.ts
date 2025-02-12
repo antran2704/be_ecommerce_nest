@@ -5,8 +5,10 @@ import {
   AdminGetProductDetailResponseDto,
   AdminGetProductListResponseDto,
   AdminGetProductsRequestDto,
+  AdminUpdateProductRequestDto,
 } from "../dtos/services";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
+import { mockProductEntity } from "./product_entity.mock";
 
 const mockAdminCreateProductRequest: AdminCreateProductRequestDto = {
   productName: "Product name",
@@ -15,9 +17,20 @@ const mockAdminCreateProductRequest: AdminCreateProductRequestDto = {
   gallery: [],
   basePrice: 1000,
   promotionPrice: 0,
-  mainCategoryId: ENUM_PREFIX_DATABASE.CA + "123",
+  mainCategoryId: mockProductEntity.main_category.id,
   subCategories: [],
   isActive: true,
+};
+
+const mockAdminUpdateProductRequest: AdminUpdateProductRequestDto = {
+  productName: "Product name",
+  description: "Product description",
+  thumbnail: "Product thumbnail",
+  gallery: [],
+  basePrice: 1000,
+  promotionPrice: 0,
+  mainCategoryId: ENUM_PREFIX_DATABASE.CA + "123",
+  subCategories: [],
 };
 
 const mockAdminGetProductsRequest: AdminGetProductsRequestDto = {
@@ -35,23 +48,24 @@ const mockAdminGetProductDetailResponse: Partial<AdminGetProductDetailResponseDt
     gallery: [],
     basePrice: 1000,
     promotionPrice: 0,
-    mainCategoryId: ENUM_PREFIX_DATABASE.CA + "123",
-    mainCategoryName: "Category name",
+    mainCategoryId: mockProductEntity.main_category.id,
+    mainCategoryName: mockProductEntity.main_category.name,
     subCategories: [],
     isActive: true,
+    createdAt: "",
   };
 
 const mockAdminGetProductListResponse: Partial<AdminGetProductListResponseDto> =
   {
     productId: ENUM_PREFIX_DATABASE.PR + "123",
     productName: "Product name",
-    description: "Product description",
     thumbnail: "Product thumbnail",
     basePrice: 1000,
     promotionPrice: 0,
-    mainCategoryId: ENUM_PREFIX_DATABASE.CA + "123",
-    mainCategoryName: "Category name",
+    mainCategoryId: mockProductEntity.main_category.id,
+    mainCategoryName: mockProductEntity.main_category.name,
     isActive: true,
+    createdAt: "",
   };
 
 const mockAdminGetProductsResponse: IEntitesAndPaginationReponse<
@@ -68,6 +82,7 @@ const mockAdminGetProductsResponse: IEntitesAndPaginationReponse<
 
 export {
   mockAdminCreateProductRequest,
+  mockAdminUpdateProductRequest,
   mockAdminGetProductsRequest,
   mockAdminGetProductDetailResponse,
   mockAdminGetProductListResponse,

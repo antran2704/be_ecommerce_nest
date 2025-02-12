@@ -11,6 +11,7 @@ import {
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import AdminGetProductSubCategoryResponseDto from "./admin_get_product_sub_category_response.dto";
 import { ModifierResponseDto } from "~/common/dtos";
+import { AutoMap } from "@automapper/classes";
 
 export default class AdminGetProductDetailResponseDto extends ModifierResponseDto {
   @ApiProperty({
@@ -43,6 +44,7 @@ export default class AdminGetProductDetailResponseDto extends ModifierResponseDt
   })
   @IsString()
   @IsOptional()
+  @AutoMap()
   thumbnail: string;
 
   @ApiProperty({

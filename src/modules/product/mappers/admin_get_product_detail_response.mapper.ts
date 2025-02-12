@@ -40,6 +40,10 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
           mapFrom((src: ProductEntity) => src.promotion_price),
         ),
         forMember(
+          (dest: AdminGetProductDetailResponseDto) => dest.gallery,
+          mapFrom((src: ProductEntity) => src.gallery),
+        ),
+        forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.mainCategoryId,
           mapFrom((src: ProductEntity) =>
             src.main_category ? src.main_category.id : null,
