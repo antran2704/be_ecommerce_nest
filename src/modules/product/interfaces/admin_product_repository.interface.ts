@@ -13,5 +13,6 @@ export interface IAdminProductRepository {
   findById(id: string): Promise<ProductEntity>;
   create(payload: AdminCreateProductDto): Promise<void>;
   update(id: string, payload: AdminUpdateProductDto): Promise<void>;
+  save(payload: ProductEntity): Promise<void>;
   delete(id: string): Promise<void>;
 }

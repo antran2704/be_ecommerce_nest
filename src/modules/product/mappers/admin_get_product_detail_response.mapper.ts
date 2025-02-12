@@ -20,6 +20,14 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
           mapFrom((src: ProductEntity) => src.id),
         ),
         forMember(
+          (dest: AdminGetProductDetailResponseDto) => dest.productName,
+          mapFrom((src: ProductEntity) => src.name),
+        ),
+        forMember(
+          (dest: AdminGetProductDetailResponseDto) => dest.description,
+          mapFrom((src: ProductEntity) => src.description),
+        ),
+        forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.basePrice,
           mapFrom((src: ProductEntity) => Number(src.base_price)),
         ),
@@ -46,10 +54,12 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.subCategories,
           mapFrom((src: ProductEntity) =>
-            src.sub_categories.map((subCategory) => ({
-              categoryName: subCategory.name,
-              categoryId: subCategory.id,
-            })),
+            src.sub_categories.length
+              ? src.sub_categories.map((subCategory) => ({
+                  categoryName: subCategory.name,
+                  categoryId: subCategory.id,
+                }))
+              : [],
           ),
         ),
         forMember(

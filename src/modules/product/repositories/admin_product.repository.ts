@@ -10,7 +10,6 @@ import {
   AdminCreateProductDto,
   AdminUpdateProductDto,
 } from "../dtos/repositories";
-import { CategoryEntity } from "~/modules/category/entities/category.entity";
 
 export class AdminProductRepository implements IAdminProductRepository {
   constructor(
@@ -25,11 +24,7 @@ export class AdminProductRepository implements IAdminProductRepository {
       this.productEntity,
       params,
       (query, originalNameEntity) => {
-        query.leftJoinAndSelect(
-          `${originalNameEntity}.main_category`,
-          "ca",
-          `${originalNameEntity}.main_category = 123`,
-        );
+        query.leftJoinAndSelect(`${originalNameEntity}.main_category`, "ca");
 
         // filter with name or id
         if (params.search) {
@@ -58,7 +53,10 @@ export class AdminProductRepository implements IAdminProductRepository {
   }
 
   async findById(id: string): Promise<ProductEntity> {
-    return this.productEntity.findOneBy({ id });
+    return this.productEntity.findOne({
+      where: { id },
+      relations: ["main_category", "sub_categories"],
+    });
   }
 
   async create(payload: AdminCreateProductDto): Promise<void> {
@@ -68,6 +66,10 @@ export class AdminProductRepository implements IAdminProductRepository {
 
   async update(id: string, payload: AdminUpdateProductDto): Promise<void> {
     await this.productEntity.update({ id }, payload);
+  }
+
+  async save(payload: ProductEntity): Promise<void> {
+    await this.productEntity.save(payload);
   }
 
   async delete(id: string): Promise<void> {

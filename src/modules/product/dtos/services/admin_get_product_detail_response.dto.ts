@@ -90,7 +90,9 @@ export default class AdminGetProductDetailResponseDto extends ModifierResponseDt
 
   @ApiProperty({
     required: true,
-    example: [AdminGetProductSubCategoryResponseDto],
+    example: [
+      { categoryId: ENUM_PREFIX_DATABASE.CA + "123", categoryName: "T-shirt" },
+    ],
   })
   @IsArray()
   subCategories: AdminGetProductSubCategoryResponseDto[];

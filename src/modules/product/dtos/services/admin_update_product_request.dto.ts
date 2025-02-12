@@ -69,6 +69,7 @@ export default class AdminUpdateProductRequestDto {
     example: ENUM_PREFIX_DATABASE.CA + "123",
   })
   @IsString()
+  @IsOptional()
   mainCategoryId: string;
 
   @ApiPropertyOptional({

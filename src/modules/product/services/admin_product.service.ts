@@ -45,9 +45,10 @@ export class AdminProductService implements IAdminProductService {
   }
 
   async getProductById(id: string): Promise<AdminGetProductDetailResponseDto> {
-    const category = await this.productRepository.findById(id);
+    const data = await this.productRepository.findById(id);
+
     const formatData = this.mapper.map(
-      category,
+      data,
       ProductEntity,
       AdminGetProductDetailResponseDto,
     );
@@ -91,12 +92,13 @@ export class AdminProductService implements IAdminProductService {
   }
 
   async updateProduct(id: string, payload: AdminUpdateProductRequestDto) {
-    const product = await this.productRepository.findById(id);
+    let product = await this.productRepository.findById(id);
 
     if (!product)
       throw new BadRequestException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
 
-    const formatData: AdminUpdateProductDto = {
+    product = {
+      ...product,
       name: payload.productName,
       description: payload.description,
       gallery: payload.gallery,
@@ -104,20 +106,22 @@ export class AdminProductService implements IAdminProductService {
       base_price: payload.basePrice || 0,
       promotion_price: payload.promotionPrice || 0,
       is_active: payload.isActive,
-      main_category_id: payload.mainCategoryId,
     };
 
     // check if update mainCategoryId
-    if (payload.mainCategoryId !== product.main_category.id) {
+    if (
+      payload.mainCategoryId &&
+      payload.mainCategoryId !== product.main_category.id
+    ) {
       const category = await this.categoryService.getCategoryEntityById(
         payload.mainCategoryId,
       );
 
-      formatData.main_category_id = category.id;
+      product.main_category = category;
     }
 
-    // check if have sub categories
-    if (payload.subCategories.length) {
+    // check if have change sub categories
+    if (payload.subCategories && payload.subCategories.length) {
       const subCategories: CategoryEntity[] = [];
 
       for (const id of payload.subCategories) {
@@ -126,10 +130,15 @@ export class AdminProductService implements IAdminProductService {
         subCategories.push(subCategory);
       }
 
-      formatData.sub_categories = subCategories;
+      product.sub_categories = subCategories;
     }
 
-    await this.productRepository.update(id, formatData);
+    // check if have change sub categories to empty
+    if (payload.subCategories && !payload.subCategories.length) {
+      product.sub_categories = [];
+    }
+
+    await this.productRepository.save(product);
   }
 
   async deleteProduct(id: string): Promise<void> {
