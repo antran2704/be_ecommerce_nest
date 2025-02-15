@@ -115,7 +115,9 @@ export class AuthUserService implements IAuthUserService {
     return { accessToken, refreshToken };
   }
 
-  async loginWithProvider(data: LoginWithProviderRequestDto): Promise<any> {
+  async loginWithProvider(
+    data: LoginWithProviderRequestDto,
+  ): Promise<LoginUserResponseDto> {
     try {
       const tokenPayload = await verifyToken(data.accessToken, {
         secretKey: this.configService.get("clerk.secretKey"),

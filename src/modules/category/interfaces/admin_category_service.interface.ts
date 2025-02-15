@@ -6,6 +6,7 @@ import {
   AdminGetChildCategoryResponseDto,
   AdminUpdateCategoryRequestDto,
 } from "../dtos/services";
+import { CategoryEntity } from "../entities/category.entity";
 
 export interface IAdminCategoryService {
   getCategories(
@@ -13,6 +14,7 @@ export interface IAdminCategoryService {
   ): Promise<IEntitesAndPaginationReponse<AdminGetCategoryResponseDto>>;
   getChildren(id: string): Promise<AdminGetChildCategoryResponseDto[]>;
   getCategoryById(id: string): Promise<AdminGetCategoryResponseDto>;
+  getCategoryEntityById(id: string): Promise<CategoryEntity>;
   createCategory(payload: AdminCreateCategoryRequestDto): Promise<void>;
   updateCategory(
     id: string,

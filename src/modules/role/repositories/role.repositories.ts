@@ -13,6 +13,7 @@ import {
 import { GetDatabaseDefaultID } from "~/helpers/database";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import { GroupRoleEntity } from "~/modules/group_role/entities/group_role.entity";
+import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 
 @Injectable()
 export default class RoleRepository implements IRoleRepository {
@@ -21,7 +22,9 @@ export default class RoleRepository implements IRoleRepository {
     private readonly roleEntity: Repository<RoleEntity>,
   ) {}
 
-  async getRoles(params: SearchRolesRequestDto): Promise<any> {
+  async getRoles(
+    params: SearchRolesRequestDto,
+  ): Promise<IEntitesAndPaginationReponse<RoleEntity>> {
     return getEntitesAndPagination(this.roleEntity, params, (query, entity) => {
       if (params.groupRoleId) {
         query.where(`${entity}.group_role_id = :groupRoleId`, {

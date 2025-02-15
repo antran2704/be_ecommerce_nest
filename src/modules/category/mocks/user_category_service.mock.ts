@@ -2,6 +2,7 @@ import { ENUM_PAGINATION_ORDER } from "~/common/pagination/enums/order.enum";
 import { UserGetCategoryResponseDto } from "../dtos/services";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 const mockUserGetCategoriesRequest: PaginationSearchRequestDto = {
   limit: 10,
@@ -10,10 +11,10 @@ const mockUserGetCategoriesRequest: PaginationSearchRequestDto = {
 };
 
 const mockUserGetCategoryResponse: UserGetCategoryResponseDto = {
-  categoryId: "CA0502258197",
+  categoryId: ENUM_PREFIX_DATABASE.CA + "123",
   categoryName: "Clothes",
   categoryIndex: 0,
-  createdAt: "2025-02-05T16:33:17.338Z",
+  createdAt: "",
 };
 
 const mockUserGetCategoriesResponse: IEntitesAndPaginationReponse<UserGetCategoryResponseDto> =

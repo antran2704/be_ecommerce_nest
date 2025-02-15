@@ -117,7 +117,6 @@ export class AdminCategoryController {
   async createImage(
     @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
   ): Promise<CreateSuccessWithDataResponse<string>> {
-    console.log("file:::", file);
     return new CreateSuccessWithDataResponse(getImagePath(file.path));
   }
 

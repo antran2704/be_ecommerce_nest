@@ -3,7 +3,6 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-  Inject,
   Logger,
 } from "@nestjs/common";
 import * as os from "node:os";

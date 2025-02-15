@@ -50,10 +50,10 @@ export class AuthUserController {
   @ApiOkResponseDecorator(LoginUserResponseDto)
   async loginWithProvider(
     @Body() payload: LoginWithProviderRequestDto,
-  ): Promise<SuccessResponse> {
+  ): Promise<GetSuccessResponse<LoginUserResponseDto>> {
     const data = await this.authService.loginWithProvider(payload);
 
-    return new SuccessResponse(data);
+    return new GetSuccessResponse(data);
   }
 
   @Post("/signup")

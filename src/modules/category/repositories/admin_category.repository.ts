@@ -56,8 +56,6 @@ export class AdminCategoryRepository implements IAdminCategoryRepository {
   }
 
   async findChildren(id: string): Promise<AdminGetChildCategoryDto[]> {
-    // return this.categoryEntity.findBy({ parent_id: id });
-    // return this.categoryEntity.find({ where: {parent_id: id}, relations: ['children'], });
     const data: AdminGetChildCategoryDto[] = await this.categoryEntity
       .createQueryBuilder("c1")
       .leftJoin(CategoryEntity, "c2", "c1.id = c2.parent_id")
