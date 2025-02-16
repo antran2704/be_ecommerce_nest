@@ -13,7 +13,7 @@ import { ProductEntity } from "~/modules/product/entities/product.entity";
 export class InventoryEntity extends DatabaseModifierEntity {
   @PrimaryGeneratedColumn()
   @AutoMap()
-  id: string;
+  id: number;
 
   @Column({ type: "int", default: 0 })
   @AutoMap()
@@ -21,6 +21,7 @@ export class InventoryEntity extends DatabaseModifierEntity {
 
   @ManyToOne(() => ProductEntity, (entity) => entity.inventories, {
     nullable: true,
+    onDelete: "CASCADE",
   })
   @JoinColumn({ name: "product_id" })
   product: ProductEntity | null;

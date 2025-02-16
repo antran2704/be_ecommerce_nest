@@ -6,10 +6,10 @@ import { AutoMap } from "@automapper/classes";
 export default class AdminGetInventoryResponseDto {
   @ApiProperty({
     required: true,
-    example: "123",
+    example: 123,
   })
   @IsString()
-  inventoryId: string;
+  inventoryId: number;
 
   @ApiProperty({
     required: true,

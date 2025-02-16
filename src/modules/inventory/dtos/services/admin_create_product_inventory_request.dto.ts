@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString, Min } from "class-validator";
 
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
@@ -9,6 +9,7 @@ export default class AdminCreateProductInventoryRequestDto {
     example: 10,
   })
   @IsNumber()
+  @Min(0)
   stock: number;
 
   @ApiProperty({

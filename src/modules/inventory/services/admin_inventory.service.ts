@@ -71,7 +71,7 @@ export class AdminInventoryService implements IAdminInventoryService {
     if (currentStock < newStock) {
       // 🟢 Case 1: Increase stock
       const stockToAdd = newStock - currentStock;
-      this.inventoryRepository.create({
+      await this.inventoryRepository.create({
         product_id: id,
         stock: stockToAdd,
       });

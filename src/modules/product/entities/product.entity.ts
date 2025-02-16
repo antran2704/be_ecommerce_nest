@@ -57,6 +57,8 @@ export class ProductEntity extends DatabaseModifierEntity {
   })
   sub_categories: CategoryEntity[];
 
-  @OneToMany(() => InventoryEntity, (entity) => entity.product)
+  @OneToMany(() => InventoryEntity, (entity) => entity.product, {
+    cascade: true,
+  })
   inventories: InventoryEntity;
 }
