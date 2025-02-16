@@ -65,7 +65,7 @@ export class AdminProductRepository implements IAdminProductRepository {
   async findById(id: string): Promise<ProductEntity> {
     return this.productEntity.findOne({
       where: { id },
-      relations: ["main_category", "sub_categories"],
+      relations: ["main_category", "sub_categories", "inventories"],
     });
   }
 
