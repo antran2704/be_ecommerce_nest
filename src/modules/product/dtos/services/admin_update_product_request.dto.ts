@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
 } from "class-validator";
 
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
@@ -47,6 +48,7 @@ export default class AdminUpdateProductRequestDto {
     example: 1000,
   })
   @IsNumber()
+  @Min(0)
   basePrice: number;
 
   @ApiProperty({
@@ -54,7 +56,16 @@ export default class AdminUpdateProductRequestDto {
     example: 100,
   })
   @IsNumber()
+  @Min(0)
   promotionPrice: number;
+
+  @ApiProperty({
+    required: true,
+    example: 10,
+  })
+  @IsNumber()
+  @Min(0)
+  stock: number;
 
   @ApiProperty({
     required: true,

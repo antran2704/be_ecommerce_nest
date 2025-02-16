@@ -27,6 +27,8 @@ export class AdminProductRepository implements IAdminProductRepository {
       (query, originalNameEntity) => {
         query.leftJoinAndSelect(`${originalNameEntity}.main_category`, "ca");
 
+        query.leftJoinAndSelect(`${originalNameEntity}.inventories`, "IV");
+
         // filter with name or id
         if (params.search) {
           query.where(`${originalNameEntity}.id LIKE :id`, {

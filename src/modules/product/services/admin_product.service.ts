@@ -17,17 +17,16 @@ import {
 } from "../dtos/services";
 import { ProductEntity } from "../entities/product.entity";
 import { AdminCategoryService } from "~/modules/category/services/admin_category.service";
-import {
-  AdminCreateProductDto,
-  AdminUpdateProductDto,
-} from "../dtos/repositories";
+import { AdminCreateProductDto } from "../dtos/repositories";
 import { CategoryEntity } from "~/modules/category/entities/category.entity";
 import { PRODUCT_ERROR_MESSAGES } from "../messages/product.error";
+import { AdminInventoryService } from "~/modules/inventory/services/admin_inventory.service";
 
 export class AdminProductService implements IAdminProductService {
   constructor(
     private readonly productRepository: AdminProductRepository,
     private readonly categoryService: AdminCategoryService,
+    private readonly inventoryService: AdminInventoryService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -89,6 +88,12 @@ export class AdminProductService implements IAdminProductService {
     }
 
     await this.productRepository.create(formatData);
+
+    // create inventory
+    await this.inventoryService.createProductInventory({
+      productId: newId,
+      stock: payload.stock,
+    });
   }
 
   async updateProduct(id: string, payload: AdminUpdateProductRequestDto) {
@@ -135,6 +140,17 @@ export class AdminProductService implements IAdminProductService {
     // check if have change sub categories to empty
     if (payload.subCategories && !payload.subCategories.length) {
       product.sub_categories = [];
+    }
+
+    const currentInventory = await this.inventoryService.getProductInventory(
+      product.id,
+    );
+
+    // check if have change stock
+    if (payload.stock !== currentInventory) {
+      await this.inventoryService.updateProductInventory(product.id, {
+        stock: payload.stock,
+      });
     }
 
     await this.productRepository.save(product);

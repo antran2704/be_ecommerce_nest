@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
   ValidateNested,
 } from "class-validator";
 import { CategoryEntity } from "~/modules/category/entities/category.entity";
@@ -33,9 +34,11 @@ export default class AdminCreateProductDto {
   gallery: string[];
 
   @IsNumber()
+  @Min(0)
   base_price: number;
 
   @IsNumber()
+  @Min(0)
   promotion_price: number;
 
   @IsBoolean()

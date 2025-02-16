@@ -60,5 +60,5 @@ export class ProductEntity extends DatabaseModifierEntity {
   @OneToMany(() => InventoryEntity, (entity) => entity.product, {
     cascade: true,
   })
-  inventories: InventoryEntity;
+  inventories: InventoryEntity[];
 }
