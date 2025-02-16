@@ -6,9 +6,10 @@ import {
 } from "../dtos/services";
 
 export interface IAdminInventoryService {
-  getProductInventory(
+  getProductInventories(
     payload: AdminGetProductInventoryRequestDto,
-  ): Promise<AdminGetProductInventoryResponseDto>;
+  ): Promise<AdminGetProductInventoryResponseDto[]>;
+  getProductInventory(id: string): Promise<number>;
   createProductInventory(
     payload: AdminCreateProductInventoryRequestDto,
   ): Promise<void>;

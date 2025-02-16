@@ -1,13 +1,10 @@
-import { Type } from "class-transformer";
-import { IsNumber, IsOptional, ValidateNested } from "class-validator";
-import { ProductEntity } from "~/modules/product/entities/product.entity";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export default class AdminCreateInventoryDto {
   @IsNumber()
   stock: number;
 
+  @IsString()
   @IsOptional()
-  @ValidateNested()
-  @Type(() => ProductEntity)
-  product?: ProductEntity | null;
+  product_id: string | null;
 }

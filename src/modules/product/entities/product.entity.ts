@@ -8,10 +8,12 @@ import {
   ManyToMany,
   JoinTable,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
 import { CategoryEntity } from "~/modules/category/entities/category.entity";
+import { InventoryEntity } from "~/modules/inventory/entities/inventory.entity";
 
 @Entity({ name: "products" })
 export class ProductEntity extends DatabaseModifierEntity {
@@ -54,4 +56,7 @@ export class ProductEntity extends DatabaseModifierEntity {
     inverseJoinColumn: { name: "category_id", referencedColumnName: "id" },
   })
   sub_categories: CategoryEntity[];
+
+  @OneToMany(() => InventoryEntity, (entity) => entity.product)
+  inventories: InventoryEntity;
 }

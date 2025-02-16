@@ -1,10 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsString } from "class-validator";
 
-import { ModifierResponseDto } from "~/common/dtos";
 import { AutoMap } from "@automapper/classes";
 
-export default class AdminGetInventoryResponseDto extends ModifierResponseDto {
+export default class AdminGetInventoryResponseDto {
   @ApiProperty({
     required: true,
     example: "123",
