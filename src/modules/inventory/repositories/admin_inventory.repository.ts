@@ -5,7 +5,10 @@ import { IAdminInventoryRepository } from "../interfaces/admin_inventory_reposit
 import { InventoryEntity } from "../entities/inventory.entity";
 import { AdminGetProductInventoryRequestDto } from "../dtos/services";
 import { ENUM_PAGINATION_ORDER } from "~/common/pagination/enums/order.enum";
-import { AdminCreateInventoryDto } from "../dtos/repositories";
+import {
+  AdminCreateProductInventoryDto,
+  AdminCreateVariantProductInventoryDto,
+} from "../dtos/repositories";
 
 export class AdminInventoryRepository implements IAdminInventoryRepository {
   constructor(
@@ -29,7 +32,11 @@ export class AdminInventoryRepository implements IAdminInventoryRepository {
     return data;
   }
 
-  async create(payload: AdminCreateInventoryDto): Promise<void> {
+  async create(
+    payload:
+      | AdminCreateProductInventoryDto
+      | AdminCreateVariantProductInventoryDto,
+  ): Promise<void> {
     const newEntity = this.entity.create(payload);
     await this.entity.save(newEntity);
   }

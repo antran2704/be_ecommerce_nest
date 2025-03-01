@@ -5,11 +5,15 @@ import { IAdminInventoryService } from "../interfaces/admin_product_service.inte
 import { AdminInventoryRepository } from "../repositories/admin_inventory.repository";
 import {
   AdminCreateProductInventoryRequestDto,
+  AdminCreateVariantProductInventoryRequestDto,
   AdminGetProductInventoryRequestDto,
   AdminGetProductInventoryResponseDto,
   AdminUpdateProductInventoryRequestDto,
 } from "../dtos/services";
-import { AdminCreateInventoryDto } from "../dtos/repositories";
+import {
+  AdminCreateProductInventoryDto,
+  AdminCreateVariantProductInventoryDto,
+} from "../dtos/repositories";
 import { InventoryEntity } from "../entities/inventory.entity";
 import { ENUM_PAGINATION_ORDER } from "~/common/pagination/enums/order.enum";
 
@@ -43,9 +47,20 @@ export class AdminInventoryService implements IAdminInventoryService {
   async createProductInventory(
     payload: AdminCreateProductInventoryRequestDto,
   ): Promise<void> {
-    const formatData: AdminCreateInventoryDto = {
+    const formatData: AdminCreateProductInventoryDto = {
       stock: payload.stock,
       product_id: payload.productId,
+    };
+
+    await this.inventoryRepository.create(formatData);
+  }
+
+  async createVariantProductInventory(
+    payload: AdminCreateVariantProductInventoryRequestDto,
+  ): Promise<void> {
+    const formatData: AdminCreateVariantProductInventoryDto = {
+      stock: payload.stock,
+      variant_product_id: payload.varaintProductId,
     };
 
     await this.inventoryRepository.create(formatData);

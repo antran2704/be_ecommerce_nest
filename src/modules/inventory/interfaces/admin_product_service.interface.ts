@@ -1,5 +1,6 @@
 import {
   AdminCreateProductInventoryRequestDto,
+  AdminCreateVariantProductInventoryRequestDto,
   AdminGetProductInventoryRequestDto,
   AdminGetProductInventoryResponseDto,
   AdminUpdateProductInventoryRequestDto,
@@ -12,6 +13,9 @@ export interface IAdminInventoryService {
   getProductInventory(id: string): Promise<number>;
   createProductInventory(
     payload: AdminCreateProductInventoryRequestDto,
+  ): Promise<void>;
+  createVariantProductInventory(
+    payload: AdminCreateVariantProductInventoryRequestDto,
   ): Promise<void>;
   updateProductInventory(
     id: string,

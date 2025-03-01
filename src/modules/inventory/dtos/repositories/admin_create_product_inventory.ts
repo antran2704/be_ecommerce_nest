@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
 
-export default class AdminCreateInventoryDto {
+export default class AdminCreateProductInventoryDto {
   @IsNumber()
   stock: number;
 

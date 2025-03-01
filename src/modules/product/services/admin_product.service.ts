@@ -5,7 +5,7 @@ import { GetDatabaseDefaultID } from "~/helpers/database";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { IAdminProductService } from "../interfaces/admin_product_service.interface";
 import { AdminProductRepository } from "../repositories/admin_product.repository";
 import {
@@ -46,6 +46,8 @@ export class AdminProductService implements IAdminProductService {
   async getProductById(id: string): Promise<AdminGetProductDetailResponseDto> {
     const data = await this.productRepository.findById(id);
 
+    if (!data) throw new NotFoundException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
     const formatData = this.mapper.map(
       data,
       ProductEntity,
@@ -53,6 +55,14 @@ export class AdminProductService implements IAdminProductService {
     );
 
     return formatData;
+  }
+
+  async getProductEntityById(id: string): Promise<ProductEntity> {
+    const data = await this.productRepository.findById(id);
+
+    if (!data) throw new NotFoundException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
+    return data;
   }
 
   async createProduct(payload: AdminCreateProductRequestDto): Promise<void> {

@@ -14,6 +14,7 @@ import {
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
 import { CategoryEntity } from "~/modules/category/entities/category.entity";
 import { InventoryEntity } from "~/modules/inventory/entities/inventory.entity";
+import { VariantProductEntity } from "~/modules/variant_product/entities/variant_product.entity";
 
 @Entity({ name: "products" })
 export class ProductEntity extends DatabaseModifierEntity {
@@ -61,4 +62,9 @@ export class ProductEntity extends DatabaseModifierEntity {
     cascade: true,
   })
   inventories: InventoryEntity[];
+
+  @OneToMany(() => VariantProductEntity, (entity) => entity.product, {
+    cascade: true,
+  })
+  variant_products: VariantProductEntity[];
 }

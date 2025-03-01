@@ -22,6 +22,7 @@ import { AdminProductModule } from "~/modules/product/admin_product.module";
 import { AdminProductController } from "~/modules/product/controllers/admin_product.controller";
 import { AdminInventoryModule } from "~/modules/inventory/admin_inventory.module";
 import { AdminInventoryController } from "~/modules/inventory/controllers/admin_inventory.controller";
+import { AdminVariantProductModule } from "~/modules/variant_product/admin_variant_product.module";
 
 @Module({
   controllers: [
@@ -49,6 +50,7 @@ import { AdminInventoryController } from "~/modules/inventory/controllers/admin_
     AdminVariantTypeValueModule,
     AdminProductModule,
     AdminInventoryModule,
+    AdminVariantProductModule,
   ],
 })
 export class InternalRouteModule {}
