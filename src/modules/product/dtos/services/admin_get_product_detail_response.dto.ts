@@ -98,4 +98,11 @@ export default class AdminGetProductDetailResponseDto extends ModifierResponseDt
   })
   @IsArray()
   subCategories: AdminGetProductSubCategoryResponseDto[];
+
+  @ApiProperty({
+    required: true,
+    example: 100,
+  })
+  @IsNumber()
+  stock: number;
 }

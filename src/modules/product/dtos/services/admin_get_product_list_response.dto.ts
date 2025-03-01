@@ -53,6 +53,13 @@ export default class AdminGetProductListResponseDto extends ModifierResponseDto 
 
   @ApiProperty({
     required: true,
+    example: 100,
+  })
+  @IsNumber()
+  stock: number;
+
+  @ApiProperty({
+    required: true,
     example: true,
   })
   @IsBoolean()

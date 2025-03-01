@@ -14,6 +14,7 @@ const mockProductEntity: Partial<ProductEntity> = {
   is_active: true,
   main_category: mockCategoryEntity as CategoryEntity,
   sub_categories: [],
+  inventories: [],
   created_at: "",
 };
 

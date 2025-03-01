@@ -44,6 +44,12 @@ export class AdminGetProductListReponseMapper extends AutomapperProfile {
           ),
         ),
         forMember(
+          (dest: AdminGetProductListResponseDto) => dest.stock,
+          mapFrom((src: ProductEntity) =>
+            src.inventories.reduce((sum, inv) => sum + inv.stock, 0),
+          ),
+        ),
+        forMember(
           (dest: AdminGetProductListResponseDto) => dest.isActive,
           mapFrom((src: ProductEntity) => src.is_active),
         ),

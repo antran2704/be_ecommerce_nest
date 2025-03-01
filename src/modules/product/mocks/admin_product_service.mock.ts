@@ -20,6 +20,7 @@ const mockAdminCreateProductRequest: AdminCreateProductRequestDto = {
   mainCategoryId: mockProductEntity.main_category.id,
   subCategories: [],
   isActive: true,
+  stock: 0,
 };
 
 const mockAdminUpdateProductRequest: AdminUpdateProductRequestDto = {
@@ -31,6 +32,7 @@ const mockAdminUpdateProductRequest: AdminUpdateProductRequestDto = {
   promotionPrice: 0,
   mainCategoryId: ENUM_PREFIX_DATABASE.CA + "123",
   subCategories: [],
+  stock: 0,
 };
 
 const mockAdminGetProductsRequest: AdminGetProductsRequestDto = {
@@ -53,6 +55,7 @@ const mockAdminGetProductDetailResponse: Partial<AdminGetProductDetailResponseDt
     subCategories: [],
     isActive: true,
     createdAt: "",
+    stock: 0,
   };
 
 const mockAdminGetProductListResponse: Partial<AdminGetProductListResponseDto> =
@@ -66,6 +69,7 @@ const mockAdminGetProductListResponse: Partial<AdminGetProductListResponseDto> =
     mainCategoryName: mockProductEntity.main_category.name,
     isActive: true,
     createdAt: "",
+    stock: 0,
   };
 
 const mockAdminGetProductsResponse: IEntitesAndPaginationReponse<
