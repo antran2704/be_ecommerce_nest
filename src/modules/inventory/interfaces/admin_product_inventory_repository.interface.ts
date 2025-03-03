@@ -2,7 +2,7 @@ import { AdminCreateProductInventoryDto } from "../dtos/repositories";
 import { AdminGetProductInventoryRequestDto } from "../dtos/services";
 import { InventoryEntity } from "../entities/inventory.entity";
 
-export interface IAdminInventoryRepository {
+export interface IAdminProductInventoryRepository {
   findByProductId(
     payload: AdminGetProductInventoryRequestDto,
   ): Promise<InventoryEntity[]>;

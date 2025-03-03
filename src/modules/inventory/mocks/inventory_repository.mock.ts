@@ -1,8 +1,11 @@
 import { InventoryEntity } from "../entities/inventory.entity";
-import { IAdminInventoryRepository } from "../interfaces/admin_inventory_repository.interface";
+import {
+  IAdminProductInventoryRepository,
+  IAdminVariantProductInventoryRepository,
+} from "../interfaces";
 import { mockInventoryEntity } from "./inventory_entity.mock";
 
-const mockAdminInventoryRepository: IAdminInventoryRepository = {
+const mockAdminProductInventoryRepository: IAdminProductInventoryRepository = {
   findByProductId: jest
     .fn()
     .mockResolvedValue([mockInventoryEntity as InventoryEntity]),
@@ -11,4 +14,17 @@ const mockAdminInventoryRepository: IAdminInventoryRepository = {
   deleteByProductId: jest.fn().mockReturnValue(null),
 };
 
-export { mockAdminInventoryRepository };
+const mockAdminVariantProductInventoryRepository: IAdminVariantProductInventoryRepository =
+  {
+    findByVariantProductId: jest
+      .fn()
+      .mockResolvedValue([mockInventoryEntity as InventoryEntity]),
+    create: jest.fn().mockReturnValue(null),
+    save: jest.fn().mockReturnValue(null),
+    deleteByVariantProductId: jest.fn().mockReturnValue(null),
+  };
+
+export {
+  mockAdminProductInventoryRepository,
+  mockAdminVariantProductInventoryRepository,
+};

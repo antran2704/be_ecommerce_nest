@@ -1,26 +1,28 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { IAdminInventoryRepository } from "../interfaces/admin_inventory_repository.interface";
 import { InventoryEntity } from "../entities/inventory.entity";
-import { AdminGetProductInventoryRequestDto } from "../dtos/services";
+import { AdminGetVariantProductInventoryRequestDto } from "../dtos/services";
 import { ENUM_PAGINATION_ORDER } from "~/common/pagination/enums/order.enum";
 import {
   AdminCreateProductInventoryDto,
   AdminCreateVariantProductInventoryDto,
 } from "../dtos/repositories";
+import { IAdminVariantProductInventoryRepository } from "../interfaces";
 
-export class AdminInventoryRepository implements IAdminInventoryRepository {
+export class AdminVariantProductInventoryRepository
+  implements IAdminVariantProductInventoryRepository
+{
   constructor(
     @InjectRepository(InventoryEntity)
     private readonly entity: Repository<InventoryEntity>,
   ) {}
 
-  async findByProductId(
-    payload: AdminGetProductInventoryRequestDto,
+  async findByVariantProductId(
+    payload: AdminGetVariantProductInventoryRequestDto,
   ): Promise<InventoryEntity[]> {
     const data = await this.entity.find({
-      where: { product: { id: payload.productId } },
+      where: { variant_product: { id: payload.variantProductId } },
       order: {
         updated_at:
           payload.order === ENUM_PAGINATION_ORDER.ASC
@@ -32,11 +34,7 @@ export class AdminInventoryRepository implements IAdminInventoryRepository {
     return data;
   }
 
-  async create(
-    payload:
-      | AdminCreateProductInventoryDto
-      | AdminCreateVariantProductInventoryDto,
-  ): Promise<void> {
+  async create(payload: AdminCreateVariantProductInventoryDto): Promise<void> {
     const newEntity = this.entity.create(payload);
     await this.entity.save(newEntity);
   }
@@ -45,7 +43,7 @@ export class AdminInventoryRepository implements IAdminInventoryRepository {
     await this.entity.save(payload);
   }
 
-  async deleteByProductId(id: string): Promise<void> {
-    await this.entity.delete({ product: { id } });
+  async deleteByVariantProductId(id: string): Promise<void> {
+    await this.entity.delete({ variant_product: { id } });
   }
 }

@@ -36,4 +36,7 @@ export class InventoryEntity extends DatabaseModifierEntity {
   })
   @JoinColumn({ name: "variant_product_id" })
   variant_product: VariantProductEntity | null;
+
+  @Column()
+  variant_product_id: string;
 }

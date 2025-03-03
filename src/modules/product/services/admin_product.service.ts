@@ -20,13 +20,13 @@ import { AdminCategoryService } from "~/modules/category/services/admin_category
 import { AdminCreateProductDto } from "../dtos/repositories";
 import { CategoryEntity } from "~/modules/category/entities/category.entity";
 import { PRODUCT_ERROR_MESSAGES } from "../messages/product.error";
-import { AdminInventoryService } from "~/modules/inventory/services/admin_inventory.service";
+import { AdminProductInventoryService } from "~/modules/inventory/services/admin_product_inventory.service";
 
 export class AdminProductService implements IAdminProductService {
   constructor(
     private readonly productRepository: AdminProductRepository,
     private readonly categoryService: AdminCategoryService,
-    private readonly inventoryService: AdminInventoryService,
+    private readonly inventoryService: AdminProductInventoryService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 

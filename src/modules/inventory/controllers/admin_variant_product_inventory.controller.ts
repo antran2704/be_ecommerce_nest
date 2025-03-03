@@ -21,84 +21,84 @@ import {
   UpdatedSuccessResponse,
 } from "~/common/response/success.response";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
-import { AdminInventoryService } from "../services/admin_inventory.service";
 import AdminGetInventoryResponseDto from "../dtos/services/admin_get_inventory_response.dto";
 import {
-  AdminCreateProductInventoryRequestDto,
-  AdminGetProductInventoryRequestDto,
-  AdminUpdateProductInventoryRequestDto,
+  AdminCreateVariantProductInventoryRequestDto,
+  AdminGetVariantProductInventoryRequestDto,
+  AdminUpdateInventoryRequestDto,
 } from "../dtos/services";
+import { AdminVariantProductInventoryService } from "../services/admin_variant_product_inventory.service";
 
 @ApiBearerAuth()
-@Controller("admin/inventories")
-@ApiTags("Admin.Inventory")
-export class AdminInventoryController {
-  constructor(private readonly productService: AdminInventoryService) {}
+@Controller("admin/inventories/variant-product")
+@ApiTags("Admin.VariantProductInventory")
+export class AdminVariantProductInventoryController {
+  constructor(private readonly service: AdminVariantProductInventoryService) {}
 
-  @Get("/product")
-  @Permissions([ENUM_PERMISSION.PRODUCT_VIEW])
+  @Get("/")
+  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetInventoryResponseDto)
   async getProductInventories(
-    @Query() query: AdminGetProductInventoryRequestDto,
+    @Query() query: AdminGetVariantProductInventoryRequestDto,
   ): Promise<GetSuccessResponse<AdminGetInventoryResponseDto[]>> {
-    const data = await this.productService.getProductInventories(query);
+    const data = await this.service.getVariantProductInventories(query);
 
     return new GetSuccessResponse(data);
   }
 
-  @Get("/product/:product_id/stock")
-  @Permissions([ENUM_PERMISSION.PRODUCT_VIEW])
+  @Get("/:variant_product_id/stock")
+  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_VIEW])
   @UseGuards(PermissionGuard)
   async getProductInventory(
-    @Param("product_id") id: string,
+    @Param("variant_product_id") id: string,
   ): Promise<GetSuccessResponse<number>> {
-    const data = await this.productService.getProductInventory(id);
+    const data = await this.service.getVariantProductInventory(id);
 
     return new GetSuccessResponse(data);
   }
 
-  @Post("/product")
+  @Post("/")
   @ApiResponse({
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.PRODUCT_CREATE])
+  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_CREATE])
   @UseGuards(PermissionGuard)
   async createProductInventory(
-    @Body() payload: AdminCreateProductInventoryRequestDto,
+    @Body() payload: AdminCreateVariantProductInventoryRequestDto,
   ): Promise<CreateSuccessResponse> {
-    await this.productService.createProductInventory(payload);
+    await this.service.createVariantProductInventory(payload);
     return new CreateSuccessResponse();
   }
 
-  @Patch("/product/:product_id")
+  @Patch("/:variant_product_id")
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.PRODUCT_UPDATE])
+  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_UPDATE])
   @UseGuards(PermissionGuard)
   async updateProductInventory(
-    @Param("product_id") id: string,
-    @Body() payload: AdminUpdateProductInventoryRequestDto,
+    @Param("variant_product_id") id: string,
+    @Body() payload: AdminUpdateInventoryRequestDto,
   ) {
-    await this.productService.updateProductInventory(id, payload);
+    await this.service.updateVariantProductInventory(id, payload);
 
     return new UpdatedSuccessResponse();
   }
 
-  @Delete("/product/:product_id")
-  @Permissions([ENUM_PERMISSION.PRODUCT_DELETE])
+  @Delete("/:variant_product_id")
+  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,
     example: new DeletedSuccessResponse(),
   })
   async deleteProductInventory(
-    @Param("product_id") id: string,
+    @Param("variant_product_id") id: string,
   ): Promise<DeletedSuccessResponse> {
-    await this.productService.deleteProductIventory(id);
+    await this.service.deleteVariantProductIventory(id);
     return new DeletedSuccessResponse();
   }
 }

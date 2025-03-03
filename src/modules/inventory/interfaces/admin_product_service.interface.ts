@@ -1,25 +1,25 @@
 import {
   AdminCreateProductInventoryRequestDto,
-  AdminCreateVariantProductInventoryRequestDto,
   AdminGetProductInventoryRequestDto,
-  AdminGetProductInventoryResponseDto,
-  AdminUpdateProductInventoryRequestDto,
+  AdminGetInventoryResponseDto,
+  AdminUpdateInventoryRequestDto,
 } from "../dtos/services";
 
-export interface IAdminInventoryService {
+export interface IAdminProductInventoryService {
   getProductInventories(
     payload: AdminGetProductInventoryRequestDto,
-  ): Promise<AdminGetProductInventoryResponseDto[]>;
+  ): Promise<AdminGetInventoryResponseDto[]>;
+
   getProductInventory(id: string): Promise<number>;
+
   createProductInventory(
     payload: AdminCreateProductInventoryRequestDto,
   ): Promise<void>;
-  createVariantProductInventory(
-    payload: AdminCreateVariantProductInventoryRequestDto,
-  ): Promise<void>;
+
   updateProductInventory(
     id: string,
-    payload: AdminUpdateProductInventoryRequestDto,
+    payload: AdminUpdateInventoryRequestDto,
   ): Promise<void>;
+
   deleteProductIventory(id: string): Promise<void>;
 }

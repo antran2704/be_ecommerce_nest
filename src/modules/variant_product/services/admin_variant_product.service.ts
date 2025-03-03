@@ -8,7 +8,6 @@ import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { IAdminVariantProductService } from "../interfaces/admin_variant_product_service.interface";
 import { AdminVariantProductRepository } from "../repositories/admin_variant_product.repository";
-import { AdminInventoryService } from "~/modules/inventory/services/admin_inventory.service";
 import {
   AdminCreateVariantProductRequestDto,
   AdminGetVariantProductDetailResponseDto,
@@ -20,12 +19,13 @@ import { VariantProductEntity } from "../entities/variant_product.entity";
 import { AdminCreateVariantProductDto } from "../dtos/repositories";
 import { AdminProductService } from "~/modules/product/services/admin_product.service";
 import { VARIANT_PRODUCT_ERROR_MESSAGES } from "../messages/varaint_product.error";
+import { AdminVariantProductInventoryService } from "~/modules/inventory/services/admin_variant_product_inventory.service";
 
 export class AdminVariantProductService implements IAdminVariantProductService {
   constructor(
     private readonly variantProductRepository: AdminVariantProductRepository,
     private readonly productService: AdminProductService,
-    private readonly inventoryService: AdminInventoryService,
+    private readonly inventoryService: AdminVariantProductInventoryService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -82,8 +82,8 @@ export class AdminVariantProductService implements IAdminVariantProductService {
     await this.variantProductRepository.create(formatData);
 
     // create inventory
-    await this.inventoryService.createProductInventory({
-      productId: newId,
+    await this.inventoryService.createVariantProductInventory({
+      varaintProductId: newId,
       stock: payload.stock,
     });
   }
@@ -105,13 +105,12 @@ export class AdminVariantProductService implements IAdminVariantProductService {
       promotion_price: payload.promotionPrice || 0,
     };
 
-    const currentInventory = await this.inventoryService.getProductInventory(
-      product.id,
-    );
+    const currentInventory =
+      await this.inventoryService.getVariantProductInventory(product.id);
 
     // check if have change stock
     if (payload.stock !== currentInventory) {
-      await this.inventoryService.updateProductInventory(product.id, {
+      await this.inventoryService.updateVariantProductInventory(product.id, {
         stock: payload.stock,
       });
     }
