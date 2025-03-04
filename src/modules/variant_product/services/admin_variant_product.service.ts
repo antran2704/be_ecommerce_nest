@@ -20,12 +20,15 @@ import { AdminCreateVariantProductDto } from "../dtos/repositories";
 import { AdminProductService } from "~/modules/product/services/admin_product.service";
 import { VARIANT_PRODUCT_ERROR_MESSAGES } from "../messages/varaint_product.error";
 import { AdminVariantProductInventoryService } from "~/modules/inventory/services/admin_variant_product_inventory.service";
+import { AdminVariantTypeValueService } from "~/modules/variant_type_value/services/admin_variant_type.service";
+import { VariantTypeValueEntity } from "~/modules/variant_type_value/entities/variant_type_value.entity";
 
 export class AdminVariantProductService implements IAdminVariantProductService {
   constructor(
     private readonly variantProductRepository: AdminVariantProductRepository,
     private readonly productService: AdminProductService,
     private readonly inventoryService: AdminVariantProductInventoryService,
+    private readonly variantTypeValueService: AdminVariantTypeValueService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -49,7 +52,6 @@ export class AdminVariantProductService implements IAdminVariantProductService {
     id: string,
   ): Promise<AdminGetVariantProductDetailResponseDto> {
     const data = await this.variantProductRepository.findById(id);
-
     const formatData = this.mapper.map(
       data,
       VariantProductEntity,
@@ -76,8 +78,23 @@ export class AdminVariantProductService implements IAdminVariantProductService {
       promotion_price: payload.promotionPrice || 0,
       is_active: payload.isActive,
       product,
-      variant_product_values: [],
+      variant_type_values: [],
     };
+
+    const variantValues: VariantTypeValueEntity[] = [];
+
+    if (payload.variantValueIds.length) {
+      for (let i = 0; i < payload.variantValueIds.length; i++) {
+        const variantValueEntity =
+          await this.variantTypeValueService.getVariantValueEntityById(
+            payload.variantValueIds[i],
+          );
+
+        variantValues.push(variantValueEntity);
+      }
+
+      formatData.variant_type_values = variantValues;
+    }
 
     await this.variantProductRepository.create(formatData);
 

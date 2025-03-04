@@ -39,6 +39,16 @@ export class AdminGetVariantProductDetailReponseMapper extends AutomapperProfile
           mapFrom((src: VariantProductEntity) => src.promotion_price),
         ),
         forMember(
+          (dest: AdminGetVariantProductDetailResponseDto) =>
+            dest.variantTypeValues,
+          mapFrom((src: VariantProductEntity) =>
+            src.variant_type_values.map((item) => ({
+              variantTypeValueId: item.id,
+              variantTypeValueName: item.name,
+            })),
+          ),
+        ),
+        forMember(
           (dest: AdminGetVariantProductDetailResponseDto) => dest.stock,
           mapFrom((src: VariantProductEntity) =>
             src.inventories.reduce((sum, inv) => sum + inv.stock, 0),

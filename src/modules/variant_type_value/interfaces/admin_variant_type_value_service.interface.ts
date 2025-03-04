@@ -5,12 +5,14 @@ import {
   AdminGetVariantTypeValuesRequestDto,
   AdminUpdateVariantTypeValueRequestDto,
 } from "../dtos/services";
+import { VariantTypeValueEntity } from "../entities/variant_type_value.entity";
 
 export interface IAdminVariantTypeValueService {
   getVariantValues(
     payload: AdminGetVariantTypeValuesRequestDto,
   ): Promise<IEntitesAndPaginationReponse<AdminGetVariantTypeValueResponseDto>>;
   getVariantValueById(id: string): Promise<AdminGetVariantTypeValueResponseDto>;
+  getVariantValueEntityById(id: string): Promise<VariantTypeValueEntity>;
   createVariantValue(
     payload: AdminCreateVariantTypeValueRequestDto,
   ): Promise<void>;

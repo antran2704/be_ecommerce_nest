@@ -67,6 +67,18 @@ export class AdminVariantTypeValueService
     return formatData;
   }
 
+  async getVariantValueEntityById(id: string): Promise<VariantTypeValueEntity> {
+    const data = await this.variantValueRepository.findById(id);
+
+    if (!data) {
+      throw new BadRequestException(
+        VARIANT_TYPE__VALUE_ERROR_MESSAGES.VARIANT_VALUE_NOT_FOUND,
+      );
+    }
+
+    return data;
+  }
+
   async createVariantValue(
     payload: AdminCreateVariantTypeValueRequestDto,
   ): Promise<void> {

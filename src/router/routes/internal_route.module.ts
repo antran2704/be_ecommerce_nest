@@ -24,6 +24,7 @@ import { AdminInventoryModule } from "~/modules/inventory/admin_inventory.module
 import { AdminProductInventoryController } from "~/modules/inventory/controllers/admin_product_inventory.controller";
 import { AdminVariantProductModule } from "~/modules/variant_product/admin_variant_product.module";
 import { AdminVariantProductInventoryController } from "~/modules/inventory/controllers/admin_variant_product_inventory.controller";
+import { AdminVariantProductController } from "~/modules/variant_product/controllers/admin_variant_product.controller";
 
 @Module({
   controllers: [
@@ -38,6 +39,7 @@ import { AdminVariantProductInventoryController } from "~/modules/inventory/cont
     AdminVariantTypeController,
     AdminVariantTypeValueController,
     AdminProductController,
+    AdminVariantProductController,
     AdminProductInventoryController,
     AdminVariantProductInventoryController,
   ],

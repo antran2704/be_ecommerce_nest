@@ -41,5 +41,5 @@ export default class AdminCreateVariantProductDto {
 
   @ValidateNested({ each: true })
   @Type(() => VariantTypeValueEntity)
-  variant_product_values: VariantTypeValueEntity[];
+  variant_type_values: VariantTypeValueEntity[];
 }

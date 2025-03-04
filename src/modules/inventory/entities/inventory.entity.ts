@@ -27,7 +27,7 @@ export class InventoryEntity extends DatabaseModifierEntity {
   @JoinColumn({ name: "product_id" })
   product: ProductEntity | null;
 
-  @Column()
+  @Column({ nullable: true })
   product_id: string;
 
   @ManyToOne(() => VariantProductEntity, (entity) => entity.inventories, {
@@ -37,6 +37,6 @@ export class InventoryEntity extends DatabaseModifierEntity {
   @JoinColumn({ name: "variant_product_id" })
   variant_product: VariantProductEntity | null;
 
-  @Column()
+  @Column({ default: null, nullable: true })
   variant_product_id: string;
 }
