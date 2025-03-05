@@ -156,14 +156,14 @@ export class AdminProductService implements IAdminProductService {
       product.id,
     );
 
+    await this.productRepository.save(product);
+
     // check if have change stock
     if (payload.stock !== currentInventory) {
-      await this.inventoryService.updateProductInventory(product.id, {
+      await this.inventoryService.updateProductInventory(id, {
         stock: payload.stock,
       });
     }
-
-    await this.productRepository.save(product);
   }
 
   async enableProduct(id: string): Promise<void> {

@@ -28,9 +28,14 @@ export class AdminVariantProductRepository
           id: params.productId,
         });
 
-        // query.leftJoinAndSelect(`${originalNameEntity}.main_category`, "ca");
-
+        // left join inventory
         query.leftJoinAndSelect(`${originalNameEntity}.inventories`, "IV");
+
+        // left join variant type value
+        query.leftJoinAndSelect(
+          `${originalNameEntity}.variant_type_values`,
+          "vtv",
+        );
 
         // filter with name or id
         if (params.search) {

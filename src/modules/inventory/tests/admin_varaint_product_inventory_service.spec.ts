@@ -10,7 +10,7 @@ import {
   mockAdminInventoryResponse,
   mockAdminUpdateInventoryRequest,
 } from "../mocks/inventory_service.mock";
-import { mockAdminVariantProductInventoryRepository } from "../mocks/inventory_repository.mock";
+import { mockAdminVariantProductInventoryRepository } from "../mocks/admin_inventory_repository.mock";
 import { AdminVariantProductInventoryService } from "../services/admin_variant_product_inventory.service";
 import { AdminVariantProductInventoryRepository } from "../repositories/admin_variant_product_inventory.repository";
 

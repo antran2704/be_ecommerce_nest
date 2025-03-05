@@ -122,6 +122,8 @@ export class AdminVariantProductService implements IAdminVariantProductService {
       promotion_price: payload.promotionPrice || 0,
     };
 
+    await this.variantProductRepository.save(product);
+
     const currentInventory =
       await this.inventoryService.getVariantProductInventory(product.id);
 
@@ -131,8 +133,6 @@ export class AdminVariantProductService implements IAdminVariantProductService {
         stock: payload.stock,
       });
     }
-
-    await this.variantProductRepository.save(product);
   }
 
   async enableVariantProduct(id: string): Promise<void> {

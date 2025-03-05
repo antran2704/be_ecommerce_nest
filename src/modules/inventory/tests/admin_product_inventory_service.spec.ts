@@ -12,7 +12,7 @@ import {
 } from "../mocks/inventory_service.mock";
 import { AdminProductInventoryService } from "../services/admin_product_inventory.service";
 import { AdminProductInventoryRepository } from "../repositories/admin_product_inventory.repository";
-import { mockAdminProductInventoryRepository } from "../mocks/inventory_repository.mock";
+import { mockAdminProductInventoryRepository } from "../mocks/admin_inventory_repository.mock";
 
 describe("AdminProductInventoryService test case", () => {
   let service: AdminProductInventoryService;

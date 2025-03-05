@@ -12,7 +12,6 @@ import { InventoryEntity } from "../entities/inventory.entity";
 import { ENUM_PAGINATION_ORDER } from "~/common/pagination/enums/order.enum";
 import { IAdminProductInventoryService } from "../interfaces";
 import { AdminProductInventoryRepository } from "../repositories/admin_product_inventory.repository";
-import { ProductEntity } from "~/modules/product/entities/product.entity";
 
 export class AdminProductInventoryService
   implements IAdminProductInventoryService

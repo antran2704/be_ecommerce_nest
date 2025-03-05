@@ -57,13 +57,11 @@ export class AdminVariantProductInventoryService
     id: string,
     payload: AdminUpdateInventoryRequestDto,
   ) {
-    console.log("pyload", payload);
     // get all inventories
     const inventories = await this.inventoryRepository.findByVariantProductId({
       variantProductId: id,
       order: ENUM_PAGINATION_ORDER.ASC,
     });
-    console.log("inventories", inventories);
 
     // Total stock
     const currentStock = inventories.reduce((sum, inv) => sum + inv.stock, 0);

@@ -23,7 +23,7 @@ import { PRODUCT_ERROR_MESSAGES } from "../messages/product.error";
 import { BadRequestException } from "@nestjs/common";
 import { AdminProductInventoryService } from "~/modules/inventory/services/admin_product_inventory.service";
 import { AdminProductInventoryRepository } from "~/modules/inventory/repositories/admin_product_inventory.repository";
-import { mockAdminProductInventoryRepository } from "~/modules/inventory/mocks/inventory_repository.mock";
+import { mockAdminProductInventoryRepository } from "~/modules/inventory/mocks/admin_inventory_repository.mock";
 
 describe("AdminProductService test case", () => {
   let productService: AdminProductService;
