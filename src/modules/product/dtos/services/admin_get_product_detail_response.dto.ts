@@ -12,6 +12,7 @@ import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import AdminGetProductSubCategoryResponseDto from "./admin_get_product_sub_category_response.dto";
 import { ModifierResponseDto } from "~/common/dtos";
 import { AutoMap } from "@automapper/classes";
+import { IAdminOptionProduct } from "../../interfaces/admin_option_product.interface";
 
 export default class AdminGetProductDetailResponseDto extends ModifierResponseDto {
   @ApiProperty({
@@ -105,4 +106,20 @@ export default class AdminGetProductDetailResponseDto extends ModifierResponseDt
   })
   @IsNumber()
   stock: number;
+
+  @ApiProperty({
+    example: [
+      {
+        id: "123",
+        name: "Color",
+        values: [
+          {
+            id: "123",
+            name: "Blue",
+          },
+        ],
+      },
+    ],
+  })
+  options: IAdminOptionProduct[];
 }

@@ -21,6 +21,8 @@ import { AdminCreateProductDto } from "../dtos/repositories";
 import { CategoryEntity } from "~/modules/category/entities/category.entity";
 import { PRODUCT_ERROR_MESSAGES } from "../messages/product.error";
 import { AdminProductInventoryService } from "~/modules/inventory/services/admin_product_inventory.service";
+import { IAdminOptionProduct } from "../interfaces/admin_option_product.interface";
+import AdminDetailProductDto from "../dtos/repositories/admin_detail_product.dto";
 
 export class AdminProductService implements IAdminProductService {
   constructor(
@@ -48,9 +50,38 @@ export class AdminProductService implements IAdminProductService {
 
     if (!data) throw new NotFoundException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
 
+    const variant_products = data.variant_products;
+    const options: { [x: string]: IAdminOptionProduct } = {};
+
+    for (const variantProduct of variant_products) {
+      const variantTypeValues = variantProduct.variant_type_values;
+
+      for (const variantTypeValue of variantTypeValues) {
+        const variantType = variantTypeValue.variant_type;
+
+        if (options[variantType.id]) {
+          options[variantType.id].values.push({
+            id: variantTypeValue.id,
+            name: variantTypeValue.name,
+          });
+        } else {
+          options[variantType.id] = {
+            id: variantType.id,
+            name: variantType.name,
+            values: [
+              {
+                id: variantTypeValue.id,
+                name: variantTypeValue.name,
+              },
+            ],
+          };
+        }
+      }
+    }
+
     const formatData = this.mapper.map(
-      data,
-      ProductEntity,
+      { ...data, options: Object.values(options) },
+      AdminDetailProductDto,
       AdminGetProductDetailResponseDto,
     );
 
