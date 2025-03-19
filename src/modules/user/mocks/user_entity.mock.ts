@@ -1,6 +1,6 @@
 import { UserEntity } from "../entities/user.entity";
 
-const mockUserEntity: UserEntity = {
+const mockUserEntity: Partial<UserEntity> = {
   id: "1",
   name: "antran",
   email: "phamtrangiaan30@gmail.com",

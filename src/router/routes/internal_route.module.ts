@@ -25,6 +25,9 @@ import { AdminProductInventoryController } from "~/modules/inventory/controllers
 import { AdminVariantProductModule } from "~/modules/variant_product/admin_variant_product.module";
 import { AdminVariantProductInventoryController } from "~/modules/inventory/controllers/admin_variant_product_inventory.controller";
 import { AdminVariantProductController } from "~/modules/variant_product/controllers/admin_variant_product.controller";
+import { AdminCartController } from "~/modules/cart/controllers/admin_cart.controller";
+import { UserCartController } from "~/modules/cart/controllers/user_category.controller";
+import { CartModule } from "~/modules/cart/cart.module";
 
 @Module({
   controllers: [
@@ -42,6 +45,8 @@ import { AdminVariantProductController } from "~/modules/variant_product/control
     AdminVariantProductController,
     AdminProductInventoryController,
     AdminVariantProductInventoryController,
+    AdminCartController,
+    UserCartController,
   ],
   imports: [
     AdminModule,
@@ -55,6 +60,7 @@ import { AdminVariantProductController } from "~/modules/variant_product/control
     AdminProductModule,
     AdminInventoryModule,
     AdminVariantProductModule,
+    CartModule,
   ],
 })
 export class InternalRouteModule {}

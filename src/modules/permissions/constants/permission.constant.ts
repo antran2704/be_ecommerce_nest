@@ -308,6 +308,32 @@ variantProductInventoryPagePermission.addChild(
   ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_DELETE,
 );
 
+// Cart Permission
+const cartPermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.CART,
+  ENUM_PERMISSION_SUBJECT.CART,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_VIEW,
+  ENUM_PERMISSION.CART_VIEW,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_CREATE,
+  ENUM_PERMISSION.CART_CREATE,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_UPDATE,
+  ENUM_PERMISSION.CART_UPDATE,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_DELETE,
+  ENUM_PERMISSION.CART_DELETE,
+);
+
 export function setPermissionDictionary() {
   // Home Page
   PermissionDictionary.addPermission(
@@ -379,5 +405,11 @@ export function setPermissionDictionary() {
   PermissionDictionary.addPermission(
     ENUM_PLATFORM_PERMISSION.ADMIN,
     variantProductInventoryPagePermission,
+  );
+
+  // Cart
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    cartPermission,
   );
 }
