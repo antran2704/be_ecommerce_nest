@@ -52,7 +52,7 @@ export class CartService implements ICartService {
 
     const formatData: CreateCartDto = {
       id: cartId,
-      is_active: ENUM_CARD_STATUS.ACTIVE,
+      status: payload.status,
       total: 0,
       user: payload.user,
     };
@@ -68,7 +68,7 @@ export class CartService implements ICartService {
     if (cart.status === ENUM_CARD_STATUS.ACTIVE)
       throw new BadRequestException(CART_ERROR_MESSAGES.WAS_ENABLED);
 
-    cart.status = ENUM_CARD_STATUS.INACTIVE;
+    cart.status = ENUM_CARD_STATUS.ACTIVE;
 
     await this.repository.save(cart);
   }
@@ -81,7 +81,32 @@ export class CartService implements ICartService {
     if (cart.status === ENUM_CARD_STATUS.INACTIVE)
       throw new BadRequestException(CART_ERROR_MESSAGES.WAS_DISABLED);
 
+    cart.status = ENUM_CARD_STATUS.INACTIVE;
+
+    await this.repository.save(cart);
+  }
+
+  async enableCartByUserId(id: string): Promise<void> {
+    const cart = await this.repository.findByUserId(id);
+    if (!cart) throw new BadRequestException(CART_ERROR_MESSAGES.NOT_FOUND);
+
+    if (cart.status === ENUM_CARD_STATUS.ACTIVE)
+      throw new BadRequestException(CART_ERROR_MESSAGES.WAS_ENABLED);
+
     cart.status = ENUM_CARD_STATUS.ACTIVE;
+
+    await this.repository.save(cart);
+  }
+
+  async disableCartByUserId(id: string): Promise<void> {
+    const cart = await this.repository.findByUserId(id);
+
+    if (!cart) throw new BadRequestException(CART_ERROR_MESSAGES.NOT_FOUND);
+
+    if (cart.status === ENUM_CARD_STATUS.INACTIVE)
+      throw new BadRequestException(CART_ERROR_MESSAGES.WAS_DISABLED);
+
+    cart.status = ENUM_CARD_STATUS.INACTIVE;
 
     await this.repository.save(cart);
   }

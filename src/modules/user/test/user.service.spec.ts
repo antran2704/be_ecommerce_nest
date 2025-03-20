@@ -15,6 +15,9 @@ import { AuthProviderRepository } from "~/modules/auth_provider/repositories/aut
 import { mockUserAuthTokenRepository } from "~/modules/auth_token/mocks/auth_token_repository.mock";
 import { mockAuthProviderRepository } from "~/modules/auth_provider/mocks/auth_provider_repository.mock";
 import { mockUserRepository } from "../mocks/user_repository.mock";
+import { CartService } from "~/modules/cart/services/cart.service";
+import { CartRepository } from "~/modules/cart/repositories/cart.repository";
+import { mockCartRepository } from "~/modules/cart/mocks/cart_repository.mock";
 
 describe("UserService test case", () => {
   let userService: UserService;
@@ -28,6 +31,7 @@ describe("UserService test case", () => {
         AuthCommonService,
         JwtService,
         AuthProviderService,
+        CartService,
         GetUserReponseMapper,
         {
           provide: UserRepository,
@@ -40,6 +44,10 @@ describe("UserService test case", () => {
         {
           provide: AuthProviderRepository,
           useValue: mockAuthProviderRepository,
+        },
+        {
+          provide: CartRepository,
+          useValue: mockCartRepository,
         },
         {
           provide: getMapperToken(),

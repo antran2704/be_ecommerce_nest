@@ -24,6 +24,8 @@ import {
 import { USER_MESSAGES } from "../messages/user.error";
 import { UserEntity } from "../entities/user.entity";
 import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
+import { CartService } from "~/modules/cart/services/cart.service";
+import { ENUM_CARD_STATUS } from "~/modules/cart/enums/cart.enum";
 
 @Injectable()
 export class UserService implements IUserService {
@@ -33,6 +35,9 @@ export class UserService implements IUserService {
 
     private readonly authCommonService: AuthCommonService,
     private readonly authProviderService: AuthProviderService,
+
+    private readonly cartService: CartService,
+
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -61,6 +66,12 @@ export class UserService implements IUserService {
 
     // save auth provider of user
     this.authProviderService.createAuthProviderSystem({ userId: newUser.id });
+
+    // create cart
+    this.cartService.createCart({
+      user: newUser,
+      status: ENUM_CARD_STATUS.ACTIVE,
+    });
   }
 
   async createUserWithSystem(payload: SignupUserRequestDto): Promise<string> {
@@ -84,6 +95,12 @@ export class UserService implements IUserService {
     // save auth provider of user
     this.authProviderService.createAuthProviderSystem({ userId: newUser.id });
 
+    // create cart inactive
+    this.cartService.createCart({
+      user: newUser,
+      status: ENUM_CARD_STATUS.INACTIVE,
+    });
+
     return newUser.id;
   }
 
@@ -106,6 +123,12 @@ export class UserService implements IUserService {
       provider: payload.provider,
       userId: newUser.id,
       providerId: payload.providerId,
+    });
+
+    // create cart
+    this.cartService.createCart({
+      user: newUser,
+      status: ENUM_CARD_STATUS.ACTIVE,
     });
 
     return newUser.id;

@@ -11,5 +11,5 @@ export default class GetCartsRequestDto extends PaginationSearchRequestDto {
   })
   @IsEnum(ENUM_CARD_STATUS)
   @IsOptional()
-  cardStatus: ENUM_CARD_STATUS;
+  cardStatus?: ENUM_CARD_STATUS;
 }

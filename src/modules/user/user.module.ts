@@ -8,6 +8,7 @@ import { GetUserReponseMapper } from "./mappers/get_user_response.mapper";
 import { UserRepository } from "./repositories/user.repository";
 import { AuthTokenModule } from "../auth_token/auth_token.module";
 import { AuthProviderModule } from "../auth_provider/auth_provider.module";
+import { CartModule } from "../cart/cart.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthProviderModule } from "../auth_provider/auth_provider.module";
     AuthCommonModule,
     AuthTokenModule,
     AuthProviderModule,
+    CartModule,
   ],
   providers: [UserService, GetUserReponseMapper, UserRepository],
   exports: [UserService],

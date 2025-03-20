@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { UserService } from "../services/user.service";
 import {
@@ -36,6 +36,7 @@ import { ResetPasswordRequestDto } from "~/modules/admin/dtos";
 
 @ApiBearerAuth()
 @Controller("users")
+@ApiTags("Admin.ManageUsers")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

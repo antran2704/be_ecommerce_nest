@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { AdminService } from "../services/admin.service";
 import {
@@ -36,6 +36,7 @@ import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-re
 
 @ApiBearerAuth()
 @Controller("admins")
+@ApiTags("Admin.ManageAdmins")
 export class AdminController {
   constructor(private readonly userService: AdminService) {}
 

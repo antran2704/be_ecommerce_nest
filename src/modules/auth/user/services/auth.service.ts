@@ -35,6 +35,7 @@ import {
 import { UserService } from "~/modules/user/services/user.service";
 import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
 import { ENUM_AUTH_PROVIDER } from "~/modules/auth_provider/enums/provider.enum";
+import { CartService } from "~/modules/cart/services/cart.service";
 
 @Injectable()
 export class AuthUserService implements IAuthUserService {
@@ -47,6 +48,7 @@ export class AuthUserService implements IAuthUserService {
     private authCommonService: AuthCommonService,
     private authTokenService: UserAuthTokenService,
     private authProviderService: AuthProviderService,
+    private cartService: CartService,
 
     private configService: ConfigService,
     private readonly mailService: MailService,
@@ -229,6 +231,9 @@ export class AuthUserService implements IAuthUserService {
 
     // active user
     await this.userService.activeUser(user.id);
+
+    // actitve cart
+    await this.cartService.enableCartByUserId(user.id);
 
     // reset signup otp
     this.authTokenService.updateSignupOtp(user.id, {

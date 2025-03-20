@@ -10,5 +10,7 @@ export interface ICartService {
   createCart(payload: CreateCartRequestDto): Promise<void>;
   enableCart(id: string): Promise<void>;
   disableCart(id: string): Promise<void>;
+  enableCartByUserId(id: string): Promise<void>;
+  disableCartByUserId(id: string): Promise<void>;
   deleteCart(id: string): Promise<void>;
 }

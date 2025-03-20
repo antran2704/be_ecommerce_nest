@@ -9,6 +9,7 @@ import { UserModule } from "../user/user.module";
 import { AuthUserService } from "./user/services/auth.service";
 import { AuthProviderModule } from "../auth_provider/auth_provider.module";
 import { ClerkClientProvider } from "~/common/auth_provider/clerk/clerk_client.provider";
+import { CartModule } from "../cart/cart.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ClerkClientProvider } from "~/common/auth_provider/clerk/clerk_client.p
     AuthTokenModule,
     AuthProviderModule,
     MailModule,
+    CartModule,
   ],
   providers: [AuthAdminService, AuthUserService, ClerkClientProvider],
   exports: [AuthAdminService, AuthUserService],
