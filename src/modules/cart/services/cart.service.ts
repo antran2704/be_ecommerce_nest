@@ -11,7 +11,7 @@ import { CartRepository } from "../repositories/cart.repository";
 import { GetCartResponseDto, GetCartsRequestDto } from "../dtos/services";
 import { CartEntity } from "../entities/cart.entity";
 import { CART_ERROR_MESSAGES } from "../messages/cart";
-import { CreateCartDto } from "../dtos/repositories";
+import { CreateCartDto, UpdateCartTotalDto } from "../dtos/repositories";
 import CreateCartRequestDto from "../dtos/services/create_cart_request.dto";
 import { ENUM_CARD_STATUS } from "../enums/cart.enum";
 
@@ -66,6 +66,21 @@ export class CartService implements ICartService {
     };
 
     await this.repository.create(formatData);
+  }
+
+  async updateCartTotal(
+    id: string,
+    payload: UpdateCartTotalDto,
+  ): Promise<void> {
+    const cart = await this.repository.findById(id);
+
+    if (!cart) throw new BadRequestException(CART_ERROR_MESSAGES.NOT_FOUND);
+
+    const { total } = payload;
+
+    cart.total = total;
+
+    await this.repository.save(cart);
   }
 
   async enableCart(id: string): Promise<void> {

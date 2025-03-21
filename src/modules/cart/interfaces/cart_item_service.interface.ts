@@ -3,7 +3,7 @@ import {
   CreateCartItemRequestDto,
   GetCartItemResponseDto,
   GetCartItemsRequestDto,
-  UpdateCartItemRequestDto,
+  UpdateCartItemQuantityRequestDto,
 } from "../dtos/services";
 
 export interface ICartItemService {
@@ -11,6 +11,9 @@ export interface ICartItemService {
     payload: GetCartItemsRequestDto,
   ): Promise<IEntitesAndPaginationReponse<GetCartItemResponseDto>>;
   createCartItem(payload: CreateCartItemRequestDto): Promise<void>;
-  updateCartItem(id: string, payload: UpdateCartItemRequestDto): Promise<void>;
+  updateCartItemQuantity(
+    id: string,
+    payload: UpdateCartItemQuantityRequestDto,
+  ): Promise<void>;
   deleteCartItem(id: string): Promise<void>;
 }

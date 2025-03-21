@@ -12,7 +12,7 @@ import {
   CreateCartItemRequestDto,
   GetCartItemResponseDto,
   GetCartItemsRequestDto,
-  UpdateCartItemRequestDto,
+  UpdateCartItemQuantityRequestDto,
 } from "../dtos/services";
 import { CartItemEntity } from "../entities/cart_item.entity";
 import { CartService } from "./cart.service";
@@ -78,7 +78,7 @@ export class CartItemService implements ICartItemService {
     // Check variant product is existed
     if (variantProductId) {
       variantProduct =
-        await this.variantProductSerivce.getVariantProductById(
+        await this.variantProductSerivce.getVariantProductEntityById(
           variantProductId,
         );
 
@@ -108,16 +108,20 @@ export class CartItemService implements ICartItemService {
     await this.repository.create(formatData);
   }
 
-  async updateCartItem(
+  async updateCartItemQuantity(
     id: string,
-    payload: UpdateCartItemRequestDto,
+    payload: UpdateCartItemQuantityRequestDto,
   ): Promise<void> {
-    const { productId, variantProductId, quantity } = payload;
+    const { quantity } = payload;
 
     const cartItemEntity = await this.repository.findById(id);
 
     if (!cartItemEntity)
       throw new BadRequestException(CART_ITEM_ERROR_MESSAGES.NOT_FOUND);
+
+    console.log("cartItemEntity:::", cartItemEntity);
+
+    const productId = cartItemEntity.product.id;
 
     // Check product is existed
     const product = await this.productSerivce.getProductEntityById(productId);
@@ -132,6 +136,7 @@ export class CartItemService implements ICartItemService {
     }
 
     let variantProduct = null;
+    const variantProductId = cartItemEntity.variant_product?.id;
 
     // Check variant product is existed
     if (variantProductId) {

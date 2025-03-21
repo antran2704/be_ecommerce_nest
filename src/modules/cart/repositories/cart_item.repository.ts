@@ -27,6 +27,12 @@ export class CartItemRepository implements ICartItemRepository {
             id: params.cardId,
           });
         }
+
+        query.leftJoinAndSelect(`${originalNameEntity}.product`, "pr");
+        query.leftJoinAndSelect(`${originalNameEntity}.variant_product`, "vpr");
+        query.leftJoinAndSelect("pr.inventories", "prIv");
+        query.leftJoinAndSelect("vpr.inventories", "vprIv");
+        query.leftJoinAndSelect("vpr.variant_type_values", "vtv");
       },
     );
 
@@ -34,14 +40,32 @@ export class CartItemRepository implements ICartItemRepository {
   }
 
   async findById(id: string): Promise<CartItemEntity> {
-    return this.entity.findOneBy({ id });
+    return this.entity.findOne({
+      where: { id },
+      relations: [
+        "product",
+        "product.inventories",
+        "variant_product",
+        "variant_product.inventories",
+      ],
+    });
   }
 
   async findByProductId(id: string): Promise<CartItemEntity> {
-    return this.entity.findOneBy([
-      { product: { id } },
-      { variant_product: { id } },
-    ]);
+    // return this.entity.findOneBy([
+    //   { product: { id } },
+    //   { variant_product: { id } },
+    // ]);
+
+    return this.entity.findOne({
+      where: [{ product: { id } }, { variant_product: { id } }],
+      relations: [
+        "product",
+        "product.inventories",
+        "variant_product",
+        "variant_product.inventories",
+      ],
+    });
   }
 
   async create(payload: CreateCartItemDto): Promise<void> {

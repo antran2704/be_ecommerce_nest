@@ -26,9 +26,10 @@ import { AdminVariantProductModule } from "~/modules/variant_product/admin_varia
 import { AdminVariantProductInventoryController } from "~/modules/inventory/controllers/admin_variant_product_inventory.controller";
 import { AdminVariantProductController } from "~/modules/variant_product/controllers/admin_variant_product.controller";
 import { AdminCartController } from "~/modules/cart/controllers/admin_cart.controller";
-import { UserCartController } from "~/modules/cart/controllers/user_category.controller";
+import { UserCartController } from "~/modules/cart/controllers/user_cart.controller";
 import { CartModule } from "~/modules/cart/cart.module";
 import { CartItemModule } from "~/modules/cart/cart_item.module";
+import { UserCartItemController } from "~/modules/cart/controllers/user_cart_item.controller";
 
 @Module({
   controllers: [
@@ -48,6 +49,7 @@ import { CartItemModule } from "~/modules/cart/cart_item.module";
     AdminVariantProductInventoryController,
     AdminCartController,
     UserCartController,
+    UserCartItemController,
   ],
   imports: [
     AdminModule,

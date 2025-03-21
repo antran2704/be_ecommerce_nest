@@ -4,6 +4,7 @@ import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_m
 import { CartEntity } from "./cart.entity";
 import { ProductEntity } from "~/modules/product/entities/product.entity";
 import { VariantProductEntity } from "~/modules/variant_product/entities/variant_product.entity";
+import { AutoMap } from "@automapper/classes";
 
 @Entity({ name: "cart_items" })
 export class CartItemEntity extends DatabaseModifierEntity {
@@ -30,5 +31,6 @@ export class CartItemEntity extends DatabaseModifierEntity {
   variant_product: VariantProductEntity;
 
   @Column({ type: "int", default: 0 })
+  @AutoMap()
   quantity: number;
 }

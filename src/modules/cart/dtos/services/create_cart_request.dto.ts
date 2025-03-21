@@ -4,11 +4,14 @@ import { IsEnum } from "class-validator";
 
 import { ENUM_CARD_STATUS } from "../../enums/cart.enum";
 import { UserEntity } from "~/modules/user/entities/user.entity";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 export default class CreateCartRequestDto {
   @ApiProperty({
     required: true,
-    example: ENUM_CARD_STATUS.ACTIVE,
+    example: {
+      id: ENUM_PREFIX_DATABASE.US + "123",
+    },
   })
   @Type(() => UserEntity)
   user: UserEntity;

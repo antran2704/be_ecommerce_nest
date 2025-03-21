@@ -4,6 +4,7 @@ import { IsNumber, IsString } from "class-validator";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import { IProductCartItem } from "../../interfaces/product_cart_item.interface";
 import { IVariantProductCartItem } from "../../interfaces/variant_product_cart_item.interface";
+import { AutoMap } from "@automapper/classes";
 
 export default class GetCartItemResponseDto {
   @ApiProperty({
@@ -18,6 +19,7 @@ export default class GetCartItemResponseDto {
     example: 1,
   })
   @IsNumber()
+  @AutoMap()
   quantity: number;
 
   @ApiProperty({
@@ -39,4 +41,32 @@ export default class GetCartItemResponseDto {
     },
   })
   variantProduct: IVariantProductCartItem;
+
+  @ApiProperty({
+    required: true,
+    example: "https://example.com/image.jpg",
+  })
+  @IsString()
+  thumbnail: string;
+
+  @ApiProperty({
+    required: true,
+    example: 100,
+  })
+  @IsNumber()
+  price: number;
+
+  @ApiProperty({
+    required: true,
+    example: 10,
+  })
+  @IsNumber()
+  promotionPrice: number;
+
+  @ApiProperty({
+    required: true,
+    example: 10,
+  })
+  @IsNumber()
+  inventory: number;
 }
