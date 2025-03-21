@@ -52,6 +52,10 @@ export class AdminVariantProductService implements IAdminVariantProductService {
     id: string,
   ): Promise<AdminGetVariantProductDetailResponseDto> {
     const data = await this.variantProductRepository.findById(id);
+
+    if (!data)
+      throw new BadRequestException(VARIANT_PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
     const formatData = this.mapper.map(
       data,
       VariantProductEntity,
@@ -59,6 +63,15 @@ export class AdminVariantProductService implements IAdminVariantProductService {
     );
 
     return formatData;
+  }
+
+  async getVariantProductEntityById(id: string): Promise<VariantProductEntity> {
+    const data = await this.variantProductRepository.findById(id);
+
+    if (!data)
+      throw new BadRequestException(VARIANT_PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
+    return data;
   }
 
   async createVariantProduct(

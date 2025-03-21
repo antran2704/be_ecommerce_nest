@@ -34,6 +34,14 @@ export class CartService implements ICartService {
     return { data: formatData, pagination };
   }
 
+  async getCartEntity(id: string): Promise<CartEntity> {
+    const entity = await this.repository.findById(id);
+
+    if (!entity) throw new BadRequestException(CART_ERROR_MESSAGES.NOT_FOUND);
+
+    return entity;
+  }
+
   async getCartByUserId(id: string): Promise<GetCartResponseDto> {
     const entity = await this.repository.findByUserId(id);
 
