@@ -4,6 +4,7 @@ import { Entity, Column, PrimaryColumn, OneToOne, OneToMany } from "typeorm";
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
 import { AuthTokenEntity } from "~/modules/auth_token/entities/auth_token.entity";
 import { AuthProviderEntity } from "~/modules/auth_provider/entities/auth_provider.entity";
+import { CartEntity } from "~/modules/cart/entities/cart.entity";
 
 @Entity({ name: "users" })
 export class UserEntity extends DatabaseModifierEntity {
@@ -39,4 +40,9 @@ export class UserEntity extends DatabaseModifierEntity {
     cascade: true,
   })
   authProviders: AuthProviderEntity[];
+
+  @OneToOne(() => CartEntity, (entity) => entity.user, {
+    cascade: true,
+  })
+  cart: CartEntity;
 }

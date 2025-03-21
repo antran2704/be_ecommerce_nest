@@ -1,32 +1,34 @@
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 
-import { IAdminInventoryService } from "../interfaces/admin_product_service.interface";
-import { AdminInventoryRepository } from "../repositories/admin_inventory.repository";
 import {
   AdminCreateProductInventoryRequestDto,
   AdminGetProductInventoryRequestDto,
-  AdminGetProductInventoryResponseDto,
-  AdminUpdateProductInventoryRequestDto,
+  AdminGetInventoryResponseDto,
+  AdminUpdateInventoryRequestDto,
 } from "../dtos/services";
-import { AdminCreateInventoryDto } from "../dtos/repositories";
+import { AdminCreateProductInventoryDto } from "../dtos/repositories";
 import { InventoryEntity } from "../entities/inventory.entity";
 import { ENUM_PAGINATION_ORDER } from "~/common/pagination/enums/order.enum";
+import { IAdminProductInventoryService } from "../interfaces";
+import { AdminProductInventoryRepository } from "../repositories/admin_product_inventory.repository";
 
-export class AdminInventoryService implements IAdminInventoryService {
+export class AdminProductInventoryService
+  implements IAdminProductInventoryService
+{
   constructor(
-    private readonly inventoryRepository: AdminInventoryRepository,
+    private readonly inventoryRepository: AdminProductInventoryRepository,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
   async getProductInventories(
     payload: AdminGetProductInventoryRequestDto,
-  ): Promise<AdminGetProductInventoryResponseDto[]> {
+  ): Promise<AdminGetInventoryResponseDto[]> {
     const data = await this.inventoryRepository.findByProductId(payload);
     const formatData = this.mapper.mapArray(
       data,
       InventoryEntity,
-      AdminGetProductInventoryResponseDto,
+      AdminGetInventoryResponseDto,
     );
 
     return formatData;
@@ -43,7 +45,7 @@ export class AdminInventoryService implements IAdminInventoryService {
   async createProductInventory(
     payload: AdminCreateProductInventoryRequestDto,
   ): Promise<void> {
-    const formatData: AdminCreateInventoryDto = {
+    const formatData: AdminCreateProductInventoryDto = {
       stock: payload.stock,
       product_id: payload.productId,
     };
@@ -53,7 +55,7 @@ export class AdminInventoryService implements IAdminInventoryService {
 
   async updateProductInventory(
     id: string,
-    payload: AdminUpdateProductInventoryRequestDto,
+    payload: AdminUpdateInventoryRequestDto,
   ) {
     // get all inventories
     const inventories = await this.inventoryRepository.findByProductId({

@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
 import { ProductEntity } from "~/modules/product/entities/product.entity";
+import { VariantProductEntity } from "~/modules/variant_product/entities/variant_product.entity";
 
 @Entity("inventories")
 export class InventoryEntity extends DatabaseModifierEntity {
@@ -26,6 +27,16 @@ export class InventoryEntity extends DatabaseModifierEntity {
   @JoinColumn({ name: "product_id" })
   product: ProductEntity | null;
 
-  @Column()
+  @Column({ nullable: true })
   product_id: string;
+
+  @ManyToOne(() => VariantProductEntity, (entity) => entity.inventories, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "variant_product_id" })
+  variant_product: VariantProductEntity | null;
+
+  @Column({ default: null, nullable: true })
+  variant_product_id: string;
 }

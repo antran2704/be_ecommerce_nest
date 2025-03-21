@@ -230,6 +230,110 @@ productPagePermission.addChild(
   ENUM_PERMISSION.PRODUCT_DELETE,
 );
 
+// Varaint Product Page Permission
+const variantProductPagePermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.VARIANT_PRODUCT,
+  ENUM_PERMISSION_SUBJECT.VARIANT_PRODUCT,
+);
+
+variantProductPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_VIEW,
+  ENUM_PERMISSION.VARIANT_PRODUCT_VIEW,
+);
+
+variantProductPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_CREATE,
+  ENUM_PERMISSION.VARIANT_PRODUCT_CREATE,
+);
+
+variantProductPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_UPDATE,
+  ENUM_PERMISSION.VARIANT_PRODUCT_UPDATE,
+);
+
+variantProductPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_DELETE,
+  ENUM_PERMISSION.VARIANT_PRODUCT_DELETE,
+);
+
+// Product Inventory Page Permission
+const productInventoryPagePermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.PRODUCT_INVENTORY,
+  ENUM_PERMISSION_SUBJECT.PRODUCT_INVENTORY,
+);
+
+productInventoryPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_INVENTORY_VIEW,
+  ENUM_PERMISSION.PRODUCT_INVENTORY_VIEW,
+);
+
+productInventoryPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_INVENTORY_CREATE,
+  ENUM_PERMISSION.PRODUCT_INVENTORY_CREATE,
+);
+
+productInventoryPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_INVENTORY_UPDATE,
+  ENUM_PERMISSION.PRODUCT_INVENTORY_UPDATE,
+);
+
+productInventoryPagePermission.addChild(
+  ENUM_PERMISSION.PRODUCT_INVENTORY_DELETE,
+  ENUM_PERMISSION.PRODUCT_INVENTORY_DELETE,
+);
+
+// Variant Product Inventory Page Permission
+const variantProductInventoryPagePermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.VARIANT_PRODUCT_INVENTORY,
+  ENUM_PERMISSION_SUBJECT.VARIANT_PRODUCT_INVENTORY,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_VIEW,
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_VIEW,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_CREATE,
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_CREATE,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_UPDATE,
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_UPDATE,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_DELETE,
+  ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_DELETE,
+);
+
+// Cart Permission
+const cartPermission = new Permission(
+  ENUM_PERMISSION_SUBJECT.CART,
+  ENUM_PERMISSION_SUBJECT.CART,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_VIEW,
+  ENUM_PERMISSION.CART_VIEW,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_CREATE,
+  ENUM_PERMISSION.CART_CREATE,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_UPDATE,
+  ENUM_PERMISSION.CART_UPDATE,
+);
+
+variantProductInventoryPagePermission.addChild(
+  ENUM_PERMISSION.CART_DELETE,
+  ENUM_PERMISSION.CART_DELETE,
+);
+
 export function setPermissionDictionary() {
   // Home Page
   PermissionDictionary.addPermission(
@@ -279,9 +383,33 @@ export function setPermissionDictionary() {
     variantTypeValuePagePermission,
   );
 
-  // Variant Type Value Page
+  // Product Page
   PermissionDictionary.addPermission(
     ENUM_PLATFORM_PERMISSION.ADMIN,
     productPagePermission,
+  );
+
+  // Variant Product Page
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    variantProductPagePermission,
+  );
+
+  // Product Inventory Page
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    productInventoryPagePermission,
+  );
+
+  // Variant Product Inventory Page
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    variantProductInventoryPagePermission,
+  );
+
+  // Cart
+  PermissionDictionary.addPermission(
+    ENUM_PLATFORM_PERMISSION.ADMIN,
+    cartPermission,
   );
 }

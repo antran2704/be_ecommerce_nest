@@ -2,31 +2,30 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { createMapper } from "@automapper/core";
 import { classes } from "@automapper/classes";
 import { AutomapperModule, getMapperToken } from "@automapper/nestjs";
-import { BadRequestException } from "@nestjs/common";
 
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
-import { AdminInventoryService } from "../services/admin_inventory.service";
-import { AdminInventoryRepository } from "../repositories/admin_inventory.repository";
 import { AdminGetInventoryReponseMapper } from "../mappers/admin_get_inventory_response.mapper";
-import { mockAdminInventoryRepository } from "../mocks/inventory_repository.mock";
 import {
-  mockAdminCreateInventoryRequest,
+  mockAdminCreateProductInventoryRequest,
   mockAdminInventoryResponse,
   mockAdminUpdateInventoryRequest,
 } from "../mocks/inventory_service.mock";
+import { AdminProductInventoryService } from "../services/admin_product_inventory.service";
+import { AdminProductInventoryRepository } from "../repositories/admin_product_inventory.repository";
+import { mockAdminProductInventoryRepository } from "../mocks/admin_inventory_repository.mock";
 
-describe("AdminInventoryService test case", () => {
-  let service: AdminInventoryService;
+describe("AdminProductInventoryService test case", () => {
+  let service: AdminProductInventoryService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [AutomapperModule],
       providers: [
         AdminGetInventoryReponseMapper,
-        AdminInventoryService,
+        AdminProductInventoryService,
         {
-          provide: AdminInventoryRepository,
-          useValue: mockAdminInventoryRepository,
+          provide: AdminProductInventoryRepository,
+          useValue: mockAdminProductInventoryRepository,
         },
         {
           provide: getMapperToken(),
@@ -37,7 +36,9 @@ describe("AdminInventoryService test case", () => {
       ],
     }).compile();
 
-    service = module.get<AdminInventoryService>(AdminInventoryService);
+    service = module.get<AdminProductInventoryService>(
+      AdminProductInventoryService,
+    );
   });
 
   it("service should be defined", () => {
@@ -60,7 +61,9 @@ describe("AdminInventoryService test case", () => {
 
   it("createProductInventory successfully", async () => {
     expect(
-      await service.createProductInventory(mockAdminCreateInventoryRequest),
+      await service.createProductInventory(
+        mockAdminCreateProductInventoryRequest,
+      ),
     ).toBeUndefined();
   });
 

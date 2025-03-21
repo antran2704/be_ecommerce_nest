@@ -22,4 +22,10 @@ export enum ENUM_PREFIX_DATABASE {
 
   // PRODUCT
   PR = "PR",
+
+  // PRODUCT
+  VPR = "VPR",
+
+  // CART
+  CAR = "CAR",
 }

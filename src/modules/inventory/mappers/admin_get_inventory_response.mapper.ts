@@ -1,7 +1,7 @@
 import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { InventoryEntity } from "../entities/inventory.entity";
-import { AdminGetProductInventoryResponseDto } from "../dtos/services";
+import { AdminGetInventoryResponseDto } from "../dtos/services";
 
 export class AdminGetInventoryReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -13,9 +13,9 @@ export class AdminGetInventoryReponseMapper extends AutomapperProfile {
       createMap(
         mapper,
         InventoryEntity,
-        AdminGetProductInventoryResponseDto,
+        AdminGetInventoryResponseDto,
         forMember(
-          (dest: AdminGetProductInventoryResponseDto) => dest.inventoryId,
+          (dest: AdminGetInventoryResponseDto) => dest.inventoryId,
           mapFrom((src: InventoryEntity) => src.id),
         ),
       );

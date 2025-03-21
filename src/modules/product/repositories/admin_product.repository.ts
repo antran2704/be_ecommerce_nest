@@ -63,10 +63,31 @@ export class AdminProductRepository implements IAdminProductRepository {
   }
 
   async findById(id: string): Promise<ProductEntity> {
-    return this.productEntity.findOne({
-      where: { id },
-      relations: ["main_category", "sub_categories", "inventories"],
-    });
+    const ORIGINAL_NAME_ENTITY = "product";
+    const queryBuilder =
+      this.productEntity.createQueryBuilder(ORIGINAL_NAME_ENTITY);
+
+    queryBuilder
+      .leftJoin(`${ORIGINAL_NAME_ENTITY}.main_category`, "mc")
+      .addSelect(["mc.id", "mc.name"]);
+    queryBuilder
+      .leftJoin(`${ORIGINAL_NAME_ENTITY}.sub_categories`, "sc")
+      .addSelect(["mc.id", "mc.name"]);
+    queryBuilder
+      .leftJoin(`${ORIGINAL_NAME_ENTITY}.inventories`, "iv")
+      .addSelect(["iv.id", "iv.stock"]);
+    queryBuilder
+      .leftJoin(`${ORIGINAL_NAME_ENTITY}.variant_products`, "vp")
+      .addSelect(["vp.id", "vp.name"]);
+    queryBuilder
+      .leftJoin("vp.variant_type_values", "vtv")
+      .addSelect(["vtv.id", "vtv.name"]);
+    queryBuilder
+      .leftJoin("vtv.variant_type", "vt")
+      .addSelect(["vt.id", "vt.name"]);
+    queryBuilder.where(`${ORIGINAL_NAME_ENTITY}.id = :id`, { id });
+
+    return queryBuilder.getOne();
   }
 
   async create(payload: AdminCreateProductDto): Promise<void> {

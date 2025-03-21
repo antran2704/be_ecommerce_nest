@@ -2,6 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { createMapper } from "@automapper/core";
 import { classes } from "@automapper/classes";
 import { AutomapperModule, getMapperToken } from "@automapper/nestjs";
+import { BadRequestException } from "@nestjs/common";
 
 import { AdminProductService } from "../services/admin_product.service";
 import { AdminProductRepository } from "../repositories/admin_product.repository";
@@ -20,10 +21,9 @@ import { AdminCategoryRepository } from "~/modules/category/repositories/admin_c
 import { AdminCategoryService } from "~/modules/category/services/admin_category.service";
 import { mockAdminCategoryRepository } from "~/modules/category/mocks/admin_category_repository.mock";
 import { PRODUCT_ERROR_MESSAGES } from "../messages/product.error";
-import { BadRequestException } from "@nestjs/common";
-import { AdminInventoryService } from "~/modules/inventory/services/admin_inventory.service";
-import { AdminInventoryRepository } from "~/modules/inventory/repositories/admin_inventory.repository";
-import { mockAdminInventoryRepository } from "~/modules/inventory/mocks/inventory_repository.mock";
+import { AdminProductInventoryService } from "~/modules/inventory/services/admin_product_inventory.service";
+import { AdminProductInventoryRepository } from "~/modules/inventory/repositories/admin_product_inventory.repository";
+import { mockAdminProductInventoryRepository } from "~/modules/inventory/mocks/admin_inventory_repository.mock";
 
 describe("AdminProductService test case", () => {
   let productService: AdminProductService;
@@ -37,7 +37,7 @@ describe("AdminProductService test case", () => {
         AdminGetProductDetailReponseMapper,
         AdminGetProductListReponseMapper,
         AdminCategoryService,
-        AdminInventoryService,
+        AdminProductInventoryService,
         {
           provide: AdminProductRepository,
           useValue: mockAdminProductRepository,
@@ -47,8 +47,8 @@ describe("AdminProductService test case", () => {
           useValue: mockAdminCategoryRepository,
         },
         {
-          provide: AdminInventoryRepository,
-          useValue: mockAdminInventoryRepository,
+          provide: AdminProductInventoryRepository,
+          useValue: mockAdminProductInventoryRepository,
         },
         {
           provide: getMapperToken(),

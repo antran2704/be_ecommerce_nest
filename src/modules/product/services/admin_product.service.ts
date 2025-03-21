@@ -5,7 +5,7 @@ import { GetDatabaseDefaultID } from "~/helpers/database";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { IAdminProductService } from "../interfaces/admin_product_service.interface";
 import { AdminProductRepository } from "../repositories/admin_product.repository";
 import {
@@ -20,13 +20,15 @@ import { AdminCategoryService } from "~/modules/category/services/admin_category
 import { AdminCreateProductDto } from "../dtos/repositories";
 import { CategoryEntity } from "~/modules/category/entities/category.entity";
 import { PRODUCT_ERROR_MESSAGES } from "../messages/product.error";
-import { AdminInventoryService } from "~/modules/inventory/services/admin_inventory.service";
+import { AdminProductInventoryService } from "~/modules/inventory/services/admin_product_inventory.service";
+import { IAdminOptionProduct } from "../interfaces/admin_option_product.interface";
+import AdminDetailProductDto from "../dtos/repositories/admin_detail_product.dto";
 
 export class AdminProductService implements IAdminProductService {
   constructor(
     private readonly productRepository: AdminProductRepository,
     private readonly categoryService: AdminCategoryService,
-    private readonly inventoryService: AdminInventoryService,
+    private readonly inventoryService: AdminProductInventoryService,
     @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
@@ -46,13 +48,52 @@ export class AdminProductService implements IAdminProductService {
   async getProductById(id: string): Promise<AdminGetProductDetailResponseDto> {
     const data = await this.productRepository.findById(id);
 
+    if (!data) throw new NotFoundException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
+    const variant_products = data.variant_products;
+    const options: { [x: string]: IAdminOptionProduct } = {};
+
+    for (const variantProduct of variant_products) {
+      const variantTypeValues = variantProduct.variant_type_values;
+
+      for (const variantTypeValue of variantTypeValues) {
+        const variantType = variantTypeValue.variant_type;
+
+        if (options[variantType.id]) {
+          options[variantType.id].values.push({
+            id: variantTypeValue.id,
+            name: variantTypeValue.name,
+          });
+        } else {
+          options[variantType.id] = {
+            id: variantType.id,
+            name: variantType.name,
+            values: [
+              {
+                id: variantTypeValue.id,
+                name: variantTypeValue.name,
+              },
+            ],
+          };
+        }
+      }
+    }
+
     const formatData = this.mapper.map(
-      data,
-      ProductEntity,
+      { ...data, options: Object.values(options) },
+      AdminDetailProductDto,
       AdminGetProductDetailResponseDto,
     );
 
     return formatData;
+  }
+
+  async getProductEntityById(id: string): Promise<ProductEntity> {
+    const data = await this.productRepository.findById(id);
+
+    if (!data) throw new NotFoundException(PRODUCT_ERROR_MESSAGES.NOT_FOUND);
+
+    return data;
   }
 
   async createProduct(payload: AdminCreateProductRequestDto): Promise<void> {
@@ -146,14 +187,14 @@ export class AdminProductService implements IAdminProductService {
       product.id,
     );
 
+    await this.productRepository.save(product);
+
     // check if have change stock
     if (payload.stock !== currentInventory) {
-      await this.inventoryService.updateProductInventory(product.id, {
+      await this.inventoryService.updateProductInventory(id, {
         stock: payload.stock,
       });
     }
-
-    await this.productRepository.save(product);
   }
 
   async enableProduct(id: string): Promise<void> {

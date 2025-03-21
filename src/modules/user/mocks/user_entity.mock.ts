@@ -1,6 +1,6 @@
 import { UserEntity } from "../entities/user.entity";
 
-const createUserByAdminMock: UserEntity = {
+const mockUserEntity: Partial<UserEntity> = {
   id: "1",
   name: "antran",
   email: "phamtrangiaan30@gmail.com",
@@ -13,4 +13,4 @@ const createUserByAdminMock: UserEntity = {
   authToken: null,
 };
 
-export { createUserByAdminMock };
+export { mockUserEntity };
