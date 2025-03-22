@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+} from "typeorm";
 
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
 import { UserEntity } from "~/modules/user/entities/user.entity";
@@ -22,4 +29,7 @@ export class CartEntity extends DatabaseModifierEntity {
   @OneToOne(() => UserEntity, (entity) => entity.cart, { onDelete: "CASCADE" })
   @JoinColumn({ name: "user" })
   user: UserEntity;
+
+  @OneToMany(() => UserEntity, (entity) => entity.cart, { onDelete: "CASCADE" })
+  cart_items: UserEntity;
 }

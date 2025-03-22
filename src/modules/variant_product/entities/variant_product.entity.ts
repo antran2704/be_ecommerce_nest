@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 
 import { DatabaseModifierEntity } from "~/common/database/mySQL/bases/database_modifier.entity";
+import { CartItemEntity } from "~/modules/cart/entities/cart_item.entity";
 import { InventoryEntity } from "~/modules/inventory/entities/inventory.entity";
 import { ProductEntity } from "~/modules/product/entities/product.entity";
 import { VariantTypeValueEntity } from "~/modules/variant_type_value/entities/variant_type_value.entity";
@@ -63,4 +64,9 @@ export class VariantProductEntity extends DatabaseModifierEntity {
     eager: true,
   })
   inventories: InventoryEntity[];
+
+  @OneToMany(() => CartItemEntity, (entity) => entity.variant_product, {
+    cascade: true,
+  })
+  cart_items: CartItemEntity[];
 }

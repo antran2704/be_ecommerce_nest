@@ -13,11 +13,9 @@ import {
   mockGetCartResponse,
   mockGetCartsRequest,
   mockGetCartsResponse,
-} from "../mocks/admin_product_service.mock";
+} from "../mocks/cart_service.mock";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import { CART_ERROR_MESSAGES } from "../messages/cart";
-import { mockCartEntity } from "../mocks/cart_entity.mock";
-import { CartEntity } from "../entities/cart.entity";
 
 describe("CartService test case", () => {
   let service: CartService;

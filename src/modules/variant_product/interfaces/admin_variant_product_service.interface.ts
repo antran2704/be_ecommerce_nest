@@ -6,6 +6,7 @@ import {
   AdminGetVariantProductsRequestDto,
   AdminUpdateVariantProductRequestDto,
 } from "../dtos/services";
+import { VariantProductEntity } from "../entities/variant_product.entity";
 
 export interface IAdminVariantProductService {
   getVariantProducts(
@@ -16,6 +17,7 @@ export interface IAdminVariantProductService {
   getVariantProductById(
     id: string,
   ): Promise<AdminGetVariantProductDetailResponseDto>;
+  getVariantProductEntityById(id: string): Promise<VariantProductEntity>;
   createVariantProduct(
     payload: AdminCreateVariantProductRequestDto,
   ): Promise<void>;

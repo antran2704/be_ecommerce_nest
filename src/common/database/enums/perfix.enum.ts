@@ -28,4 +28,7 @@ export enum ENUM_PREFIX_DATABASE {
 
   // CART
   CAR = "CAR",
+
+  // CART ITEM
+  CARI = "CARI",
 }
