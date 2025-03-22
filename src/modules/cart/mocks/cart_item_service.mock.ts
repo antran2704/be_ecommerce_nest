@@ -23,17 +23,17 @@ const mockGetCartItemsRequest: GetCartItemsRequestDto = {
 
 const mockGetCartItemResponse: Partial<GetCartItemResponseDto> = {
   cartItemId: ENUM_PREFIX_DATABASE.CARI + "123",
-  inventory: 10,
-  price: 100,
+  inventory: 0,
+  price: 1000,
   quantity: 1,
-  promotionPrice: 10,
-  thumbnail: "thumbnail",
+  promotionPrice: 0,
+  thumbnail: "Product thumbnail",
   product: {
-    name: "product name",
+    name: "Product name",
     productId: ENUM_PREFIX_DATABASE.PR + "123",
   },
   variantProduct: {
-    name: "variant product name",
+    name: "Product name",
     variantProductId: ENUM_PREFIX_DATABASE.VPR + "123",
     options: [],
   },

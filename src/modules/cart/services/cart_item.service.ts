@@ -119,8 +119,6 @@ export class CartItemService implements ICartItemService {
     if (!cartItemEntity)
       throw new BadRequestException(CART_ITEM_ERROR_MESSAGES.NOT_FOUND);
 
-    console.log("cartItemEntity:::", cartItemEntity);
-
     const productId = cartItemEntity.product.id;
 
     // Check product is existed
@@ -141,7 +139,7 @@ export class CartItemService implements ICartItemService {
     // Check variant product is existed
     if (variantProductId) {
       variantProduct =
-        await this.variantProductSerivce.getVariantProductById(
+        await this.variantProductSerivce.getVariantProductEntityById(
           variantProductId,
         );
 
