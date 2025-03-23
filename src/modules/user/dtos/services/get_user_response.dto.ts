@@ -2,7 +2,7 @@ import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
-export default class GetAdminResponseDto {
+export default class GetUserResponseDto {
   @ApiProperty({
     example: `${ENUM_PREFIX_DATABASE.US}123`,
   })

@@ -29,6 +29,10 @@ export class AdminEntity extends DatabaseModifierEntity {
   @Column()
   password: string;
 
+  @Column()
+  @AutoMap()
+  avartar: string;
+
   @Column({ default: true })
   @AutoMap()
   is_active: boolean;

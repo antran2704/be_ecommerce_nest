@@ -22,6 +22,12 @@ export default class GetAdminResponseDto {
   name: string;
 
   @ApiProperty({
+    example: "/path/image",
+  })
+  @AutoMap()
+  avartar: string;
+
+  @ApiProperty({
     example: true,
   })
   @AutoMap()
@@ -34,7 +40,7 @@ export default class GetAdminResponseDto {
   isActive: boolean;
 
   @ApiProperty({
-    example: "2025-01-07T07:53:40.829Z",
+    example: "2026-01-08T07:53:40.829Z",
   })
   @AutoMap()
   createdAt: string;

@@ -103,7 +103,7 @@ export class AuthUserController {
     return new SuccessResponse(AUTH_SUCCESS_MESSAGES.LOGOUT_SUCCESS);
   }
 
-  @Post("/refreshToken")
+  @Post("refresh-token")
   @ApiBody({
     type: NewAccessTokenRequestDto,
   })
