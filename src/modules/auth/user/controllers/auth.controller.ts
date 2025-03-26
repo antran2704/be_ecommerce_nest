@@ -112,7 +112,7 @@ export class AuthUserController {
     return await this.authService.getNewAccessToken(payload);
   }
 
-  @Post("/fotgot-password")
+  @Post("/forgot-password")
   @ApiBody({
     type: ForgotPasswordUserRequestDto,
   })

@@ -24,6 +24,7 @@ import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pag
 import { RoleService } from "~/modules/role/services/role.service";
 import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
 import { AdminAuthTokenService } from "~/modules/auth_token/services";
+import CreateSuperAdminDto from "../dtos/repositories/create_super_admin_repository.dto";
 
 @Injectable()
 export class AdminService implements IAdminService {
@@ -82,10 +83,11 @@ export class AdminService implements IAdminService {
 
     const hashPassword = await this.authCommonService.hashData(defaultPassword);
 
-    const dataForSave: CreateAdminDto = {
+    const dataForSave: CreateSuperAdminDto = {
       ...payload,
       password: hashPassword,
       role: null,
+      is_admin: true,
     };
 
     // save user
@@ -154,7 +156,11 @@ export class AdminService implements IAdminService {
       throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
-    return { permissions: (user.role.permissions as ENUM_PERMISSION[]) || [] };
+    return {
+      permissions: user.role
+        ? (user.role.permissions as ENUM_PERMISSION[])
+        : [],
+    };
   }
 
   async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {

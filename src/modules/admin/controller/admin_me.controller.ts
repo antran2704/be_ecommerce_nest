@@ -31,12 +31,10 @@ export class AdminMeController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponseDecorator(GetAdminResponseDto)
-  async getMe(
-    @Request() req: any,
-  ): Promise<GetSuccessResponse<GetAdminResponseDto>> {
+  async getMe(@Request() req: any): Promise<GetAdminResponseDto> {
     const data = await this.userService.getAdminById(req.user.id);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   // get permission of admin
@@ -45,10 +43,10 @@ export class AdminMeController {
   @UseGuards(JwtAuthGuard)
   async getPermissions(
     @Request() req: any,
-  ): Promise<GetSuccessResponse<GetAdminPermissionResponseDto>> {
+  ): Promise<GetAdminPermissionResponseDto> {
     const data = await this.userService.getAdminPermissions(req.user.id);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   // change password

@@ -29,7 +29,7 @@ export class AdminEntity extends DatabaseModifierEntity {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ default: null, nullable: true })
   @AutoMap()
   avartar: string;
 
@@ -48,7 +48,7 @@ export class AdminEntity extends DatabaseModifierEntity {
   @JoinColumn({ name: "role_id" })
   role: RoleEntity | null;
 
-  @Column()
+  @Column({ default: null, nullable: true })
   @AutoMap()
   role_id: string;
 }

@@ -9,7 +9,6 @@ import {
   ResetPasswordAdminRequestDto,
 } from "../dtos";
 import {
-  GetSuccessResponse,
   SuccessResponse,
   UpdatedSuccessResponse,
 } from "~/common/response/success.response";
@@ -39,10 +38,10 @@ export class AuthAdminController {
   @ApiOkResponseDecorator(LoginAdminResponseDto)
   async login(
     @Body() payload: LoginAdminRequestDto,
-  ): Promise<GetSuccessResponse<LoginAdminResponseDto>> {
+  ): Promise<LoginAdminResponseDto> {
     const data = await this.authService.login(payload);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   @Post("/logout")
@@ -69,13 +68,22 @@ export class AuthAdminController {
     return await this.authService.getNewAccessToken(payload);
   }
 
-  @Post("/fotgot-password")
+  @Post("/forgot-password")
   @ApiBody({
     type: ForgotPasswordAdminRequestDto,
   })
   @ApiOkResponseDecorator(ForgotPasswordAdminResponseDto)
   async forgotPassword(@Body() payload: ForgotPasswordAdminRequestDto) {
     return await this.authService.forgotPassword(payload);
+  }
+
+  @Post("/is-in-forgot-password")
+  @ApiBody({
+    type: ForgotPasswordAdminRequestDto,
+  })
+  @ApiOkResponseDecorator(ForgotPasswordAdminResponseDto)
+  async isInForgotPassword(@Body() payload: ForgotPasswordAdminRequestDto) {
+    return await this.authService.isInForgotPassword(payload);
   }
 
   @Post("/confirm-forgot-password-otp")

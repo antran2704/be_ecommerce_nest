@@ -200,6 +200,10 @@ export class AuthAdminService implements IAuthAdminService {
     // check user is exited
     const user = await this.adminService.getAdminEntityByEmail(data.email);
 
+    if (!user.is_active) {
+      throw new BadRequestException(AUTH_ERROR_MESSAGES.USER_WAS_DISABLED);
+    }
+
     const newOtp = generateOTP();
     const otpHash = await this.authCommonService.hashData(newOtp);
 
@@ -224,6 +228,27 @@ export class AuthAdminService implements IAuthAdminService {
     });
 
     return { otp: newOtp, expireAt: otpExpiresIn };
+  }
+
+  async isInForgotPassword(
+    data: ForgotPasswordAdminRequestDto,
+  ): Promise<boolean> {
+    // check user is exited
+    const user = await this.adminService.getAdminEntityByEmail(data.email);
+
+    if (!user.is_active) {
+      return false;
+    }
+
+    const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
+
+    // check have forgot otp
+    if (!authToken.forgot_otp) return false;
+
+    // check forgot otp expired
+    // if(dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) return false;
+
+    return true;
   }
 
   async confirmOtpForgotPassword(
@@ -254,9 +279,9 @@ export class AuthAdminService implements IAuthAdminService {
 
     const authToken = await this.authTokenService.getAuthTokenByUserId(user.id);
 
-    if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
-      throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
-    }
+    // if (dayjs(authToken.forgot_otp_expire_at).isBefore(dayjs())) {
+    //   throw new BadRequestException(AUTH_ERROR_MESSAGES.OTP_EXPIRED);
+    // }
 
     const isOtpCorrect = await this.authCommonService.compareHashData(
       data.otp,
