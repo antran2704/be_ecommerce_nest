@@ -29,7 +29,7 @@ export class RoleEntity extends DatabaseModifierEntity {
   @ManyToOne(() => GroupRoleEntity, (entity) => entity.roles, {
     onDelete: "CASCADE",
   })
-  @JoinColumn({ name: "group_role_id" })
+  @JoinColumn({ name: "group_role" })
   groupRole: GroupRoleEntity;
 
   @OneToMany(() => AdminEntity, (entity) => entity.role)

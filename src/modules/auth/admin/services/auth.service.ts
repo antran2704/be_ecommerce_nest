@@ -67,7 +67,7 @@ export class AuthAdminService implements IAuthAdminService {
         {
           userId: user.id,
           isAdmin: user.is_admin,
-          role: user.role_id,
+          role: user.role ? user.role.id : "",
         },
         {
           secret: this.configService.get<string>("auth.accessTokenSecret"),
@@ -181,7 +181,7 @@ export class AuthAdminService implements IAuthAdminService {
         {
           userId: user.id,
           isAdmin: user.is_admin,
-          role: user.role_id,
+          role: user.role ? user.role.id : "",
         },
         {
           secret: this.configService.get<string>("auth.accessTokenSecret"),

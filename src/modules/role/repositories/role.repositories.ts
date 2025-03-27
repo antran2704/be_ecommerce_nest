@@ -27,7 +27,7 @@ export default class RoleRepository implements IRoleRepository {
   ): Promise<IEntitesAndPaginationReponse<RoleEntity>> {
     return getEntitesAndPagination(this.roleEntity, params, (query, entity) => {
       if (params.groupRoleId) {
-        query.where(`${entity}.group_role_id = :groupRoleId`, {
+        query.where(`${entity}.group_role = :groupRoleId`, {
           groupRoleId: params.groupRoleId,
         });
       }

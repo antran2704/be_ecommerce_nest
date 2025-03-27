@@ -31,7 +31,7 @@ export class AdminEntity extends DatabaseModifierEntity {
 
   @Column({ default: null, nullable: true })
   @AutoMap()
-  avartar: string;
+  avatar: string;
 
   @Column({ default: true })
   @AutoMap()
@@ -45,10 +45,6 @@ export class AdminEntity extends DatabaseModifierEntity {
   authToken: AuthTokenEntity;
 
   @ManyToOne(() => RoleEntity, (role) => role.users, { nullable: true })
-  @JoinColumn({ name: "role_id" })
+  @JoinColumn({ name: "role" })
   role: RoleEntity | null;
-
-  @Column({ default: null, nullable: true })
-  @AutoMap()
-  role_id: string;
 }

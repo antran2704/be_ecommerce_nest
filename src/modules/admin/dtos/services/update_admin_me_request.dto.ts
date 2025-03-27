@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 
-export default class UpdateAdminRequestDto {
+export default class UpdateAdminMeRequestDto {
   @ApiProperty({
     required: true,
     example: "admin",
@@ -9,14 +9,6 @@ export default class UpdateAdminRequestDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-
-  @ApiProperty({
-    required: true,
-    example: "RO1201252481",
-  })
-  @IsNotEmpty()
-  @IsString()
-  role: string;
 
   @ApiPropertyOptional({
     required: true,

@@ -8,6 +8,7 @@ import { GetAdminReponseMapper } from "./mappers/get_admin_response.mapper";
 import { AdminRepository } from "./repositories/admin.repository";
 import { RoleModule } from "../role/role.module";
 import { AuthTokenModule } from "../auth_token/auth_token.module";
+import { GetAdminListReponseMapper } from "./mappers/get_admin_list_response.mapper";
 
 @Module({
   imports: [
@@ -16,7 +17,12 @@ import { AuthTokenModule } from "../auth_token/auth_token.module";
     RoleModule,
     AuthTokenModule,
   ],
-  providers: [AdminService, GetAdminReponseMapper, AdminRepository],
+  providers: [
+    AdminService,
+    GetAdminListReponseMapper,
+    GetAdminReponseMapper,
+    AdminRepository,
+  ],
   exports: [AdminService],
 })
 export class AdminModule {}

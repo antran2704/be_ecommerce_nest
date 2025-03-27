@@ -9,4 +9,7 @@ export default class UpdateAdminDto {
   @IsNotEmpty()
   @IsString()
   role: RoleEntity;
+
+  @IsString()
+  avatar: string;
 }

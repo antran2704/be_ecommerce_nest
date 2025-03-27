@@ -10,6 +10,7 @@ import {
   CreateAdminDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
+  UpdateAdminMeDto,
 } from "../dtos";
 import { ENUM_ADMIN_STATUS } from "../enums/admin.enum";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
@@ -81,14 +82,16 @@ export class AdminRepository implements IAdminRepository {
   }
 
   async findByEmail(email: string): Promise<AdminEntity> {
-    return await this.adminEntity.findOneBy({
-      email,
+    return await this.adminEntity.findOne({
+      where: { email },
+      relations: ["role.groupRole"],
     });
   }
 
   async findByUserId(id: string): Promise<AdminEntity> {
-    return await this.adminEntity.findOneBy({
-      id,
+    return await this.adminEntity.findOne({
+      where: { id },
+      relations: ["role.groupRole"],
     });
   }
 
@@ -99,7 +102,10 @@ export class AdminRepository implements IAdminRepository {
     });
   }
 
-  async updateAdmin(id: string, payload: UpdateAdminDto): Promise<void> {
+  async updateAdmin(
+    id: string,
+    payload: UpdateAdminDto | UpdateAdminMeDto,
+  ): Promise<void> {
     await this.adminEntity.update({ id }, payload);
   }
 

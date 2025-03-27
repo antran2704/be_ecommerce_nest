@@ -3,6 +3,7 @@ import {
   CreateAdminDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
+  UpdateAdminMeDto,
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 
@@ -18,7 +19,10 @@ export interface IAdminRepository {
 
   findPermissions(id: string): Promise<AdminEntity>;
 
-  updateAdmin(id: string, payload: UpdateAdminDto): Promise<void>;
+  updateAdmin(
+    id: string,
+    payload: UpdateAdminDto | UpdateAdminMeDto,
+  ): Promise<void>;
   enableAdmin(id: string): Promise<void>;
   disableAdmin(id: string): Promise<void>;
   changePassword(id: string, password: string): Promise<void>;

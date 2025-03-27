@@ -2,10 +2,13 @@ import {
   ChangePasswordAdminRequestDto,
   CreateAdminRequestDto,
   CreateSuperAdminRequestDto,
+  GetAdminListResponseDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
+  UpdateAdminMeRequestDto,
+  UpdateAdminRequestDto,
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { AdminEntity } from "../entities/admin.entity";
@@ -15,7 +18,7 @@ export interface IAdminService {
   createSuperUser(payload: CreateSuperAdminRequestDto): Promise<void>;
   getAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<GetAdminResponseDto>>;
+  ): Promise<IEntitesAndPaginationReponse<GetAdminListResponseDto>>;
 
   getAdminById(id: string): Promise<GetAdminResponseDto>;
 
@@ -24,7 +27,8 @@ export interface IAdminService {
 
   getAdminPermissions(id: string): Promise<GetAdminPermissionResponseDto>;
 
-  updateAdmin(id: string, payload: CreateAdminRequestDto): Promise<void>;
+  updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void>;
+  updateAdminMe(id: string, payload: UpdateAdminMeRequestDto): Promise<void>;
 
   enableAdmin(id: string): Promise<void>;
   disableAdmin(id: string): Promise<void>;
