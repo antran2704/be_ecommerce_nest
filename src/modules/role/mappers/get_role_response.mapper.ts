@@ -18,6 +18,12 @@ export default class GetRoleMapper extends AutomapperProfile {
           (dest: GetRoleResponeDto) => dest?.roleId,
           mapFrom((src: RoleEntity) => src.id),
         ),
+        forMember(
+          (dest: GetRoleResponeDto) => dest?.permissions,
+          mapFrom((src: RoleEntity) =>
+            src.permissions ? src.permissions : [],
+          ),
+        ),
       );
     };
   }

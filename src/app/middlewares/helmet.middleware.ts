@@ -12,6 +12,7 @@ export class HelmetMiddleware implements NestMiddleware {
           "img-src": ["'self'", "https: data:"],
         },
       },
+      crossOriginResourcePolicy: { policy: "cross-origin" },
     })(req, res, next);
   }
 }

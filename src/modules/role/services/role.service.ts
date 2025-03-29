@@ -31,7 +31,6 @@ export class RoleService implements IRoleService {
     params: SearchRolesRequestDto,
   ): Promise<IEntitesAndPaginationReponse<GetRoleResponeDto>> {
     const { data, pagination } = await this.roleRepository.getRoles(params);
-
     const result: GetRoleResponeDto[] = this.mapper.mapArray(
       data,
       RoleEntity,

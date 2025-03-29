@@ -85,7 +85,7 @@ export class AdminMeController {
     return new UpdatedSuccessResponse();
   }
 
-  @Post("/upload-avartar")
+  @Post("/upload-avatar")
   @ApiConsumes("multipart/form-data")
   @ApiMulterRequestDecorator()
   @UseInterceptors(FileUploadInterceptor("/admins"))

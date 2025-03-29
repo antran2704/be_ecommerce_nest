@@ -32,19 +32,14 @@ export class GetSuccessResponse<T> extends SuccessResponse {
   }
 }
 
-export class GetSuccessWithPaginationResponse<T> extends SuccessResponse {
+export class GetSuccessWithPaginationResponse<T> {
   @ApiProperty({ description: "Response data" })
   data: T[];
 
   @ApiProperty({ description: "Response data" })
   pagination: PaginationResponseDto;
 
-  constructor(
-    data: T[],
-    pagination: PaginationResponseDto,
-    message: string = SUCCESS_RESPONSE_MESSAGES.GET,
-  ) {
-    super(message, 200);
+  constructor(data: T[], pagination: PaginationResponseDto) {
     this.data = data;
     this.pagination = pagination;
   }
