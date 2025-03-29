@@ -11,7 +11,7 @@ import { MailModule } from "./mail/mail.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [".env.development", ".env"],
+      envFilePath: [".env.development", ".env.production", ".env"],
       isGlobal: true,
       load: configs,
     }),

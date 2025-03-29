@@ -2,6 +2,7 @@ import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { AdminEntity } from "../entities/admin.entity";
 import { GetAdminResponseDto } from "../dtos";
+import { getFullImagePath } from "~/common/multer/helpers";
 
 export class GetAdminReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -25,6 +26,12 @@ export class GetAdminReponseMapper extends AutomapperProfile {
         forMember(
           (dest: GetAdminResponseDto) => dest?.userId,
           mapFrom((src: AdminEntity) => src.id),
+        ),
+        forMember(
+          (dest: GetAdminResponseDto) => dest?.avatar,
+          mapFrom((src: AdminEntity) =>
+            src.avatar ? getFullImagePath(src.avatar) : null,
+          ),
         ),
         forMember(
           (dest: GetAdminResponseDto) => dest?.roleId,

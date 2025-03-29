@@ -27,11 +27,9 @@ import {
 } from "../dtos";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
-import {
-  FileUploadInterceptor,
-  getImagePath,
-} from "~/common/multer/multer_interceptor";
 import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
+import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
+import { getImagePath } from "~/common/multer/helpers";
 
 @ApiBearerAuth()
 @Controller("admins/me")
@@ -91,7 +89,7 @@ export class AdminMeController {
   @ApiConsumes("multipart/form-data")
   @ApiMulterRequestDecorator()
   @UseInterceptors(FileUploadInterceptor("/admins"))
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   async createImage(
     @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
   ): Promise<string> {
