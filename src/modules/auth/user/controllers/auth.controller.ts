@@ -103,7 +103,7 @@ export class AuthUserController {
     return new SuccessResponse(AUTH_SUCCESS_MESSAGES.LOGOUT_SUCCESS);
   }
 
-  @Post("/refreshToken")
+  @Post("refresh-token")
   @ApiBody({
     type: NewAccessTokenRequestDto,
   })
@@ -112,7 +112,7 @@ export class AuthUserController {
     return await this.authService.getNewAccessToken(payload);
   }
 
-  @Post("/fotgot-password")
+  @Post("/forgot-password")
   @ApiBody({
     type: ForgotPasswordUserRequestDto,
   })

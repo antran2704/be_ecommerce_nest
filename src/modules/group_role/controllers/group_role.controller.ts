@@ -31,6 +31,7 @@ import {
 } from "../dtos";
 import { SearchAdminsRequestDto } from "~/modules/admin/dtos";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
+import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
 
 @ApiBearerAuth()
 @Controller("group-roles")
@@ -44,7 +45,7 @@ export class GroupRoleController {
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetGroupRoleResponeDto)
   async getGroupRoles(
-    @Query(PaginationRequestPipe) query: SearchAdminsRequestDto,
+    @Query(PaginationRequestPipe) query: PaginationSearchRequestDto,
   ): Promise<GetSuccessWithPaginationResponse<GetGroupRoleResponeDto>> {
     const { data, pagination } =
       await this.groupRoleService.getGroupRoles(query);

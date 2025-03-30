@@ -15,6 +15,7 @@ export interface IAuthAdminService {
   forgotPassword(
     data: ForgotPasswordAdminRequestDto,
   ): Promise<ForgotPasswordAdminResponseDto>;
+  isInForgotPassword(data: ForgotPasswordAdminRequestDto): Promise<boolean>;
   confirmOtpForgotPassword(
     data: ConfirmForgotPasswordRequestDto,
   ): Promise<void>;

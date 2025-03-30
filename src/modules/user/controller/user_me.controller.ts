@@ -31,7 +31,7 @@ export class UserMeController {
   async getMe(
     @Request() req: any,
   ): Promise<GetSuccessResponse<GetUserResponseDto>> {
-    const data = await this.userService.getUserById(req.user.id);
+    const data = await this.userService.getUserById(req.user.userId);
     return new GetSuccessResponse(data);
   }
 
@@ -46,7 +46,7 @@ export class UserMeController {
     @Request() req: any,
     @Body() payload: ChangePasswordUserRequestDto,
   ): Promise<UpdatedSuccessResponse> {
-    await this.userService.changePassword(req.user.id, payload);
+    await this.userService.changePassword(req.user.userId, payload);
     return new UpdatedSuccessResponse();
   }
 }

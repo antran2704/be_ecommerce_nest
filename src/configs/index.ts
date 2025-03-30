@@ -6,6 +6,7 @@ import AUTH_CONFIG from "./auth.config";
 import FORGOT_PASSWORD_CONFIG from "./forgot_password.config";
 import MAIL_CONFIG from "./mail.config";
 import CLERK_CONFIG from "./clerk.config";
+import MULTER_CONFIG from "./multer.config";
 
 export default [
   APP_CONFIG,
@@ -16,4 +17,5 @@ export default [
   FORGOT_PASSWORD_CONFIG,
   MAIL_CONFIG,
   CLERK_CONFIG,
+  MULTER_CONFIG,
 ];

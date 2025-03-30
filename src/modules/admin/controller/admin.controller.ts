@@ -27,6 +27,7 @@ import { PermissionGuard } from "~/common/auth/guards";
 import {
   CreateAdminRequestDto,
   CreateSuperAdminRequestDto,
+  GetAdminListResponseDto,
   GetAdminResponseDto,
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
@@ -44,10 +45,10 @@ export class AdminController {
   @Get()
   @Permissions([ENUM_PERMISSION.STAFF_VIEW])
   @UseGuards(PermissionGuard)
-  @ApiOkResponsePaginateDecorator(GetAdminResponseDto)
+  @ApiOkResponsePaginateDecorator(GetAdminListResponseDto)
   async getUsers(
     @Query(PaginationRequestPipe) query: SearchAdminsRequestDto,
-  ): Promise<GetSuccessWithPaginationResponse<GetAdminResponseDto>> {
+  ): Promise<GetSuccessWithPaginationResponse<GetAdminListResponseDto>> {
     const { data, pagination } = await this.userService.getAdmins(query);
 
     return new GetSuccessWithPaginationResponse(data, pagination);
@@ -106,7 +107,9 @@ export class AdminController {
     @Param("user_id") userId: string,
     @Body() payload: UpdateAdminRequestDto,
   ) {
-    return await this.userService.updateAdmin(userId, payload);
+    await this.userService.updateAdmin(userId, payload);
+
+    return new UpdatedSuccessResponse();
   }
 
   // reset password

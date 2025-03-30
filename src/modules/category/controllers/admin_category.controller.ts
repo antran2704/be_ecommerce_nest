@@ -39,12 +39,10 @@ import {
   UpdatedSuccessResponse,
 } from "~/common/response/success.response";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
-import {
-  FileUploadInterceptor,
-  getImagePath,
-} from "~/common/multer/multer_interceptor";
 import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
 import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
+import { getImagePath } from "~/common/multer/helpers";
+import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
 
 @ApiBearerAuth()
 @Controller("admin/categories")

@@ -13,17 +13,21 @@ import {
   CreateAdminDto,
   CreateAdminRequestDto,
   CreateSuperAdminRequestDto,
+  GetAdminListResponseDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
+  UpdateAdminMeRequestDto,
   UpdateAdminRequestDto,
 } from "../dtos";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { RoleService } from "~/modules/role/services/role.service";
 import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
 import { AdminAuthTokenService } from "~/modules/auth_token/services";
+import CreateSuperAdminDto from "../dtos/repositories/create_super_admin_repository.dto";
+import UpdateAdminMeDto from "../dtos/repositories/update_admin_me_repository.dto";
 
 @Injectable()
 export class AdminService implements IAdminService {
@@ -82,10 +86,11 @@ export class AdminService implements IAdminService {
 
     const hashPassword = await this.authCommonService.hashData(defaultPassword);
 
-    const dataForSave: CreateAdminDto = {
+    const dataForSave: CreateSuperAdminDto = {
       ...payload,
       password: hashPassword,
       role: null,
+      is_admin: true,
     };
 
     // save user
@@ -97,13 +102,13 @@ export class AdminService implements IAdminService {
 
   async getAdmins(
     params: SearchAdminsRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<GetAdminResponseDto>> {
+  ): Promise<IEntitesAndPaginationReponse<GetAdminListResponseDto>> {
     const { data, pagination } = await this.adminRepository.findAdmins(params);
 
-    const formatData: GetAdminResponseDto[] = this.mapper.mapArray(
+    const formatData: GetAdminListResponseDto[] = this.mapper.mapArray(
       data,
       AdminEntity,
-      GetAdminResponseDto,
+      GetAdminListResponseDto,
     );
 
     return { data: formatData, pagination };
@@ -154,7 +159,11 @@ export class AdminService implements IAdminService {
       throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
     }
 
-    return { permissions: (user.role.permissions as ENUM_PERMISSION[]) || [] };
+    return {
+      permissions: user.role
+        ? (user.role.permissions as ENUM_PERMISSION[])
+        : [],
+    };
   }
 
   async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {
@@ -169,6 +178,23 @@ export class AdminService implements IAdminService {
     const dataForSave: UpdateAdminDto = {
       ...payload,
       role,
+    };
+
+    await this.adminRepository.updateAdmin(id, dataForSave);
+  }
+
+  async updateAdminMe(
+    id: string,
+    payload: UpdateAdminMeRequestDto,
+  ): Promise<void> {
+    const isExitUser = await this.adminRepository.findByUserId(id);
+
+    if (!isExitUser) {
+      throw new BadRequestException(ADMIN_MESSAGES.USER_NOT_FOUND);
+    }
+
+    const dataForSave: UpdateAdminMeDto = {
+      ...payload,
     };
 
     await this.adminRepository.updateAdmin(id, dataForSave);

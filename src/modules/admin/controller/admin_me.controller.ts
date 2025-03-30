@@ -3,23 +3,33 @@ import {
   Controller,
   Get,
   Patch,
+  Post,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { AdminService } from "../services/admin.service";
-import {
-  GetSuccessResponse,
-  UpdatedSuccessResponse,
-} from "~/common/response/success.response";
+import { UpdatedSuccessResponse } from "~/common/response/success.response";
 import { JwtAuthGuard } from "~/common/auth/guards";
 import {
   ChangePasswordAdminRequestDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
+  UpdateAdminMeRequestDto,
 } from "../dtos";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
+import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
+import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
+import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
+import { getImagePath } from "~/common/multer/helpers";
 
 @ApiBearerAuth()
 @Controller("admins/me")
@@ -27,31 +37,40 @@ import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-re
 export class AdminMeController {
   constructor(private readonly userService: AdminService) {}
 
-  // get an admin
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiOkResponseDecorator(GetAdminResponseDto)
-  async getMe(
-    @Request() req: any,
-  ): Promise<GetSuccessResponse<GetAdminResponseDto>> {
-    const data = await this.userService.getAdminById(req.user.id);
+  async getMe(@Request() req: any): Promise<GetAdminResponseDto> {
+    const data = await this.userService.getAdminById(req.user.userId);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
-  // get permission of admin
   @Get("/permissions")
   @ApiOkResponseDecorator(GetAdminPermissionResponseDto)
   @UseGuards(JwtAuthGuard)
   async getPermissions(
     @Request() req: any,
-  ): Promise<GetSuccessResponse<GetAdminPermissionResponseDto>> {
-    const data = await this.userService.getAdminPermissions(req.user.id);
+  ): Promise<GetAdminPermissionResponseDto> {
+    const data = await this.userService.getAdminPermissions(req.user.userId);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
-  // change password
+  @Patch()
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  @UseGuards(JwtAuthGuard)
+  async updateMe(
+    @Request() req: any,
+    @Body() payload: UpdateAdminMeRequestDto,
+  ): Promise<UpdatedSuccessResponse> {
+    await this.userService.updateAdminMe(req.user.userId, payload);
+    return new UpdatedSuccessResponse();
+  }
+
   @Patch("/change-password")
   @ApiResponse({
     status: 201,
@@ -62,7 +81,18 @@ export class AdminMeController {
     @Request() req: any,
     @Body() payload: ChangePasswordAdminRequestDto,
   ): Promise<UpdatedSuccessResponse> {
-    await this.userService.changePassword(req.user.id, payload);
+    await this.userService.changePassword(req.user.userId, payload);
     return new UpdatedSuccessResponse();
+  }
+
+  @Post("/upload-avatar")
+  @ApiConsumes("multipart/form-data")
+  @ApiMulterRequestDecorator()
+  @UseInterceptors(FileUploadInterceptor("/admins"))
+  // @UseGuards(JwtAuthGuard)
+  async createImage(
+    @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
+  ): Promise<string> {
+    return getImagePath(file.path);
   }
 }

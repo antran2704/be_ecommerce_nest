@@ -29,6 +29,10 @@ export class AdminEntity extends DatabaseModifierEntity {
   @Column()
   password: string;
 
+  @Column({ default: null, nullable: true })
+  @AutoMap()
+  avatar: string;
+
   @Column({ default: true })
   @AutoMap()
   is_active: boolean;
@@ -41,10 +45,6 @@ export class AdminEntity extends DatabaseModifierEntity {
   authToken: AuthTokenEntity;
 
   @ManyToOne(() => RoleEntity, (role) => role.users, { nullable: true })
-  @JoinColumn({ name: "role_id" })
+  @JoinColumn({ name: "role" })
   role: RoleEntity | null;
-
-  @Column()
-  @AutoMap()
-  role_id: string;
 }

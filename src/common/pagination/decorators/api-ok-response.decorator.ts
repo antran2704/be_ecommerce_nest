@@ -10,14 +10,15 @@ export const ApiOkResponseDecorator = <DataDto extends Type<unknown>>(
     ApiOkResponse({
       schema: {
         allOf: [
-          { $ref: getSchemaPath(GetSuccessResponse) },
-          {
-            properties: {
-              data: {
-                $ref: getSchemaPath(datDto),
-              },
-            },
-          },
+          // { $ref: getSchemaPath(GetSuccessResponse) },
+          // {
+          //   properties: {
+          //     data: {
+          //       $ref: getSchemaPath(datDto),
+          //     },
+          //   },
+          // },
+          { $ref: getSchemaPath(datDto) },
         ],
       },
     }),
