@@ -14,6 +14,7 @@ import {
   CreateRoleRequestDto,
   UpdateRoleRequestDto,
   GetRoleResponeDto,
+  UpdatePermissionRequestDto,
 } from "../dtos";
 import { RoleEntity } from "../entities/role.entity";
 import { ROLE_MESSAGES } from "../messages/role.error";
@@ -85,6 +86,20 @@ export class RoleService implements IRoleService {
       throw new BadRequestException(ROLE_MESSAGES.ROLE_NAME_IS_EXISTED);
 
     await this.roleRepository.updateRole(id, payload);
+  }
+
+  async updatePermission(
+    id: string,
+    payload: UpdatePermissionRequestDto,
+  ): Promise<void> {
+    // check role is existed
+    const roleEntity = await this.roleRepository.getRoleById(id);
+
+    if (!roleEntity) throw new NotFoundException(ROLE_MESSAGES.ROLE_NOT_FOUND);
+
+    roleEntity.permissions = payload.permissions;
+
+    await this.roleRepository.save(roleEntity);
   }
 
   async deleteRole(id: string): Promise<void> {

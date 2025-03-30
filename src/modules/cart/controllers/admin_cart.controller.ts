@@ -39,7 +39,7 @@ export class AdminCartController {
   constructor(private readonly service: CartService) {}
 
   @Get()
-  @Permissions([ENUM_PERMISSION.CART_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_CART_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetCartResponseDto)
   async getCarts(
@@ -51,7 +51,7 @@ export class AdminCartController {
   }
 
   @Get("/:user_id")
-  @Permissions([ENUM_PERMISSION.CART_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_CART_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(GetCartResponseDto)
   async getCart(
@@ -67,7 +67,7 @@ export class AdminCartController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.CART_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CART_CREATE])
   @UseGuards(PermissionGuard)
   async createCart(
     @Body() payload: CreateCartRequestDto,
@@ -77,7 +77,7 @@ export class AdminCartController {
   }
 
   @Patch("/:cart_id/enable")
-  @Permissions([ENUM_PERMISSION.CART_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CART_UPDATE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,
@@ -91,7 +91,7 @@ export class AdminCartController {
   }
 
   @Patch("/:cart_id/disable")
-  @Permissions([ENUM_PERMISSION.CART_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CART_UPDATE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,
@@ -105,7 +105,7 @@ export class AdminCartController {
   }
 
   @Delete("/:cart_id")
-  @Permissions([ENUM_PERMISSION.CART_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CART_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

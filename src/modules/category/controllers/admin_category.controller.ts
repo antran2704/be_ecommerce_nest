@@ -52,7 +52,7 @@ export class AdminCategoryController {
 
   // get categories
   @Get()
-  @Permissions([ENUM_PERMISSION.CATEGORY_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(AdminGetCategoryResponseDto)
   async getCategories(
@@ -66,7 +66,7 @@ export class AdminCategoryController {
 
   // get children of category
   @Get("/children/:category_id")
-  @Permissions([ENUM_PERMISSION.CATEGORY_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetCategoryResponseDto)
   async getChildren(
@@ -79,7 +79,7 @@ export class AdminCategoryController {
 
   // get a category
   @Get("/:category_id")
-  @Permissions([ENUM_PERMISSION.CATEGORY_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetCategoryResponseDto)
   async getUser(
@@ -96,7 +96,7 @@ export class AdminCategoryController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.CATEGORY_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_CREATE])
   @UseGuards(PermissionGuard)
   async createUser(
     @Body() payload: AdminCreateCategoryRequestDto,
@@ -110,7 +110,7 @@ export class AdminCategoryController {
   @ApiConsumes("multipart/form-data")
   @ApiMulterRequestDecorator()
   @UseInterceptors(FileUploadInterceptor("/categories"))
-  @Permissions([ENUM_PERMISSION.CATEGORY_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_CREATE])
   @UseGuards(PermissionGuard)
   async createImage(
     @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
@@ -124,7 +124,7 @@ export class AdminCategoryController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.CATEGORY_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_UPDATE])
   @UseGuards(PermissionGuard)
   async updateAdmin(
     @Param("category_id") id: string,
@@ -137,7 +137,7 @@ export class AdminCategoryController {
 
   // delete category
   @Delete("/:category_id")
-  @Permissions([ENUM_PERMISSION.CATEGORY_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

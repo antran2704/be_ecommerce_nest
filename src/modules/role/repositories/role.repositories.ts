@@ -47,13 +47,22 @@ export default class RoleRepository implements IRoleRepository {
     payload: CreateRoleRequestDto,
   ): Promise<void> {
     const id = GetDatabaseDefaultID(ENUM_PREFIX_DATABASE.RO);
-    const role = this.roleEntity.create({ ...payload, id, groupRole });
+    const role = this.roleEntity.create({
+      ...payload,
+      id,
+      groupRole,
+      permissions: [],
+    });
 
     await this.roleEntity.save(role);
   }
 
   async updateRole(id: string, payload: UpdateRoleRequestDto): Promise<void> {
     await this.roleEntity.update(id, payload);
+  }
+
+  async save(role: RoleEntity): Promise<void> {
+    await this.roleEntity.save(role);
   }
 
   async deleteRole(id: string): Promise<void> {

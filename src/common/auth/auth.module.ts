@@ -3,12 +3,13 @@ import { AuthCommonService } from "./services/auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtStrategy } from "./strategies/jwt.strategy";
+import { RoleModule } from "~/modules/role/role.module";
 
 @Module({
   imports: [
     JwtModule.registerAsync({
       inject: [ConfigService],
-      imports: [ConfigModule],
+      imports: [ConfigModule, RoleModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>("auth.accessTokenSecret"),
         signOptions: {

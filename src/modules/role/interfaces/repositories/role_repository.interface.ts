@@ -19,5 +19,6 @@ export default interface IRoleRepository {
     payload: CreateRoleRequestDto,
   ): Promise<void>;
   updateRole(id: string, payload: UpdateRoleRequestDto): Promise<void>;
+  save(role: RoleEntity): Promise<void>;
   deleteRole(id: string): Promise<void>;
 }

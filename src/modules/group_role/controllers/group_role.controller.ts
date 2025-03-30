@@ -41,7 +41,7 @@ export class GroupRoleController {
 
   // Get all group roles
   @Get()
-  @Permissions([ENUM_PERMISSION.GROUP_ROLE_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_GROUP_ROLE_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetGroupRoleResponeDto)
   async getGroupRoles(
@@ -57,7 +57,7 @@ export class GroupRoleController {
 
   // Get group role by id
   @Get("/:group_role_id")
-  @Permissions([ENUM_PERMISSION.GROUP_ROLE_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_GROUP_ROLE_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(GetGroupRoleResponeDto)
   async getGroupRole(
@@ -74,7 +74,7 @@ export class GroupRoleController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.GROUP_ROLE_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_GROUP_ROLE_CREATE])
   @UseGuards(PermissionGuard)
   async createGroupRole(
     @Body() payload: CreateGroupRoleRequestDto,
@@ -89,7 +89,7 @@ export class GroupRoleController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.GROUP_ROLE_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_GROUP_ROLE_UPDATE])
   @UseGuards(PermissionGuard)
   async updateGroupRole(
     @Param("group_role_id") id: string,
@@ -101,7 +101,7 @@ export class GroupRoleController {
 
   // Delete group role
   @Delete("/:group_role_id")
-  @Permissions([ENUM_PERMISSION.GROUP_ROLE_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_GROUP_ROLE_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

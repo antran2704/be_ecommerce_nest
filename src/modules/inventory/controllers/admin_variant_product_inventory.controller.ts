@@ -36,7 +36,7 @@ export class AdminVariantProductInventoryController {
   constructor(private readonly service: AdminVariantProductInventoryService) {}
 
   @Get("/")
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_INVENTORY_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetInventoryResponseDto)
   async getProductInventories(
@@ -48,7 +48,7 @@ export class AdminVariantProductInventoryController {
   }
 
   @Get("/:variant_product_id/stock")
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_INVENTORY_VIEW])
   @UseGuards(PermissionGuard)
   async getProductInventory(
     @Param("variant_product_id") id: string,
@@ -63,7 +63,7 @@ export class AdminVariantProductInventoryController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_INVENTORY_CREATE])
   @UseGuards(PermissionGuard)
   async createProductInventory(
     @Body() payload: AdminCreateVariantProductInventoryRequestDto,
@@ -77,7 +77,7 @@ export class AdminVariantProductInventoryController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_INVENTORY_UPDATE])
   @UseGuards(PermissionGuard)
   async updateProductInventory(
     @Param("variant_product_id") id: string,
@@ -89,7 +89,7 @@ export class AdminVariantProductInventoryController {
   }
 
   @Delete("/:variant_product_id")
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_INVENTORY_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_INVENTORY_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

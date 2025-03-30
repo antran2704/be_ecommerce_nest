@@ -39,7 +39,7 @@ export class AdminVariantTypeController {
   constructor(private readonly variantTypeService: AdminVariantTypeService) {}
 
   @Get()
-  @Permissions([ENUM_PERMISSION.VARIANT_TYPE_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_TYPE_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(AdminGetVariantTypeResponseDto)
   async getVariantTypes(
@@ -52,7 +52,7 @@ export class AdminVariantTypeController {
   }
 
   @Get("/:variant_type_id")
-  @Permissions([ENUM_PERMISSION.VARIANT_TYPE_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_TYPE_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetVariantTypeResponseDto)
   async getUser(
@@ -68,7 +68,7 @@ export class AdminVariantTypeController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_TYPE_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_TYPE_CREATE])
   @UseGuards(PermissionGuard)
   async createUser(
     @Body() payload: AdminCreateVariantTypeRequestDto,
@@ -82,7 +82,7 @@ export class AdminVariantTypeController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_TYPE_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_TYPE_UPDATE])
   @UseGuards(PermissionGuard)
   async updateAdmin(
     @Param("variant_type_id") id: string,
@@ -94,7 +94,7 @@ export class AdminVariantTypeController {
   }
 
   @Delete("/:variant_type_id")
-  @Permissions([ENUM_PERMISSION.VARIANT_TYPE_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_TYPE_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,
