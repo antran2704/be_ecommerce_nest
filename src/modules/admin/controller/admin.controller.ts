@@ -7,9 +7,16 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { AdminService } from "../services/admin.service";
 import {
@@ -34,6 +41,10 @@ import {
   UpdateAdminRequestDto,
 } from "../dtos";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
+import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
+import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
+import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
+import { getImagePath } from "~/common/multer/helpers";
 
 @ApiBearerAuth()
 @Controller("admins")
@@ -126,6 +137,17 @@ export class AdminController {
   ): Promise<UpdatedSuccessResponse> {
     await this.userService.resetPassword(userId, payload);
     return new UpdatedSuccessResponse();
+  }
+
+  @Post("/upload-avatar")
+  @ApiConsumes("multipart/form-data")
+  @ApiMulterRequestDecorator()
+  @UseInterceptors(FileUploadInterceptor("/admins"))
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_CREATE])
+  async createImage(
+    @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
+  ): Promise<string> {
+    return getImagePath(file.path);
   }
 
   // enable admin

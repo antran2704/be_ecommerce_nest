@@ -14,7 +14,7 @@ const mockAdminCreateCategoryRequest: AdminCreateCategoryRequestDto = {
 };
 
 const mockAdminGetCategoriesRequest: AdminGetCategoriesRequestDto = {
-  limit: 10,
+  take: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
 };

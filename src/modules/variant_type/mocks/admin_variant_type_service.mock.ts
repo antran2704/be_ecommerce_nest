@@ -16,7 +16,7 @@ const mockAdminUpdateVariantTypeRequest: AdminUpdateVariantTypeRequestDto = {
 };
 
 const mockAdminGetVariantTypesRequest: PaginationSearchRequestDto = {
-  limit: 10,
+  take: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
 };

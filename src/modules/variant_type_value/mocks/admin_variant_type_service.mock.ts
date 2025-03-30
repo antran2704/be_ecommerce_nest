@@ -20,7 +20,7 @@ const mockAdminUpdateVariantValueRequest: AdminUpdateVariantTypeValueRequestDto 
   };
 
 const mockAdminGetVariantValuesRequest: AdminGetVariantTypeValuesRequestDto = {
-  limit: 10,
+  take: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
   variantTypeId: ENUM_PREFIX_DATABASE.VT + "123",

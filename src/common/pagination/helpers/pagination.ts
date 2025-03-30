@@ -13,10 +13,10 @@ const getEntitesAndPagination = async <T>(
     originalNameEntity?: string,
   ) => void,
 ): Promise<IEntitesAndPaginationReponse<T>> => {
-  let { page, limit, order } = dto;
+  let { page, take, order } = dto;
 
   if (!page) page = 1;
-  if (!limit) limit = 10;
+  if (!take) take = 10;
   if (!order) order = ENUM_PAGINATION_ORDER.DESC;
 
   const ORIGINAL_NAME_ENTITY = "entity";
@@ -41,15 +41,15 @@ const getEntitesAndPagination = async <T>(
   }
 
   const [data, total] = await queryBuilder
-    .skip((page - 1) * limit)
-    .take(limit)
+    .skip((page - 1) * take)
+    .take(take)
     .getManyAndCount();
 
   const pagination: PaginationResponseDto = {
     page,
-    take: limit,
+    take: take,
     total,
-    totalPages: Math.ceil(total / limit),
+    totalPages: Math.ceil(total / take),
   };
 
   return { data, pagination };

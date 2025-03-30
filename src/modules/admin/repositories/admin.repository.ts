@@ -75,6 +75,12 @@ export class AdminRepository implements IAdminRepository {
             status: params.status === ENUM_ADMIN_STATUS.ACTIVE ? true : false,
           });
         }
+
+        // left join Role table
+        query.leftJoinAndSelect(`${originalNameEntity}.role`, "role");
+
+        // left join GroupRole table
+        query.leftJoinAndSelect("role.groupRole", "groupRole");
       },
     );
 

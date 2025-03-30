@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEnum } from "class-validator";
+import { IsEnum, IsOptional } from "class-validator";
 
 import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
 import { ENUM_ADMIN_STATUS } from "../../enums/admin.enum";
@@ -11,5 +11,6 @@ export default class SearchAdminResponseDto extends PaginationSearchRequestDto {
     default: ENUM_ADMIN_STATUS.ACTIVE,
   })
   @IsEnum(ENUM_ADMIN_STATUS)
+  @IsOptional()
   status: ENUM_ADMIN_STATUS;
 }

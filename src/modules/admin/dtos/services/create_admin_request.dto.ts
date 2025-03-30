@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
 export default class CreateAdminRequestDto {
@@ -33,4 +33,11 @@ export default class CreateAdminRequestDto {
   @IsNotEmpty()
   @IsString()
   role: string;
+
+  @ApiPropertyOptional({
+    required: true,
+    example: "/images/avatar.png",
+  })
+  @IsString()
+  avatar: string;
 }
