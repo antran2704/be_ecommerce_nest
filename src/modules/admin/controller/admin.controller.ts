@@ -14,6 +14,7 @@ import {
 import {
   ApiBearerAuth,
   ApiConsumes,
+  ApiOkResponse,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
@@ -36,6 +37,7 @@ import {
   CreateSuperAdminRequestDto,
   GetAdminListResponseDto,
   GetAdminResponseDto,
+  IsExitAdminRequestDto,
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminRequestDto,
@@ -72,10 +74,22 @@ export class AdminController {
   @ApiOkResponseDecorator(GetAdminResponseDto)
   async getUser(
     @Param("user_id") userId: string,
-  ): Promise<GetSuccessResponse<GetAdminResponseDto>> {
+  ): Promise<GetAdminResponseDto> {
     const data = await this.userService.getAdminById(userId);
 
-    return new GetSuccessResponse(data);
+    return data;
+  }
+
+  @Post("is-exit-user")
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_VIEW])
+  @UseGuards(PermissionGuard)
+  @ApiOkResponse({
+    example: true,
+  })
+  async isExitUser(@Body() payload: IsExitAdminRequestDto): Promise<boolean> {
+    const data = await this.userService.isAdminExitByEmail(payload);
+
+    return data;
   }
 
   // create admin

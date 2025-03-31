@@ -12,3 +12,4 @@ export { default as ResetPasswordRequestDto } from "./services/reset_password_re
 export { default as GetAdminResponseDto } from "./services/get_admin_response.dto";
 export { default as GetAdminListResponseDto } from "./services/get_admin_list_response.dto";
 export { default as GetAdminPermissionResponseDto } from "./services/get_admin_permission_response.dto";
+export { default as IsExitAdminRequestDto } from "./services/is_exit_admin_request.dto";

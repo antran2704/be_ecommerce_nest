@@ -16,6 +16,7 @@ import {
   GetAdminListResponseDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
+  IsExitAdminRequestDto,
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminDto,
@@ -164,6 +165,12 @@ export class AdminService implements IAdminService {
         ? (user.role.permissions as ENUM_PERMISSION[])
         : [],
     };
+  }
+
+  async isAdminExitByEmail(payload: IsExitAdminRequestDto): Promise<boolean> {
+    const user = await this.adminRepository.findByEmail(payload.email);
+
+    return !!user;
   }
 
   async updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void> {
