@@ -5,6 +5,7 @@ import {
   GetAdminListResponseDto,
   GetAdminPermissionResponseDto,
   GetAdminResponseDto,
+  IsExitAdminRequestDto,
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminMeRequestDto,
@@ -29,6 +30,8 @@ export interface IAdminService {
 
   updateAdmin(id: string, payload: UpdateAdminRequestDto): Promise<void>;
   updateAdminMe(id: string, payload: UpdateAdminMeRequestDto): Promise<void>;
+
+  isAdminExitByEmail(data: IsExitAdminRequestDto): Promise<boolean>;
 
   enableAdmin(id: string): Promise<void>;
   disableAdmin(id: string): Promise<void>;

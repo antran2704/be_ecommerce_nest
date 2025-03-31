@@ -36,7 +36,7 @@ const mockAdminUpdateProductRequest: AdminUpdateProductRequestDto = {
 };
 
 const mockAdminGetProductsRequest: AdminGetProductsRequestDto = {
-  limit: 10,
+  take: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
 };

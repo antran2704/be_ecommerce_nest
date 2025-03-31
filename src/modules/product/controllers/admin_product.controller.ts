@@ -40,7 +40,7 @@ export class AdminProductController {
   constructor(private readonly productService: AdminProductService) {}
 
   @Get()
-  @Permissions([ENUM_PERMISSION.PRODUCT_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(AdminGetProductListResponseDto)
   async getProducts(
@@ -52,7 +52,7 @@ export class AdminProductController {
   }
 
   @Get("/:product_id")
-  @Permissions([ENUM_PERMISSION.PRODUCT_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetProductDetailResponseDto)
   async getProduct(
@@ -68,7 +68,7 @@ export class AdminProductController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.PRODUCT_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_CREATE])
   @UseGuards(PermissionGuard)
   async createProduct(
     @Body() payload: AdminCreateProductRequestDto,
@@ -82,7 +82,7 @@ export class AdminProductController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.PRODUCT_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_UPDATE])
   @UseGuards(PermissionGuard)
   async updateProduct(
     @Param("product_id") id: string,
@@ -98,7 +98,7 @@ export class AdminProductController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.PRODUCT_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_UPDATE])
   @UseGuards(PermissionGuard)
   async enableProduct(@Param("product_id") id: string) {
     await this.productService.enableProduct(id);
@@ -111,7 +111,7 @@ export class AdminProductController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.PRODUCT_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_UPDATE])
   @UseGuards(PermissionGuard)
   async disableProduct(@Param("product_id") id: string) {
     await this.productService.disableProduct(id);
@@ -120,7 +120,7 @@ export class AdminProductController {
   }
 
   @Delete("/:product_id")
-  @Permissions([ENUM_PERMISSION.PRODUCT_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

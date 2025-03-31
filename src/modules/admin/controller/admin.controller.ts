@@ -7,9 +7,17 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { AdminService } from "../services/admin.service";
 import {
@@ -29,11 +37,16 @@ import {
   CreateSuperAdminRequestDto,
   GetAdminListResponseDto,
   GetAdminResponseDto,
+  IsExitAdminRequestDto,
   ResetPasswordRequestDto,
   SearchAdminsRequestDto,
   UpdateAdminRequestDto,
 } from "../dtos";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
+import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
+import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
+import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
+import { getImagePath } from "~/common/multer/helpers";
 
 @ApiBearerAuth()
 @Controller("admins")
@@ -43,7 +56,7 @@ export class AdminController {
 
   // get all admins
   @Get()
-  @Permissions([ENUM_PERMISSION.STAFF_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetAdminListResponseDto)
   async getUsers(
@@ -56,15 +69,27 @@ export class AdminController {
 
   // get an admin
   @Get("/:user_id")
-  @Permissions([ENUM_PERMISSION.STAFF_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(GetAdminResponseDto)
   async getUser(
     @Param("user_id") userId: string,
-  ): Promise<GetSuccessResponse<GetAdminResponseDto>> {
+  ): Promise<GetAdminResponseDto> {
     const data = await this.userService.getAdminById(userId);
 
-    return new GetSuccessResponse(data);
+    return data;
+  }
+
+  @Post("is-exit-user")
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_VIEW])
+  @UseGuards(PermissionGuard)
+  @ApiOkResponse({
+    example: true,
+  })
+  async isExitUser(@Body() payload: IsExitAdminRequestDto): Promise<boolean> {
+    const data = await this.userService.isAdminExitByEmail(payload);
+
+    return data;
   }
 
   // create admin
@@ -73,7 +98,7 @@ export class AdminController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.STAFF_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_CREATE])
   @UseGuards(PermissionGuard)
   async createAdmin(
     @Body() payload: CreateAdminRequestDto,
@@ -101,7 +126,7 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async updateAdmin(
     @Param("user_id") userId: string,
@@ -118,7 +143,7 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async resetPassword(
     @Param("user_id") userId: string,
@@ -128,13 +153,24 @@ export class AdminController {
     return new UpdatedSuccessResponse();
   }
 
+  @Post("/upload-avatar")
+  @ApiConsumes("multipart/form-data")
+  @ApiMulterRequestDecorator()
+  @UseInterceptors(FileUploadInterceptor("/admins"))
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_CREATE])
+  async createImage(
+    @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
+  ): Promise<string> {
+    return getImagePath(file.path);
+  }
+
   // enable admin
   @Patch("/:user_id/enable")
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async enable(
     @Param("user_id") userId: string,
@@ -149,7 +185,7 @@ export class AdminController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.STAFF_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_UPDATE])
   @UseGuards(PermissionGuard)
   async disable(
     @Param("user_id") userId: string,
@@ -160,7 +196,7 @@ export class AdminController {
 
   // delete admin
   @Delete("/:user_id")
-  @Permissions([ENUM_PERMISSION.STAFF_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

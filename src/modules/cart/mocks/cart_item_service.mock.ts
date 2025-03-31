@@ -15,7 +15,7 @@ const mockCreateCartItemRequest: CreateCartItemRequestDto = {
 };
 
 const mockGetCartItemsRequest: GetCartItemsRequestDto = {
-  limit: 10,
+  take: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
   cardId: ENUM_PREFIX_DATABASE.CAR + "123",

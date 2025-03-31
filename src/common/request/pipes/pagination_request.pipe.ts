@@ -6,7 +6,7 @@ export class PaginationRequestPipe implements PipeTransform<any> {
   async transform(value: PaginationRequestDto) {
     if (value?.page) value.page = Number(value.page);
 
-    if (value?.limit) value.limit = Number(value.limit);
+    if (value?.take) value.take = Number(value.take);
 
     return value;
   }

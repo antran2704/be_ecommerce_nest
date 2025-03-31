@@ -3,6 +3,7 @@ import {
   CreateRoleRequestDto,
   GetRoleResponeDto,
   SearchRolesRequestDto,
+  UpdatePermissionRequestDto,
   UpdateRoleRequestDto,
 } from "../../dtos";
 import { RoleEntity } from "../../entities/role.entity";
@@ -16,5 +17,9 @@ export default interface IRoleService {
 
   createRole(payload: CreateRoleRequestDto): Promise<void>;
   updateRole(id: string, payload: UpdateRoleRequestDto): Promise<void>;
+  updatePermission(
+    id: string,
+    payload: UpdatePermissionRequestDto,
+  ): Promise<void>;
   deleteRole(id: string): Promise<void>;
 }

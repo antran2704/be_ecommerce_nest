@@ -22,7 +22,7 @@ class PaginationRequestDto {
   @Min(1, { message: "Minimal take is 1" })
   @Max(100, { message: "Maximal take is 100" })
   @IsOptional()
-  limit: number = 10;
+  take: number = 10;
 
   @ApiPropertyOptional({
     example: ENUM_PAGINATION_ORDER.DESC,

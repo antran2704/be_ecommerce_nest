@@ -28,6 +28,30 @@ export default class GetAdminListResponseDto {
   avatar: string;
 
   @ApiProperty({
+    example: "Admin",
+  })
+  @AutoMap()
+  role: string;
+
+  @ApiProperty({
+    example: ENUM_PREFIX_DATABASE.RO + "123",
+  })
+  @AutoMap()
+  roleId: string;
+
+  @ApiProperty({
+    example: "Super Admin",
+  })
+  @AutoMap()
+  groupRole: string;
+
+  @ApiProperty({
+    example: ENUM_PREFIX_DATABASE.GR + "123",
+  })
+  @AutoMap()
+  groupRoleId: string;
+
+  @ApiProperty({
     example: true,
   })
   @AutoMap()

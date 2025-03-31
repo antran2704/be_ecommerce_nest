@@ -31,7 +31,7 @@ const mockAdminUpdateVariantProductRequest: AdminUpdateVariantProductRequestDto 
   };
 
 const mockAdminGetVariantProductsRequest: AdminGetVariantProductsRequestDto = {
-  limit: 10,
+  take: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
   productId: ENUM_PREFIX_DATABASE.PR + "123",

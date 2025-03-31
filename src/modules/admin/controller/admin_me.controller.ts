@@ -32,7 +32,7 @@ import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
 import { getImagePath } from "~/common/multer/helpers";
 
 @ApiBearerAuth()
-@Controller("admins/me")
+@Controller("admin/me")
 @ApiTags("Admin.Me")
 export class AdminMeController {
   constructor(private readonly userService: AdminService) {}
@@ -89,7 +89,7 @@ export class AdminMeController {
   @ApiConsumes("multipart/form-data")
   @ApiMulterRequestDecorator()
   @UseInterceptors(FileUploadInterceptor("/admins"))
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async createImage(
     @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
   ): Promise<string> {

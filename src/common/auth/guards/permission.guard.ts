@@ -1,21 +1,21 @@
 import { Injectable, ExecutionContext } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 
-import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
 import { Permissions } from "../decorators/permission.decorator";
 import JwtAuthGuard from "./jwt-auth.guard";
 import { IAccessTokenAdminPayload } from "~/modules/auth/admin/interfaces/access_token_payload.interface";
-
-const initPermission = [ENUM_PERMISSION.HOME_VIEW, ENUM_PERMISSION.HOME_CREATE];
+import { RoleService } from "~/modules/role/services/role.service";
 
 @Injectable()
 export default class PermissionGuard extends JwtAuthGuard {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private reflector: Reflector,
+    private readonly roleService: RoleService,
+  ) {
     super();
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    return true;
     // check if user is authenticated
     const isAuthenticated = await super.canActivate(context);
 
@@ -28,13 +28,21 @@ export default class PermissionGuard extends JwtAuthGuard {
 
     // Pass if user is admin
     if (user.isAdmin) return true;
+
+    // Fail if user has no role
+    if (!user.role) return false;
+
     // Get required permissions form Permission decorator
     const requiredPermissions = this.reflector.get<string[]>(
       Permissions,
       context.getHandler(),
     );
 
-    return initPermission.some((permission) =>
+    const roleEntity = await this.roleService.getRoleEntity(user.role);
+
+    if (!roleEntity) return false;
+
+    return roleEntity.permissions.some((permission) =>
       requiredPermissions.includes(permission),
     );
   }

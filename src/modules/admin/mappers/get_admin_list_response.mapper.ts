@@ -27,6 +27,26 @@ export class GetAdminListReponseMapper extends AutomapperProfile {
           mapFrom((src: AdminEntity) => src.id),
         ),
         forMember(
+          (dest: GetAdminListResponseDto) => dest?.roleId,
+          mapFrom((src: AdminEntity) => (src.role ? src.role.id : null)),
+        ),
+        forMember(
+          (dest: GetAdminListResponseDto) => dest?.role,
+          mapFrom((src: AdminEntity) => (src.role ? src.role.name : null)),
+        ),
+        forMember(
+          (dest: GetAdminListResponseDto) => dest?.groupRoleId,
+          mapFrom((src: AdminEntity) =>
+            src.role?.groupRole ? src.role.groupRole.id : null,
+          ),
+        ),
+        forMember(
+          (dest: GetAdminListResponseDto) => dest?.groupRole,
+          mapFrom((src: AdminEntity) =>
+            src.role?.groupRole ? src.role.groupRole.name : null,
+          ),
+        ),
+        forMember(
           (dest: GetAdminListResponseDto) => dest?.createdAt,
           mapFrom((src: AdminEntity) => src.created_at),
         ),

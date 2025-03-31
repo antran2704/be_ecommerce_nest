@@ -39,7 +39,7 @@ export class RoleController {
 
   // Get all roles
   @Get()
-  @Permissions([ENUM_PERMISSION.ROLE_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_ROLE_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(GetRoleResponeDto)
   async getRoles(
@@ -54,7 +54,7 @@ export class RoleController {
 
   // Get role by id
   @Get("/:role_id")
-  @Permissions([ENUM_PERMISSION.ROLE_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_ROLE_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(GetRoleResponeDto)
   async getRole(
@@ -71,7 +71,7 @@ export class RoleController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ROLE_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_ROLE_CREATE])
   @UseGuards(PermissionGuard)
   async createRole(
     @Body() payload: CreateRoleRequestDto,
@@ -86,7 +86,7 @@ export class RoleController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.ROLE_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_ROLE_UPDATE])
   @UseGuards(PermissionGuard)
   async updateRole(
     @Param("role_id") id: string,
@@ -98,7 +98,7 @@ export class RoleController {
 
   // Delete role
   @Delete("/:role_id")
-  @Permissions([ENUM_PERMISSION.ROLE_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_ROLE_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,

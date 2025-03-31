@@ -5,7 +5,7 @@ import { PaginationSearchRequestDto } from "~/common/pagination/dtos";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 const mockUserGetCategoriesRequest: PaginationSearchRequestDto = {
-  limit: 10,
+  take: 10,
   order: ENUM_PAGINATION_ORDER.DESC,
   page: 1,
 };

@@ -40,7 +40,7 @@ export class AdminVariantProductController {
   constructor(private readonly service: AdminVariantProductService) {}
 
   @Get()
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponsePaginateDecorator(AdminGetVariantProductListResponseDto)
   async getProducts(
@@ -54,7 +54,7 @@ export class AdminVariantProductController {
   }
 
   @Get("/:variant_product_id")
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_VIEW])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetVariantProductDetailResponseDto)
   async getProduct(
@@ -70,7 +70,7 @@ export class AdminVariantProductController {
     status: 201,
     example: new CreateSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_CREATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_CREATE])
   @UseGuards(PermissionGuard)
   async createProduct(
     @Body() payload: AdminCreateVariantProductRequestDto,
@@ -84,7 +84,7 @@ export class AdminVariantProductController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_UPDATE])
   @UseGuards(PermissionGuard)
   async updateProduct(
     @Param("variant_product_id") id: string,
@@ -100,7 +100,7 @@ export class AdminVariantProductController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_UPDATE])
   @UseGuards(PermissionGuard)
   async enableProduct(@Param("variant_product_id") id: string) {
     await this.service.enableVariantProduct(id);
@@ -113,7 +113,7 @@ export class AdminVariantProductController {
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_UPDATE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_UPDATE])
   @UseGuards(PermissionGuard)
   async disableProduct(@Param("variant_product_id") id: string) {
     await this.service.disableVariantProduct(id);
@@ -122,7 +122,7 @@ export class AdminVariantProductController {
   }
 
   @Delete("/:variant_product_id")
-  @Permissions([ENUM_PERMISSION.VARIANT_PRODUCT_DELETE])
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_DELETE])
   @UseGuards(PermissionGuard)
   @ApiResponse({
     status: 201,
