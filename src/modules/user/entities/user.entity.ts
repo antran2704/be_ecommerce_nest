@@ -20,6 +20,17 @@ export class UserEntity extends DatabaseModifierEntity {
   @AutoMap()
   email: string;
 
+  @Column({ default: null, nullable: true })
+  phone_number: string;
+
+  @Column({ default: null, nullable: true })
+  @AutoMap()
+  birthday: string;
+
+  @Column({ default: null, nullable: true })
+  @AutoMap()
+  avatar: string;
+
   @Column({ nullable: true })
   password: string;
 

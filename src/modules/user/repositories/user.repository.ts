@@ -56,6 +56,11 @@ export class UserRepository implements IUserRepository {
             status: params.status === ENUM_USER_STATUS.ACTIVE ? true : false,
           });
         }
+
+        query.leftJoinAndSelect(
+          `${originalNameEntity}.authProviders`,
+          "providers",
+        );
       },
     );
 
@@ -69,8 +74,9 @@ export class UserRepository implements IUserRepository {
   }
 
   async findByUserId(id: string): Promise<UserEntity> {
-    return await this.userEntity.findOneBy({
-      id,
+    return await this.userEntity.findOne({
+      where: { id },
+      relations: ["authProviders"],
     });
   }
 

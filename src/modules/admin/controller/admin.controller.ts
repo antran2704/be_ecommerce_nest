@@ -23,7 +23,6 @@ import { AdminService } from "../services/admin.service";
 import {
   CreateSuccessResponse,
   DeletedSuccessResponse,
-  GetSuccessResponse,
   GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
 } from "~/common/response/success.response";

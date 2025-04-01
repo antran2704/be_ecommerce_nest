@@ -23,6 +23,19 @@ export class GetUserReponseMapper extends AutomapperProfile {
           mapFrom((src: UserEntity) => src.id),
         ),
         forMember(
+          (dest: GetUserResponseDto) => dest?.phoneNumber,
+          mapFrom((src: UserEntity) => src.phone_number),
+        ),
+        forMember(
+          (dest: GetUserResponseDto) => dest?.providers,
+          mapFrom((src: UserEntity) =>
+            src.authProviders.map((x) => ({
+              providerId: x.id,
+              provider: x.provider,
+            })),
+          ),
+        ),
+        forMember(
           (dest: GetUserResponseDto) => dest?.createdAt,
           mapFrom((src: UserEntity) => src.created_at),
         ),

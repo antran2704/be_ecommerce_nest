@@ -13,6 +13,7 @@ import {
   CreateUserDto,
   CreateUserRequestDto,
   GetUserResponseDto,
+  IsExitUserRequestDto,
   ResetPasswordRequestDto,
   SearchUserRequestDto,
   SignupUserPasswordRequestDto,
@@ -26,6 +27,7 @@ import { UserEntity } from "../entities/user.entity";
 import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
 import { CartService } from "~/modules/cart/services/cart.service";
 import { ENUM_CARD_STATUS } from "~/modules/cart/enums/cart.enum";
+import { ENUM_AUTH_PROVIDER } from "~/modules/auth_provider/enums/provider.enum";
 
 @Injectable()
 export class UserService implements IUserService {
@@ -42,10 +44,15 @@ export class UserService implements IUserService {
   ) {}
 
   async createUserByAdmin(payload: CreateUserRequestDto): Promise<void> {
-    const isExitUser = await this.userRepository.findByEmail(payload.email);
+    const user = await this.userRepository.findByEmail(payload.email);
 
-    if (isExitUser) {
-      throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
+    if (user) {
+      const provider = await this.authProviderService.getAuthProvider({
+        userId: user.id,
+        provider: ENUM_AUTH_PROVIDER.SYSTEM,
+      });
+
+      if (provider) throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
     }
 
     const hashPassword = await this.authCommonService.hashData(
@@ -65,7 +72,9 @@ export class UserService implements IUserService {
     await this.authTokenService.create(newUser);
 
     // save auth provider of user
-    this.authProviderService.createAuthProviderSystem({ userId: newUser.id });
+    await this.authProviderService.createAuthProviderSystem({
+      userId: newUser.id,
+    });
 
     // create cart
     this.cartService.createCart({
@@ -75,10 +84,15 @@ export class UserService implements IUserService {
   }
 
   async createUserWithSystem(payload: SignupUserRequestDto): Promise<string> {
-    const isExitUser = await this.userRepository.findByEmail(payload.email);
+    const user = await this.userRepository.findByEmail(payload.email);
 
-    if (isExitUser) {
-      throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
+    if (user) {
+      const provider = await this.authProviderService.getAuthProvider({
+        userId: user.id,
+        provider: ENUM_AUTH_PROVIDER.SYSTEM,
+      });
+
+      if (provider) throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
     }
 
     const formatData: CreateUserDto = {
@@ -138,7 +152,6 @@ export class UserService implements IUserService {
     params: SearchUserRequestDto,
   ): Promise<IEntitesAndPaginationReponse<GetUserResponseDto>> {
     const { data, pagination } = await this.userRepository.findUsers(params);
-
     const formatData: GetUserResponseDto[] = this.mapper.mapArray(
       data,
       UserEntity,
@@ -176,6 +189,21 @@ export class UserService implements IUserService {
 
   async getUserEntityByEmail(email: string): Promise<UserEntity> {
     return await this.userRepository.findByEmail(email);
+  }
+
+  async isExitUser(payload: IsExitUserRequestDto): Promise<boolean> {
+    const user = await this.userRepository.findByEmail(payload.email);
+
+    if (user) {
+      const provider = await this.authProviderService.getAuthProvider({
+        userId: user.id,
+        provider: payload.provider,
+      });
+
+      if (!provider) return false;
+    }
+
+    return true;
   }
 
   async updateUser(id: string, payload: UpdateUserRequestDto): Promise<void> {

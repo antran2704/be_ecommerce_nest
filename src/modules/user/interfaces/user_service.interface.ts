@@ -2,6 +2,7 @@ import {
   ChangePasswordUserRequestDto,
   CreateUserRequestDto,
   GetUserResponseDto,
+  IsExitUserRequestDto,
   SearchUserRequestDto,
   SignupUserPasswordRequestDto,
   SignupUserRequestDto,
@@ -25,6 +26,8 @@ export interface IUserService {
 
   getUserEntityById(id: string): Promise<UserEntity>;
   getUserEntityByEmail(id: string): Promise<UserEntity>;
+
+  isExitUser(payload: IsExitUserRequestDto): Promise<boolean>;
 
   updateUser(id: string, payload: CreateUserRequestDto): Promise<void>;
 
