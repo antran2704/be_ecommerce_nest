@@ -7,15 +7,22 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { UserService } from "../services/user.service";
 import {
   CreateSuccessResponse,
   DeletedSuccessResponse,
-  GetSuccessResponse,
   GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
 } from "~/common/response/success.response";
@@ -28,11 +35,17 @@ import { PermissionGuard } from "~/common/auth/guards";
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 import {
   CreateUserRequestDto,
+  GetListUserResponseDto,
   GetUserResponseDto,
+  IsExitUserRequestDto,
   SearchUserRequestDto,
   UpdateUserRequestDto,
 } from "../dtos";
 import { ResetPasswordRequestDto } from "~/modules/admin/dtos";
+import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
+import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
+import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
+import { getImagePath } from "~/common/multer/helpers";
 
 @ApiBearerAuth()
 @Controller("users")
@@ -44,10 +57,10 @@ export class UserController {
   @Get()
   @Permissions([ENUM_PERMISSION.ADMIN_USER_VIEW])
   @UseGuards(PermissionGuard)
-  @ApiOkResponsePaginateDecorator(GetUserResponseDto)
+  @ApiOkResponsePaginateDecorator(GetListUserResponseDto)
   async getUsers(
     @Query(PaginationRequestPipe) query: SearchUserRequestDto,
-  ): Promise<GetSuccessWithPaginationResponse<GetUserResponseDto>> {
+  ): Promise<GetSuccessWithPaginationResponse<GetListUserResponseDto>> {
     const { data, pagination } = await this.userService.getUsers(query);
 
     return new GetSuccessWithPaginationResponse(data, pagination);
@@ -56,14 +69,12 @@ export class UserController {
   // get an user
   @Get("/:user_id")
   @Permissions([ENUM_PERMISSION.ADMIN_USER_VIEW])
-  @UseGuards(PermissionGuard)
+  // @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(GetUserResponseDto)
-  async getUser(
-    @Param("user_id") userId: string,
-  ): Promise<GetSuccessResponse<GetUserResponseDto>> {
+  async getUser(@Param("user_id") userId: string): Promise<GetUserResponseDto> {
     const data = await this.userService.getUserById(userId);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   // create user
@@ -77,8 +88,31 @@ export class UserController {
   async createUser(
     @Body() payload: CreateUserRequestDto,
   ): Promise<CreateSuccessResponse> {
-    await this.userService.createUserWithSystem(payload);
+    await this.userService.createUserByAdmin(payload);
     return new CreateSuccessResponse();
+  }
+
+  @Post("is-exit-user")
+  @Permissions([ENUM_PERMISSION.ADMIN_STAFF_VIEW])
+  @UseGuards(PermissionGuard)
+  @ApiOkResponse({
+    example: true,
+  })
+  async isExitUser(@Body() payload: IsExitUserRequestDto): Promise<boolean> {
+    const data = await this.userService.isExitUser(payload);
+
+    return data;
+  }
+
+  @Post("/upload-avatar")
+  @ApiConsumes("multipart/form-data")
+  @ApiMulterRequestDecorator()
+  @UseInterceptors(FileUploadInterceptor("/user"))
+  @Permissions([ENUM_PERMISSION.ADMIN_USER_CREATE])
+  async createImage(
+    @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
+  ): Promise<string> {
+    return getImagePath(file.path);
   }
 
   // update user
@@ -112,18 +146,33 @@ export class UserController {
     return new UpdatedSuccessResponse();
   }
 
-  // enable user
-  @Patch("/:user_id/enable")
+  // unban user
+  @Patch("/:user_id/unban")
   @ApiResponse({
     status: 201,
     example: new UpdatedSuccessResponse(),
   })
   @Permissions([ENUM_PERMISSION.ADMIN_USER_UPDATE])
   @UseGuards(PermissionGuard)
-  async enable(
+  async unBanUser(
     @Param("user_id") userId: string,
   ): Promise<UpdatedSuccessResponse> {
-    await this.userService.enableUser(userId);
+    await this.userService.unBanUser(userId);
+    return new UpdatedSuccessResponse();
+  }
+
+  // disable user
+  @Patch("/:user_id/ban")
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  @Permissions([ENUM_PERMISSION.ADMIN_USER_UPDATE])
+  @UseGuards(PermissionGuard)
+  async banUser(
+    @Param("user_id") userId: string,
+  ): Promise<UpdatedSuccessResponse> {
+    await this.userService.banUser(userId);
     return new UpdatedSuccessResponse();
   }
 
@@ -138,7 +187,22 @@ export class UserController {
   async disable(
     @Param("user_id") userId: string,
   ): Promise<UpdatedSuccessResponse> {
-    await this.userService.disableUser(userId);
+    await this.userService.inactiveUser(userId);
+    return new UpdatedSuccessResponse();
+  }
+
+  // active user
+  @Patch("/:user_id/enable")
+  @ApiResponse({
+    status: 201,
+    example: new UpdatedSuccessResponse(),
+  })
+  @Permissions([ENUM_PERMISSION.ADMIN_USER_UPDATE])
+  @UseGuards(PermissionGuard)
+  async enable(
+    @Param("user_id") userId: string,
+  ): Promise<UpdatedSuccessResponse> {
+    await this.userService.activeUser(userId);
     return new UpdatedSuccessResponse();
   }
 

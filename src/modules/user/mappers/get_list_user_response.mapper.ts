@@ -1,10 +1,9 @@
 import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { UserEntity } from "../entities/user.entity";
-import { GetUserResponseDto } from "../dtos";
-import { getFullImagePath } from "~/common/multer/helpers";
+import { GetListUserResponseDto } from "../dtos";
 
-export class GetUserReponseMapper extends AutomapperProfile {
+export class GetListUserReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -14,31 +13,21 @@ export class GetUserReponseMapper extends AutomapperProfile {
       createMap(
         mapper,
         UserEntity,
-        GetUserResponseDto,
+        GetListUserResponseDto,
         forMember(
-          (dest: GetUserResponseDto) => dest?.isActive,
+          (dest: GetListUserResponseDto) => dest?.isActive,
           mapFrom((src: UserEntity) => src.is_active),
         ),
         forMember(
-          (dest: GetUserResponseDto) => dest?.isBan,
-          mapFrom((src: UserEntity) => src.is_banned),
-        ),
-        forMember(
-          (dest: GetUserResponseDto) => dest?.userId,
+          (dest: GetListUserResponseDto) => dest?.userId,
           mapFrom((src: UserEntity) => src.id),
         ),
         forMember(
-          (dest: GetUserResponseDto) => dest?.phoneNumber,
+          (dest: GetListUserResponseDto) => dest?.phoneNumber,
           mapFrom((src: UserEntity) => src.phone_number),
         ),
         forMember(
-          (dest: GetUserResponseDto) => dest?.avatar,
-          mapFrom((src: UserEntity) =>
-            src.avatar ? getFullImagePath(src.avatar) : null,
-          ),
-        ),
-        forMember(
-          (dest: GetUserResponseDto) => dest?.providers,
+          (dest: GetListUserResponseDto) => dest?.providers,
           mapFrom((src: UserEntity) =>
             src.authProviders.map((x) => ({
               providerId: x.id,
@@ -47,7 +36,7 @@ export class GetUserReponseMapper extends AutomapperProfile {
           ),
         ),
         forMember(
-          (dest: GetUserResponseDto) => dest?.createdAt,
+          (dest: GetListUserResponseDto) => dest?.createdAt,
           mapFrom((src: UserEntity) => src.created_at),
         ),
       );

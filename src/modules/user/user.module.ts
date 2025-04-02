@@ -9,6 +9,7 @@ import { UserRepository } from "./repositories/user.repository";
 import { AuthTokenModule } from "../auth_token/auth_token.module";
 import { AuthProviderModule } from "../auth_provider/auth_provider.module";
 import { CartModule } from "../cart/cart.module";
+import { GetListUserReponseMapper } from "./mappers/get_list_user_response.mapper";
 
 @Module({
   imports: [
@@ -18,7 +19,12 @@ import { CartModule } from "../cart/cart.module";
     AuthProviderModule,
     CartModule,
   ],
-  providers: [UserService, GetUserReponseMapper, UserRepository],
+  providers: [
+    UserService,
+    GetListUserReponseMapper,
+    GetUserReponseMapper,
+    UserRepository,
+  ],
   exports: [UserService],
 })
 export class UserModule {}

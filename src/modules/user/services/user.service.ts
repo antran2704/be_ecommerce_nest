@@ -12,7 +12,9 @@ import {
   ChangePasswordUserRequestDto,
   CreateUserDto,
   CreateUserRequestDto,
+  GetListUserResponseDto,
   GetUserResponseDto,
+  IsExitUserRequestDto,
   ResetPasswordRequestDto,
   SearchUserRequestDto,
   SignupUserPasswordRequestDto,
@@ -26,6 +28,7 @@ import { UserEntity } from "../entities/user.entity";
 import { AuthProviderService } from "~/modules/auth_provider/services/auth_provider.service";
 import { CartService } from "~/modules/cart/services/cart.service";
 import { ENUM_CARD_STATUS } from "~/modules/cart/enums/cart.enum";
+import { ENUM_AUTH_PROVIDER } from "~/modules/auth_provider/enums/provider.enum";
 
 @Injectable()
 export class UserService implements IUserService {
@@ -42,10 +45,15 @@ export class UserService implements IUserService {
   ) {}
 
   async createUserByAdmin(payload: CreateUserRequestDto): Promise<void> {
-    const isExitUser = await this.userRepository.findByEmail(payload.email);
+    const user = await this.userRepository.findByEmail(payload.email);
 
-    if (isExitUser) {
-      throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
+    if (user) {
+      const provider = await this.authProviderService.getAuthProvider({
+        userId: user.id,
+        provider: ENUM_AUTH_PROVIDER.SYSTEM,
+      });
+
+      if (provider) throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
     }
 
     const hashPassword = await this.authCommonService.hashData(
@@ -54,6 +62,7 @@ export class UserService implements IUserService {
 
     const formatData: CreateUserDto = {
       ...payload,
+      phone_number: payload.phoneNumber,
       password: hashPassword,
       is_active: true,
     };
@@ -65,7 +74,9 @@ export class UserService implements IUserService {
     await this.authTokenService.create(newUser);
 
     // save auth provider of user
-    this.authProviderService.createAuthProviderSystem({ userId: newUser.id });
+    await this.authProviderService.createAuthProviderSystem({
+      userId: newUser.id,
+    });
 
     // create cart
     this.cartService.createCart({
@@ -75,10 +86,15 @@ export class UserService implements IUserService {
   }
 
   async createUserWithSystem(payload: SignupUserRequestDto): Promise<string> {
-    const isExitUser = await this.userRepository.findByEmail(payload.email);
+    const user = await this.userRepository.findByEmail(payload.email);
 
-    if (isExitUser) {
-      throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
+    if (user) {
+      const provider = await this.authProviderService.getAuthProvider({
+        userId: user.id,
+        provider: ENUM_AUTH_PROVIDER.SYSTEM,
+      });
+
+      if (provider) throw new BadRequestException(USER_MESSAGES.USER_EXISTED);
     }
 
     const formatData: CreateUserDto = {
@@ -136,13 +152,13 @@ export class UserService implements IUserService {
 
   async getUsers(
     params: SearchUserRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<GetUserResponseDto>> {
+  ): Promise<IEntitesAndPaginationReponse<GetListUserResponseDto>> {
     const { data, pagination } = await this.userRepository.findUsers(params);
 
-    const formatData: GetUserResponseDto[] = this.mapper.mapArray(
+    const formatData: GetListUserResponseDto[] = this.mapper.mapArray(
       data,
       UserEntity,
-      GetUserResponseDto,
+      GetListUserResponseDto,
     );
 
     return { data: formatData, pagination };
@@ -178,6 +194,21 @@ export class UserService implements IUserService {
     return await this.userRepository.findByEmail(email);
   }
 
+  async isExitUser(payload: IsExitUserRequestDto): Promise<boolean> {
+    const user = await this.userRepository.findByEmail(payload.email);
+
+    if (user) {
+      const provider = await this.authProviderService.getAuthProvider({
+        userId: user.id,
+        provider: payload.provider,
+      });
+
+      if (provider) return true;
+    }
+
+    return false;
+  }
+
   async updateUser(id: string, payload: UpdateUserRequestDto): Promise<void> {
     const isExitUser = await this.userRepository.findByUserId(id);
 
@@ -186,7 +217,10 @@ export class UserService implements IUserService {
     }
 
     const formatData: UpdateUserDto = {
-      ...payload,
+      name: payload.name,
+      phone_number: payload.phoneNumber,
+      birthday: payload.birthday,
+      avatar: payload.avatar,
     };
 
     await this.userRepository.updateUser(id, formatData);
@@ -242,7 +276,7 @@ export class UserService implements IUserService {
     await this.userRepository.changePassword(id, hashPassword);
   }
 
-  async enableUser(id: string): Promise<void> {
+  async unBanUser(id: string): Promise<void> {
     const user = await this.userRepository.findByUserId(id);
 
     if (!user) {
@@ -256,7 +290,7 @@ export class UserService implements IUserService {
     await this.userRepository.enableUser(id);
   }
 
-  async disableUser(id: string): Promise<void> {
+  async banUser(id: string): Promise<void> {
     const user = await this.userRepository.findByUserId(id);
 
     if (!user) {

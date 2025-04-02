@@ -1,7 +1,9 @@
 import {
   ChangePasswordUserRequestDto,
   CreateUserRequestDto,
+  GetListUserResponseDto,
   GetUserResponseDto,
+  IsExitUserRequestDto,
   SearchUserRequestDto,
   SignupUserPasswordRequestDto,
   SignupUserRequestDto,
@@ -19,17 +21,20 @@ export interface IUserService {
   createUserByAdmin(payload: CreateUserRequestDto): Promise<void>;
   getUsers(
     params: SearchUserRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<GetUserResponseDto>>;
+  ): Promise<IEntitesAndPaginationReponse<GetListUserResponseDto>>;
 
   getUserById(id: string): Promise<GetUserResponseDto>;
 
   getUserEntityById(id: string): Promise<UserEntity>;
   getUserEntityByEmail(id: string): Promise<UserEntity>;
 
+  isExitUser(payload: IsExitUserRequestDto): Promise<boolean>;
+
   updateUser(id: string, payload: CreateUserRequestDto): Promise<void>;
 
-  enableUser(id: string): Promise<void>;
-  disableUser(id: string): Promise<void>;
+  unBanUser(id: string): Promise<void>;
+  banUser(id: string): Promise<void>;
+
   activeUser(id: string): Promise<void>;
   inactiveUser(id: string): Promise<void>;
 
