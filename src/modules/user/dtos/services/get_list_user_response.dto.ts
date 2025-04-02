@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 import { ENUM_AUTH_PROVIDER } from "~/modules/auth_provider/enums/provider.enum";
 
-export default class GetUserResponseDto {
+export default class GetListUserResponseDto {
   @ApiProperty({
     example: `${ENUM_PREFIX_DATABASE.US}123`,
   })
@@ -34,22 +34,10 @@ export default class GetUserResponseDto {
   birthday: string;
 
   @ApiProperty({
-    example: "images/avatar.jpg",
-  })
-  @AutoMap()
-  avatar: string;
-
-  @ApiProperty({
     example: true,
   })
   @AutoMap()
   isActive: boolean;
-
-  @ApiProperty({
-    example: true,
-  })
-  @AutoMap()
-  isBan: boolean;
 
   @ApiProperty({
     example: [

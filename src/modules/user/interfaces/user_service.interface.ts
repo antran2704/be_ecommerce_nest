@@ -1,6 +1,7 @@
 import {
   ChangePasswordUserRequestDto,
   CreateUserRequestDto,
+  GetListUserResponseDto,
   GetUserResponseDto,
   IsExitUserRequestDto,
   SearchUserRequestDto,
@@ -20,7 +21,7 @@ export interface IUserService {
   createUserByAdmin(payload: CreateUserRequestDto): Promise<void>;
   getUsers(
     params: SearchUserRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<GetUserResponseDto>>;
+  ): Promise<IEntitesAndPaginationReponse<GetListUserResponseDto>>;
 
   getUserById(id: string): Promise<GetUserResponseDto>;
 
@@ -31,8 +32,9 @@ export interface IUserService {
 
   updateUser(id: string, payload: CreateUserRequestDto): Promise<void>;
 
-  enableUser(id: string): Promise<void>;
-  disableUser(id: string): Promise<void>;
+  unBanUser(id: string): Promise<void>;
+  banUser(id: string): Promise<void>;
+
   activeUser(id: string): Promise<void>;
   inactiveUser(id: string): Promise<void>;
 

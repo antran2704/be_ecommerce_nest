@@ -44,7 +44,7 @@ export default class CreateUserRequestDto {
     example: "/images/avatar.jpg",
   })
   @IsOptional()
-  @IsDateString()
+  @IsString()
   avatar: string;
 
   @ApiProperty({

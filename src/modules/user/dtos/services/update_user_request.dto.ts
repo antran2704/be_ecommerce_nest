@@ -36,6 +36,6 @@ export default class UpdateUserRequestDto {
     example: "/images/avatar.jpg",
   })
   @IsOptional()
-  @IsDateString()
+  @IsString()
   avatar: string;
 }

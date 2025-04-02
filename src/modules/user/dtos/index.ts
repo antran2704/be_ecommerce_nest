@@ -10,4 +10,5 @@ export { default as SignupUserPasswordRequestDto } from "./services/signup_passw
 export { default as SearchUserRequestDto } from "./services/search_user_request.dto";
 export { default as ResetPasswordRequestDto } from "./services/reset_password_request.dto";
 export { default as GetUserResponseDto } from "./services/get_user_response.dto";
+export { default as GetListUserResponseDto } from "./services/get_list_user_response.dto";
 export { default as IsExitUserRequestDto } from "./services/is_exit_user_request.dto";

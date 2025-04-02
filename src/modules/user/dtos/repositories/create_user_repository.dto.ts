@@ -22,7 +22,7 @@ export default class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  phoneNumber?: string;
+  phone_number?: string;
 
   @IsOptional()
   @IsDateString()
