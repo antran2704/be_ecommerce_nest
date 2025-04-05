@@ -32,6 +32,7 @@ export class AdminCategoryService implements IAdminCategoryService {
   ): Promise<IEntitesAndPaginationReponse<AdminGetCategoryResponseDto>> {
     const { data, pagination } =
       await this.categoryRepository.findCategories(payload);
+
     const formatData = this.mapper.mapArray(
       data,
       CategoryEntity,
@@ -92,6 +93,8 @@ export class AdminCategoryService implements IAdminCategoryService {
       id: categoryId,
       category_index: categoryIndex,
       name: payload.categoryName,
+      slug: payload.categorySlug,
+      thumbnail: payload.categoryThumbnail,
     };
 
     // check if have parentId
@@ -149,6 +152,8 @@ export class AdminCategoryService implements IAdminCategoryService {
 
     const formatData: AdminUpdateCategoryDto = {
       name: payload.categoryName,
+      thumbnail: payload.categoryThumbnail,
+      slug: payload.categorySlug,
     };
 
     // check if update parentId

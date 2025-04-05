@@ -2,6 +2,7 @@ import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pag
 import {
   AdminCreateCategoryRequestDto,
   AdminGetCategoriesRequestDto,
+  AdminGetCategoriesResponseDto,
   AdminGetCategoryResponseDto,
   AdminGetChildCategoryResponseDto,
   AdminUpdateCategoryRequestDto,
@@ -11,7 +12,7 @@ import { CategoryEntity } from "../entities/category.entity";
 export interface IAdminCategoryService {
   getCategories(
     payload: AdminGetCategoriesRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<AdminGetCategoryResponseDto>>;
+  ): Promise<IEntitesAndPaginationReponse<AdminGetCategoriesResponseDto>>;
   getChildren(id: string): Promise<AdminGetChildCategoryResponseDto[]>;
   getCategoryById(id: string): Promise<AdminGetCategoryResponseDto>;
   getCategoryEntityById(id: string): Promise<CategoryEntity>;

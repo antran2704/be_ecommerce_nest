@@ -23,6 +23,14 @@ export class CategoryEntity extends DatabaseModifierEntity {
   @AutoMap()
   name: string;
 
+  @Column({ type: "varchar", length: 255, default: "" })
+  @AutoMap()
+  slug: string;
+
+  @Column({ default: null, nullable: true })
+  @AutoMap()
+  thumbnail: string;
+
   @Column({ type: "integer", default: 0 })
   @AutoMap()
   category_index: number;

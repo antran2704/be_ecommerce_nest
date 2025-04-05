@@ -29,7 +29,7 @@ export default class CreateUserDto {
   birthday?: string;
 
   @IsOptional()
-  @IsDateString()
+  @IsString()
   avatar?: string;
 
   @IsOptional()

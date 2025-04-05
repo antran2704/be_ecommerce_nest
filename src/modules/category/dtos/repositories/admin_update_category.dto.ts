@@ -5,11 +5,19 @@ export default class AdminUpdateCategoryDto {
   @IsString()
   name?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   parent_id?: string;
 
-  @IsNumber()
   @IsOptional()
+  @IsNumber()
   category_index?: number;
+
+  @IsOptional()
+  @IsString()
+  thumbnail?: string;
+
+  @IsOptional()
+  @IsString()
+  slug?: string;
 }

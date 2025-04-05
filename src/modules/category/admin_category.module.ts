@@ -6,6 +6,7 @@ import { AdminCategoryRepository } from "./repositories/admin_category.repositor
 import { AdminCategoryService } from "./services/admin_category.service";
 import { AdminGetCategoryReponseMapper } from "./mappers/admin_get_category_response.mapper";
 import { AdminGetChildCategoryReponseMapper } from "./mappers/admin_get_child_category_response.mapper";
+import { AdminGetCategoriesReponseMapper } from "./mappers/admin_get_categories_response.mapper";
 
 @Module({
   imports: [TypeOrmModule.forFeature([CategoryEntity])],
@@ -17,6 +18,7 @@ import { AdminGetChildCategoryReponseMapper } from "./mappers/admin_get_child_ca
     AdminCategoryService,
 
     // Mappers
+    AdminGetCategoriesReponseMapper,
     AdminGetCategoryReponseMapper,
     AdminGetChildCategoryReponseMapper,
   ],

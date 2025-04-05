@@ -2,7 +2,7 @@ import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsString } from "class-validator";
 
-export default class AdminGetCategoryResponseDto {
+export default class AdminGetCategoriesResponseDto {
   @ApiProperty({
     required: true,
     example: "CA123",
@@ -26,14 +26,6 @@ export default class AdminGetCategoryResponseDto {
   @IsString()
   @AutoMap()
   categoryThumbnail: string;
-
-  @ApiProperty({
-    required: true,
-    example: "this-is-slug",
-  })
-  @IsString()
-  @AutoMap()
-  categorySlug: string;
 
   @ApiProperty({
     required: true,
