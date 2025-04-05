@@ -10,6 +10,13 @@ export default class AdminCreateCategoryDto {
   name: string;
 
   @IsString()
+  slug: string;
+
+  @IsOptional()
+  @IsString()
+  thumbnail?: string;
+
+  @IsString()
   @IsOptional()
   parent_id?: string;
 

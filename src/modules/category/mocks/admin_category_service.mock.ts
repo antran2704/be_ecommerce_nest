@@ -11,6 +11,8 @@ import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 const mockAdminCreateCategoryRequest: AdminCreateCategoryRequestDto = {
   categoryName: "Category Test",
   categoryParentId: null,
+  categorySlug: "category-test",
+  categoryThumbnail: "/path/to/thumbnail",
 };
 
 const mockAdminGetCategoriesRequest: AdminGetCategoriesRequestDto = {
@@ -26,7 +28,9 @@ const mockAdminGetCategoryRequest: AdminGetCategoryRequestDto = {
 const mockAdminGetCategoryResponse: AdminGetCategoryResponseDto = {
   categoryId: ENUM_PREFIX_DATABASE.CA + "123",
   categoryName: "Clothes",
-  categoryIndex: 0,
+  categoryThumbnail: "",
+  categorySlug: "",
+  childrenCount: 0,
   createdAt: "",
 };
 

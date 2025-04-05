@@ -45,6 +45,9 @@ export class AdminCategoryRepository implements IAdminCategoryRepository {
             parent_id: params.parentId,
           });
         }
+
+        // count children
+        query.leftJoinAndSelect(`${originalNameEntity}.children`, "children");
       },
     );
 

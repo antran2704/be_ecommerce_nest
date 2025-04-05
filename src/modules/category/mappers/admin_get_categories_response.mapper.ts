@@ -1,9 +1,9 @@
 import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { CategoryEntity } from "../entities/category.entity";
-import { AdminGetCategoryResponseDto } from "../dtos/services";
+import { AdminGetCategoriesResponseDto } from "../dtos/services";
 
-export class AdminGetCategoryReponseMapper extends AutomapperProfile {
+export class AdminGetCategoriesReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -13,29 +13,25 @@ export class AdminGetCategoryReponseMapper extends AutomapperProfile {
       createMap(
         mapper,
         CategoryEntity,
-        AdminGetCategoryResponseDto,
+        AdminGetCategoriesResponseDto,
         forMember(
-          (dest: AdminGetCategoryResponseDto) => dest?.categoryId,
+          (dest: AdminGetCategoriesResponseDto) => dest?.categoryId,
           mapFrom((src: CategoryEntity) => src.id),
         ),
         forMember(
-          (dest: AdminGetCategoryResponseDto) => dest?.categoryName,
+          (dest: AdminGetCategoriesResponseDto) => dest?.categoryName,
           mapFrom((src: CategoryEntity) => src.name),
         ),
         forMember(
-          (dest: AdminGetCategoryResponseDto) => dest?.categoryThumbnail,
+          (dest: AdminGetCategoriesResponseDto) => dest?.categoryThumbnail,
           mapFrom((src: CategoryEntity) => src.thumbnail),
         ),
         forMember(
-          (dest: AdminGetCategoryResponseDto) => dest?.categorySlug,
-          mapFrom((src: CategoryEntity) => src.slug),
-        ),
-        forMember(
-          (dest: AdminGetCategoryResponseDto) => dest?.childrenCount,
+          (dest: AdminGetCategoriesResponseDto) => dest?.childrenCount,
           mapFrom((src: CategoryEntity) => src.children.length),
         ),
         forMember(
-          (dest: AdminGetCategoryResponseDto) => dest?.createdAt,
+          (dest: AdminGetCategoriesResponseDto) => dest?.createdAt,
           mapFrom((src: CategoryEntity) => src.created_at),
         ),
       );

@@ -27,12 +27,12 @@ import {
   AdminCreateCategoryRequestDto,
   AdminGetCategoriesRequestDto,
   AdminGetCategoryResponseDto,
+  AdminGetChildCategoryResponseDto,
   AdminUpdateCategoryRequestDto,
 } from "../dtos/services";
 import { PaginationRequestPipe } from "~/common/request/pipes/pagination_request.pipe";
 import {
   CreateSuccessResponse,
-  CreateSuccessWithDataResponse,
   DeletedSuccessResponse,
   GetSuccessResponse,
   GetSuccessWithPaginationResponse,
@@ -68,10 +68,10 @@ export class AdminCategoryController {
   @Get("/children/:category_id")
   @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_VIEW])
   @UseGuards(PermissionGuard)
-  @ApiOkResponseDecorator(AdminGetCategoryResponseDto)
+  @ApiOkResponseDecorator(AdminGetChildCategoryResponseDto)
   async getChildren(
     @Param("category_id") id: string,
-  ): Promise<GetSuccessResponse<AdminGetCategoryResponseDto[]>> {
+  ): Promise<GetSuccessResponse<AdminGetChildCategoryResponseDto[]>> {
     const data = await this.categoryService.getChildren(id);
 
     return new GetSuccessResponse(data);
@@ -106,7 +106,7 @@ export class AdminCategoryController {
   }
 
   // create image
-  @Post("/image")
+  @Post("/upload-thumbnail")
   @ApiConsumes("multipart/form-data")
   @ApiMulterRequestDecorator()
   @UseInterceptors(FileUploadInterceptor("/categories"))
@@ -114,8 +114,8 @@ export class AdminCategoryController {
   @UseGuards(PermissionGuard)
   async createImage(
     @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
-  ): Promise<CreateSuccessWithDataResponse<string>> {
-    return new CreateSuccessWithDataResponse(getImagePath(file.path));
+  ): Promise<string> {
+    return getImagePath(file.path);
   }
 
   // update user

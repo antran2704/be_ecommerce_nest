@@ -16,4 +16,16 @@ export default class AdminCreateCategoryRequestDto {
   @IsString()
   @IsOptional()
   categoryParentId: string;
+
+  @ApiPropertyOptional({
+    example: "this-is-slug",
+  })
+  @IsString()
+  categorySlug: string;
+
+  @ApiPropertyOptional({
+    example: "/path/to/thumbnail",
+  })
+  @IsString()
+  categoryThumbnail: string;
 }
