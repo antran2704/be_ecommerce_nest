@@ -2,6 +2,7 @@ import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { CategoryEntity } from "../entities/category.entity";
 import { AdminGetCategoriesResponseDto } from "../dtos/services";
+import { getFullImagePath } from "~/common/multer/helpers";
 
 export class AdminGetCategoriesReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -24,7 +25,9 @@ export class AdminGetCategoriesReponseMapper extends AutomapperProfile {
         ),
         forMember(
           (dest: AdminGetCategoriesResponseDto) => dest?.categoryThumbnail,
-          mapFrom((src: CategoryEntity) => src.thumbnail),
+          mapFrom((src: CategoryEntity) =>
+            src.thumbnail ? getFullImagePath(src.thumbnail) : null,
+          ),
         ),
         forMember(
           (dest: AdminGetCategoriesResponseDto) => dest?.childrenCount,

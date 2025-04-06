@@ -26,6 +26,13 @@ export default class AdminGetCategoryResponseDto {
 
   @ApiProperty({
     required: true,
+    example: "Clothes",
+  })
+  @IsString()
+  categoryParentName: string;
+
+  @ApiProperty({
+    required: true,
     example: "/path/to/thumbnail",
   })
   @IsString()

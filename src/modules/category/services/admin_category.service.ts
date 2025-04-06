@@ -4,6 +4,7 @@ import { AdminCategoryRepository } from "../repositories/admin_category.reposito
 import { InjectMapper } from "@automapper/nestjs";
 import {
   AdminCreateCategoryRequestDto,
+  AdminGetCategoriesByIndexRequestDto,
   AdminGetCategoriesRequestDto,
   AdminGetCategoriesResponseDto,
   AdminGetCategoryResponseDto,
@@ -21,6 +22,7 @@ import {
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { BadRequestException } from "@nestjs/common";
 import { CATEGORY_ERROR_MESSAGES } from "../messages/category.error";
+import { stringToSlug } from "~/helpers/format";
 
 export class AdminCategoryService implements IAdminCategoryService {
   constructor(
@@ -41,6 +43,20 @@ export class AdminCategoryService implements IAdminCategoryService {
     );
 
     return { data: formatData, pagination };
+  }
+
+  async getCategoriesByIndex(
+    dto: AdminGetCategoriesByIndexRequestDto,
+  ): Promise<AdminGetCategoriesResponseDto[]> {
+    const data = await this.categoryRepository.findCategoriesByIndex(dto);
+
+    const formatData = this.mapper.mapArray(
+      data,
+      CategoryEntity,
+      AdminGetCategoriesResponseDto,
+    );
+
+    return formatData;
   }
 
   async getChildren(id: string): Promise<AdminGetChildCategoryResponseDto[]> {
@@ -94,7 +110,9 @@ export class AdminCategoryService implements IAdminCategoryService {
       id: categoryId,
       category_index: categoryIndex,
       name: payload.categoryName,
-      slug: payload.categorySlug,
+      slug: payload.categorySlug
+        ? stringToSlug(payload.categorySlug)
+        : stringToSlug(payload.categoryName),
       thumbnail: payload.categoryThumbnail,
     };
 
@@ -153,9 +171,14 @@ export class AdminCategoryService implements IAdminCategoryService {
 
     const formatData: AdminUpdateCategoryDto = {
       name: payload.categoryName,
-      thumbnail: payload.categoryThumbnail,
-      slug: payload.categorySlug,
+      slug: payload.categorySlug
+        ? stringToSlug(payload.categorySlug)
+        : stringToSlug(payload.categoryName),
     };
+
+    if (payload.categoryThumbnail) {
+      formatData.thumbnail = payload.categoryThumbnail;
+    }
 
     // check if update parentId
     if (

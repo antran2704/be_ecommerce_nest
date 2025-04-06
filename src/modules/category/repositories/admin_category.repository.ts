@@ -3,7 +3,10 @@ import { Repository } from "typeorm";
 
 import { IAdminCategoryRepository } from "../interfaces/admin_category_repository.interface";
 import { CategoryEntity } from "../entities/category.entity";
-import { AdminGetCategoriesRequestDto } from "../dtos/services";
+import {
+  AdminGetCategoriesByIndexRequestDto,
+  AdminGetCategoriesRequestDto,
+} from "../dtos/services";
 import { IEntitesAndPaginationReponse } from "~/common/pagination/interfaces/pagination.interface";
 import { getEntitesAndPagination } from "~/common/pagination/helpers/pagination";
 import {
@@ -54,10 +57,19 @@ export class AdminCategoryRepository implements IAdminCategoryRepository {
     return { data, pagination };
   }
 
+  async findCategoriesByIndex(
+    payload: AdminGetCategoriesByIndexRequestDto,
+  ): Promise<CategoryEntity[]> {
+    return this.categoryEntity.find({
+      where: { category_index: payload.index ? Number(payload.index) : 0 },
+      relations: ["children"],
+    });
+  }
+
   async findCategoryById(id: string): Promise<CategoryEntity> {
     return this.categoryEntity.findOne({
       where: { id },
-      relations: ["children"],
+      relations: ["children", "parent"],
     });
   }
 

@@ -21,6 +21,7 @@ export default class AdminUpdateCategoryRequestDto {
     example: "/path/to/thumbnail",
   })
   @IsString()
+  @IsOptional()
   categoryThumbnail: string;
 
   @ApiPropertyOptional({

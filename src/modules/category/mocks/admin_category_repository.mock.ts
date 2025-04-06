@@ -14,6 +14,7 @@ const mockAdminCategoryRepository: IAdminCategoryRepository = {
       totalPages: 1,
     },
   }),
+  findCategoriesByIndex: jest.fn().mockReturnValue([mockCategoryEntity]),
   findCategoryById: jest.fn().mockReturnValue(mockCategoryEntity),
   findCategoryByName: jest.fn().mockReturnValue(null),
   findChildren: jest.fn().mockReturnValue([mockChildCategoryEntity]),

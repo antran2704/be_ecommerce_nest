@@ -25,6 +25,7 @@ import { PermissionGuard } from "~/common/auth/guards";
 import { ApiOkResponsePaginateDecorator } from "~/common/pagination/decorators/api-ok-response-paginate.decorator";
 import {
   AdminCreateCategoryRequestDto,
+  AdminGetCategoriesByIndexRequestDto,
   AdminGetCategoriesRequestDto,
   AdminGetCategoriesResponseDto,
   AdminGetCategoryResponseDto,
@@ -45,6 +46,7 @@ import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
 import { getImagePath } from "~/common/multer/helpers";
 import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
 import { ApiListOkResponseDecorator } from "~/common/pagination/decorators/api-list-ok-response.decorator";
+import { GetCategoriesByIndexRequestPipe } from "../pipes/get_categories_by_index_request.pipe";
 
 @ApiBearerAuth()
 @Controller("admin/categories")
@@ -64,6 +66,19 @@ export class AdminCategoryController {
       await this.categoryService.getCategories(query);
 
     return new GetSuccessWithPaginationResponse(data, pagination);
+  }
+
+  @Get("/follow-index")
+  @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_VIEW])
+  // @UseGuards(PermissionGuard)
+  @ApiListOkResponseDecorator(AdminGetCategoriesResponseDto)
+  async getCategoriesByIndex(
+    @Query(GetCategoriesByIndexRequestPipe)
+    query: AdminGetCategoriesByIndexRequestDto,
+  ): Promise<AdminGetCategoriesResponseDto[]> {
+    const data = await this.categoryService.getCategoriesByIndex(query);
+
+    return data;
   }
 
   // get children of category

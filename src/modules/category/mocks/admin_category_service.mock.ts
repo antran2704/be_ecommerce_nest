@@ -28,6 +28,7 @@ const mockAdminGetCategoryRequest: AdminGetCategoryRequestDto = {
 const mockAdminGetCategoryResponse: AdminGetCategoryResponseDto = {
   categoryId: ENUM_PREFIX_DATABASE.CA + "123",
   categoryParentId: ENUM_PREFIX_DATABASE.CA + "123",
+  categoryParentName: "Clothes",
   categoryName: "Clothes",
   categoryThumbnail: "",
   categorySlug: "",

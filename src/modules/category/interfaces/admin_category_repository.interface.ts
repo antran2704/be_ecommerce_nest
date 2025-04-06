@@ -4,13 +4,19 @@ import {
   AdminGetChildCategoryDto,
   AdminUpdateCategoryDto,
 } from "../dtos/repositories";
-import { AdminGetCategoriesRequestDto } from "../dtos/services";
+import {
+  AdminGetCategoriesRequestDto,
+  AdminGetCategoriesByIndexRequestDto,
+} from "../dtos/services";
 import { CategoryEntity } from "../entities/category.entity";
 
 export interface IAdminCategoryRepository {
   findCategories(
     payload: AdminGetCategoriesRequestDto,
   ): Promise<IEntitesAndPaginationReponse<CategoryEntity>>;
+  findCategoriesByIndex(
+    payload: AdminGetCategoriesByIndexRequestDto,
+  ): Promise<CategoryEntity[]>;
   findCategoryById(id: string): Promise<CategoryEntity>;
   findCategoryByName(name: string): Promise<CategoryEntity>;
   findChildren(id: string): Promise<AdminGetChildCategoryDto[]>;
