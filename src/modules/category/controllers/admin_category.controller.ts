@@ -26,6 +26,7 @@ import { ApiOkResponsePaginateDecorator } from "~/common/pagination/decorators/a
 import {
   AdminCreateCategoryRequestDto,
   AdminGetCategoriesRequestDto,
+  AdminGetCategoriesResponseDto,
   AdminGetCategoryResponseDto,
   AdminGetChildCategoryResponseDto,
   AdminUpdateCategoryRequestDto,
@@ -43,6 +44,7 @@ import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-mu
 import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
 import { getImagePath } from "~/common/multer/helpers";
 import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
+import { ApiListOkResponseDecorator } from "~/common/pagination/decorators/api-list-ok-response.decorator";
 
 @ApiBearerAuth()
 @Controller("admin/categories")
@@ -53,11 +55,11 @@ export class AdminCategoryController {
   // get categories
   @Get()
   @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_VIEW])
-  @UseGuards(PermissionGuard)
-  @ApiOkResponsePaginateDecorator(AdminGetCategoryResponseDto)
+  // @UseGuards(PermissionGuard)
+  @ApiOkResponsePaginateDecorator(AdminGetCategoriesResponseDto)
   async getCategories(
     @Query(PaginationRequestPipe) query: AdminGetCategoriesRequestDto,
-  ): Promise<GetSuccessWithPaginationResponse<AdminGetCategoryResponseDto>> {
+  ): Promise<GetSuccessWithPaginationResponse<AdminGetCategoriesResponseDto>> {
     const { data, pagination } =
       await this.categoryService.getCategories(query);
 
@@ -68,13 +70,13 @@ export class AdminCategoryController {
   @Get("/children/:category_id")
   @Permissions([ENUM_PERMISSION.ADMIN_CATEGORY_VIEW])
   @UseGuards(PermissionGuard)
-  @ApiOkResponseDecorator(AdminGetChildCategoryResponseDto)
+  @ApiListOkResponseDecorator(AdminGetChildCategoryResponseDto)
   async getChildren(
     @Param("category_id") id: string,
-  ): Promise<GetSuccessResponse<AdminGetChildCategoryResponseDto[]>> {
+  ): Promise<AdminGetChildCategoryResponseDto[]> {
     const data = await this.categoryService.getChildren(id);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   // get a category
@@ -84,10 +86,10 @@ export class AdminCategoryController {
   @ApiOkResponseDecorator(AdminGetCategoryResponseDto)
   async getUser(
     @Param("category_id") id: string,
-  ): Promise<GetSuccessResponse<AdminGetCategoryResponseDto>> {
+  ): Promise<AdminGetCategoryResponseDto> {
     const data = await this.categoryService.getCategoryById(id);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   // create category

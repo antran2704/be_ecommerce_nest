@@ -5,6 +5,7 @@ import { InjectMapper } from "@automapper/nestjs";
 import {
   AdminCreateCategoryRequestDto,
   AdminGetCategoriesRequestDto,
+  AdminGetCategoriesResponseDto,
   AdminGetCategoryResponseDto,
   AdminGetChildCategoryResponseDto,
   AdminUpdateCategoryRequestDto,
@@ -29,14 +30,14 @@ export class AdminCategoryService implements IAdminCategoryService {
 
   async getCategories(
     payload: AdminGetCategoriesRequestDto,
-  ): Promise<IEntitesAndPaginationReponse<AdminGetCategoryResponseDto>> {
+  ): Promise<IEntitesAndPaginationReponse<AdminGetCategoriesResponseDto>> {
     const { data, pagination } =
       await this.categoryRepository.findCategories(payload);
 
     const formatData = this.mapper.mapArray(
       data,
       CategoryEntity,
-      AdminGetCategoryResponseDto,
+      AdminGetCategoriesResponseDto,
     );
 
     return { data: formatData, pagination };

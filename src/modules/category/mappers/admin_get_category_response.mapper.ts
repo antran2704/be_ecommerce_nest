@@ -23,6 +23,10 @@ export class AdminGetCategoryReponseMapper extends AutomapperProfile {
           mapFrom((src: CategoryEntity) => src.name),
         ),
         forMember(
+          (dest: AdminGetCategoryResponseDto) => dest?.categoryParentId,
+          mapFrom((src: CategoryEntity) => src.parent_id),
+        ),
+        forMember(
           (dest: AdminGetCategoryResponseDto) => dest?.categoryThumbnail,
           mapFrom((src: CategoryEntity) => src.thumbnail),
         ),

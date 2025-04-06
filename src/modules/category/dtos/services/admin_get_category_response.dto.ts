@@ -1,6 +1,6 @@
-import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsString } from "class-validator";
+import { ENUM_PREFIX_DATABASE } from "~/common/database/enums/perfix.enum";
 
 export default class AdminGetCategoryResponseDto {
   @ApiProperty({
@@ -8,7 +8,6 @@ export default class AdminGetCategoryResponseDto {
     example: "CA123",
   })
   @IsString()
-  @AutoMap()
   categoryId: string;
 
   @ApiProperty({
@@ -16,15 +15,20 @@ export default class AdminGetCategoryResponseDto {
     example: "Clothes",
   })
   @IsString()
-  @AutoMap()
   categoryName: string;
+
+  @ApiProperty({
+    required: true,
+    example: ENUM_PREFIX_DATABASE.CA + "123",
+  })
+  @IsString()
+  categoryParentId: string;
 
   @ApiProperty({
     required: true,
     example: "/path/to/thumbnail",
   })
   @IsString()
-  @AutoMap()
   categoryThumbnail: string;
 
   @ApiProperty({
@@ -32,7 +36,6 @@ export default class AdminGetCategoryResponseDto {
     example: "this-is-slug",
   })
   @IsString()
-  @AutoMap()
   categorySlug: string;
 
   @ApiProperty({
@@ -45,6 +48,5 @@ export default class AdminGetCategoryResponseDto {
   @ApiProperty({
     example: "2025-01-07T07:53:40.829Z",
   })
-  @AutoMap()
   createdAt: string;
 }

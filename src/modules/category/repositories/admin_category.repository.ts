@@ -55,7 +55,10 @@ export class AdminCategoryRepository implements IAdminCategoryRepository {
   }
 
   async findCategoryById(id: string): Promise<CategoryEntity> {
-    return this.categoryEntity.findOneBy({ id });
+    return this.categoryEntity.findOne({
+      where: { id },
+      relations: ["children"],
+    });
   }
 
   async findChildren(id: string): Promise<AdminGetChildCategoryDto[]> {

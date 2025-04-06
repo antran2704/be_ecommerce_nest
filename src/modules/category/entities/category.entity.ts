@@ -45,7 +45,9 @@ export class CategoryEntity extends DatabaseModifierEntity {
   @Column({ nullable: true, default: null })
   parent_id: string | null;
 
-  @OneToMany(() => CategoryEntity, (entity) => entity.parent)
+  @OneToMany(() => CategoryEntity, (entity) => entity.parent, {
+    cascade: true,
+  })
   children: CategoryEntity[];
 
   @OneToMany(() => ProductEntity, (entity) => entity.main_category)
