@@ -24,6 +24,10 @@ export class AdminVariantTypeValueReponseMapper extends AutomapperProfile {
             dest.variantTypeValueName,
           mapFrom((src: VariantTypeValueEntity) => src.name),
         ),
+        forMember(
+          (dest: AdminGetVariantTypeValueResponseDto) => dest.createdAt,
+          mapFrom((src: VariantTypeValueEntity) => src.created_at),
+        ),
       );
     };
   }

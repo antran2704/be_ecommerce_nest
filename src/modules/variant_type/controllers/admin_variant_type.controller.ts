@@ -55,12 +55,12 @@ export class AdminVariantTypeController {
   @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_TYPE_VIEW])
   @UseGuards(PermissionGuard)
   @ApiOkResponseDecorator(AdminGetVariantTypeResponseDto)
-  async getUser(
+  async getVariantType(
     @Param("variant_type_id") id: string,
-  ): Promise<GetSuccessResponse<AdminGetVariantTypeResponseDto>> {
+  ): Promise<AdminGetVariantTypeResponseDto> {
     const data = await this.variantTypeService.getVariantTypeById(id);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   @Post()

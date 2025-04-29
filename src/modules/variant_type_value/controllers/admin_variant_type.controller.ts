@@ -62,10 +62,10 @@ export class AdminVariantTypeValueController {
   @ApiOkResponseDecorator(AdminGetVariantTypeValueResponseDto)
   async getUser(
     @Param("variant_value_id") id: string,
-  ): Promise<GetSuccessResponse<AdminGetVariantTypeValueResponseDto>> {
+  ): Promise<AdminGetVariantTypeValueResponseDto> {
     const data = await this.variantValueService.getVariantValueById(id);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   @Post()

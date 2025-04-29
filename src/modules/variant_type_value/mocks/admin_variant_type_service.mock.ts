@@ -29,6 +29,7 @@ const mockAdminGetVariantValuesRequest: AdminGetVariantTypeValuesRequestDto = {
 const mockAdminGetVariantValueResponse: AdminGetVariantTypeValueResponseDto = {
   variantTypeValueId: ENUM_PREFIX_DATABASE.VTE + "123",
   variantTypeValueName: "Blue",
+  createdAt: "",
 };
 
 const mockAdminGetVariantValuesResponse: IEntitesAndPaginationReponse<AdminGetVariantTypeValueResponseDto> =

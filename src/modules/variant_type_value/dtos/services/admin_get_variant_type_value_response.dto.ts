@@ -15,4 +15,10 @@ export default class GetVariantTypeValueResponseDto {
   })
   @IsString()
   variantTypeValueName: string;
+
+  @ApiProperty({
+    example: new Date().toISOString(),
+  })
+  @IsString()
+  createdAt: string;
 }
