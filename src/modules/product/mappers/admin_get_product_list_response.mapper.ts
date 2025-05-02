@@ -3,7 +3,7 @@ import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 
 import { ProductEntity } from "../entities/product.entity";
 import { AdminGetProductListResponseDto } from "../dtos/services";
-import { getFullImagePath } from "~/common/multer/helpers";
+import { getFullFilePath } from "~/common/multer/helpers";
 
 export class AdminGetProductListReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -27,7 +27,7 @@ export class AdminGetProductListReponseMapper extends AutomapperProfile {
         forMember(
           (dest: AdminGetProductListResponseDto) => dest?.thumbnail,
           mapFrom((src: ProductEntity) =>
-            src.thumbnail ? getFullImagePath(src.thumbnail) : null,
+            src.thumbnail ? getFullFilePath(src.thumbnail) : null,
           ),
         ),
         forMember(

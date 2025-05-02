@@ -1,10 +1,15 @@
-const getImagePath = (filename: string) => {
+const getFilePath = (filename: string) => {
   return filename.replace("uploads", "");
 };
 
-const getFullImagePath = (filename: string) => {
+const getFullFilePath = (filename: string) => {
   const path = process.env.MULTER_HOST + filename;
   return path;
 };
 
-export { getFullImagePath, getImagePath };
+const getFilePathToSave = (filename: string) => {
+  const path = filename.replaceAll(process.env.MULTER_HOST, "");
+  return path;
+};
+
+export { getFullFilePath, getFilePath, getFilePathToSave };

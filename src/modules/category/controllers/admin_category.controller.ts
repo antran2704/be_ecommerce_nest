@@ -43,7 +43,7 @@ import {
 import { ApiOkResponseDecorator } from "~/common/pagination/decorators/api-ok-response.decorator";
 import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
 import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
-import { getImagePath } from "~/common/multer/helpers";
+import { getFilePath } from "~/common/multer/helpers";
 import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
 import { ApiListOkResponseDecorator } from "~/common/pagination/decorators/api-list-ok-response.decorator";
 import { GetCategoriesByIndexRequestPipe } from "../pipes/get_categories_by_index_request.pipe";
@@ -132,7 +132,7 @@ export class AdminCategoryController {
   async createImage(
     @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
   ): Promise<string> {
-    return getImagePath(file.path);
+    return getFilePath(file.path);
   }
 
   // update user

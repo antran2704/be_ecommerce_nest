@@ -2,7 +2,7 @@ import { createMap, forMember, mapFrom, Mapper } from "@automapper/core";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { UserEntity } from "../entities/user.entity";
 import { GetUserResponseDto } from "../dtos";
-import { getFullImagePath } from "~/common/multer/helpers";
+import { getFullFilePath } from "~/common/multer/helpers";
 
 export class GetUserReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -34,7 +34,7 @@ export class GetUserReponseMapper extends AutomapperProfile {
         forMember(
           (dest: GetUserResponseDto) => dest?.avatar,
           mapFrom((src: UserEntity) =>
-            src.avatar ? getFullImagePath(src.avatar) : null,
+            src.avatar ? getFullFilePath(src.avatar) : null,
           ),
         ),
         forMember(

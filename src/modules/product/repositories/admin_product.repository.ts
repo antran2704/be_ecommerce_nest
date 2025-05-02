@@ -72,7 +72,7 @@ export class AdminProductRepository implements IAdminProductRepository {
       .addSelect(["mc.id", "mc.name"]);
     queryBuilder
       .leftJoin(`${ORIGINAL_NAME_ENTITY}.sub_categories`, "sc")
-      .addSelect(["mc.id", "mc.name"]);
+      .addSelect(["sc.id", "sc.name"]);
     queryBuilder
       .leftJoin(`${ORIGINAL_NAME_ENTITY}.inventories`, "iv")
       .addSelect(["iv.id", "iv.stock"]);

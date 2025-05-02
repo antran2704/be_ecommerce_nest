@@ -3,7 +3,7 @@ import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 
 import { AdminGetProductDetailResponseDto } from "../dtos/services";
 import AdminDetailProductDto from "../dtos/repositories/admin_detail_product.dto";
-import { getFullImagePath } from "~/common/multer/helpers";
+import { getFullFilePath } from "~/common/multer/helpers";
 
 export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
@@ -27,13 +27,13 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest?.thumbnail,
           mapFrom((src: AdminDetailProductDto) =>
-            src.thumbnail ? getFullImagePath(src.thumbnail) : null,
+            src.thumbnail ? getFullFilePath(src.thumbnail) : null,
           ),
         ),
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest?.gallery,
           mapFrom((src: AdminDetailProductDto) =>
-            src.gallery ? src.gallery.map((x) => getFullImagePath(x)) : [],
+            src.gallery ? src.gallery.map((x) => getFullFilePath(x)) : [],
           ),
         ),
         forMember(
@@ -50,11 +50,7 @@ export class AdminGetProductDetailReponseMapper extends AutomapperProfile {
         ),
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.promotionPrice,
-          mapFrom((src: AdminDetailProductDto) => src.promotion_price),
-        ),
-        forMember(
-          (dest: AdminGetProductDetailResponseDto) => dest.gallery,
-          mapFrom((src: AdminDetailProductDto) => src.gallery),
+          mapFrom((src: AdminDetailProductDto) => Number(src.promotion_price)),
         ),
         forMember(
           (dest: AdminGetProductDetailResponseDto) => dest.stock,

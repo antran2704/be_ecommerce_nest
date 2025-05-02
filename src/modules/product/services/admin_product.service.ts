@@ -23,6 +23,7 @@ import { PRODUCT_ERROR_MESSAGES } from "../messages/product.error";
 import { AdminProductInventoryService } from "~/modules/inventory/services/admin_product_inventory.service";
 import { IAdminOptionProduct } from "../interfaces/admin_option_product.interface";
 import AdminDetailProductDto from "../dtos/repositories/admin_detail_product.dto";
+import { getFilePathToSave } from "~/common/multer/helpers";
 
 export class AdminProductService implements IAdminProductService {
   constructor(
@@ -147,19 +148,25 @@ export class AdminProductService implements IAdminProductService {
       ...product,
       name: payload.productName,
       description: payload.description,
-      gallery: payload.gallery,
-      thumbnail: payload.thumbnail,
       base_price: payload.basePrice || 0,
       promotion_price: payload.promotionPrice || 0,
     };
 
-    // check if update mainCategoryId
+    if (payload.thumbnail) {
+      product.thumbnail = getFilePathToSave(payload.thumbnail);
+    }
+
+    if (payload.gallery) {
+      product.gallery = payload.gallery.map((x) => getFilePathToSave(x));
+    }
+
+    // check if update mainCategory
     if (
-      payload.mainCategoryId &&
-      payload.mainCategoryId !== product.main_category.id
+      payload.mainCategory &&
+      payload.mainCategory !== product.main_category.id
     ) {
       const category = await this.categoryService.getCategoryEntityById(
-        payload.mainCategoryId,
+        payload.mainCategory,
       );
 
       product.main_category = category;

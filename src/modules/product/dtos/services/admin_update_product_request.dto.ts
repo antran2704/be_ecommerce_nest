@@ -73,7 +73,7 @@ export default class AdminUpdateProductRequestDto {
   })
   @IsString()
   @IsOptional()
-  mainCategoryId: string;
+  mainCategory: string;
 
   @ApiPropertyOptional({
     required: true,

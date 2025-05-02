@@ -30,7 +30,7 @@ const mockAdminUpdateProductRequest: AdminUpdateProductRequestDto = {
   gallery: [],
   basePrice: 1000,
   promotionPrice: 0,
-  mainCategoryId: ENUM_PREFIX_DATABASE.CA + "123",
+  mainCategory: ENUM_PREFIX_DATABASE.CA + "123",
   subCategories: [],
   stock: 0,
 };
