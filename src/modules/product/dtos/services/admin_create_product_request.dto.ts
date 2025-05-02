@@ -80,7 +80,7 @@ export default class AdminCreateProductRequestDto {
     example: ENUM_PREFIX_DATABASE.CA + "123",
   })
   @IsString()
-  mainCategoryId: string;
+  mainCategory: string;
 
   @ApiProperty({
     required: true,

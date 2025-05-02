@@ -7,9 +7,16 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import { Permissions } from "~/common/auth/decorators/permission.decorator";
 import { ENUM_PERMISSION } from "~/modules/permissions/enums/permission.enum";
@@ -19,7 +26,6 @@ import { PaginationRequestPipe } from "~/common/request/pipes/pagination_request
 import {
   CreateSuccessResponse,
   DeletedSuccessResponse,
-  GetSuccessResponse,
   GetSuccessWithPaginationResponse,
   UpdatedSuccessResponse,
 } from "~/common/response/success.response";
@@ -32,6 +38,10 @@ import {
   AdminGetProductsRequestDto,
   AdminUpdateProductRequestDto,
 } from "../dtos/services";
+import { ApiMulterRequestDecorator } from "~/common/pagination/decorators/api-multer-request.decorator";
+import { FileUploadInterceptor } from "~/common/multer/file-upload.interceptor";
+import { FileRequiredPipe } from "~/common/request/pipes/file_request.pipe";
+import { getImagePath } from "~/common/multer/helpers";
 
 @ApiBearerAuth()
 @Controller("admin/products")
@@ -57,10 +67,10 @@ export class AdminProductController {
   @ApiOkResponseDecorator(AdminGetProductDetailResponseDto)
   async getProduct(
     @Param("product_id") id: string,
-  ): Promise<GetSuccessResponse<AdminGetProductDetailResponseDto>> {
+  ): Promise<AdminGetProductDetailResponseDto> {
     const data = await this.productService.getProductById(id);
 
-    return new GetSuccessResponse(data);
+    return data;
   }
 
   @Post()
@@ -117,6 +127,19 @@ export class AdminProductController {
     await this.productService.disableProduct(id);
 
     return new UpdatedSuccessResponse();
+  }
+
+  // create image
+  @Post("/upload-image")
+  @ApiConsumes("multipart/form-data")
+  @ApiMulterRequestDecorator()
+  @UseInterceptors(FileUploadInterceptor("/products"))
+  @Permissions([ENUM_PERMISSION.ADMIN_PRODUCT_CREATE])
+  @UseGuards(PermissionGuard)
+  async createImage(
+    @UploadedFile(FileRequiredPipe) file: Express.Multer.File,
+  ): Promise<string> {
+    return getImagePath(file.path);
   }
 
   @Delete("/:product_id")

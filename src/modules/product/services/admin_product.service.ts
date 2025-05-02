@@ -98,7 +98,7 @@ export class AdminProductService implements IAdminProductService {
 
   async createProduct(payload: AdminCreateProductRequestDto): Promise<void> {
     const category = await this.categoryService.getCategoryEntityById(
-      payload.mainCategoryId,
+      payload.mainCategory,
     );
 
     const subCategories: CategoryEntity[] = [];

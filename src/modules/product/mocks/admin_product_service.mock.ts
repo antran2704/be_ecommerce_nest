@@ -17,7 +17,7 @@ const mockAdminCreateProductRequest: AdminCreateProductRequestDto = {
   gallery: [],
   basePrice: 1000,
   promotionPrice: 0,
-  mainCategoryId: mockProductEntity.main_category.id,
+  mainCategory: mockProductEntity.main_category.id,
   subCategories: [],
   isActive: true,
   stock: 0,
