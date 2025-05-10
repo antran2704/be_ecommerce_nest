@@ -84,9 +84,14 @@ export class AdminVariantProductRepository
 
     const qb = this.entity
       .createQueryBuilder("vp")
-      .leftJoin("vp.variant_type_values", "vtv")
+      .innerJoin("vp.variant_type_values", "vtv")
+      .innerJoin("vtv.variant_product_values", "vpv")
       .where("vp.product = :productId", { productId: product.id })
-      .andWhere("vtv.id IN (:...inputIds)", { inputIds });
+      .andWhere("vp.id = vpv.id")
+      .andWhere("vtv.id IN (:...inputIds)", { inputIds })
+      .groupBy("vp.id")
+      .having("COUNT(DISTINCT vtv.id) = :count", { count: inputIds.length });
+
     const result = await qb.getOne();
 
     return result;

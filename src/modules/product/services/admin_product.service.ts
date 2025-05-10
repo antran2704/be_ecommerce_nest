@@ -61,10 +61,17 @@ export class AdminProductService implements IAdminProductService {
         const variantType = variantTypeValue.variant_type;
 
         if (options[variantType.id]) {
-          options[variantType.id].values.push({
-            id: variantTypeValue.id,
-            name: variantTypeValue.name,
-          });
+          // check if have variant type
+          const isExistValue = options[variantType.id].values.some(
+            (x) => x.id === variantTypeValue.id,
+          );
+
+          if (!isExistValue) {
+            options[variantType.id].values.push({
+              id: variantTypeValue.id,
+              name: variantTypeValue.name,
+            });
+          }
         } else {
           options[variantType.id] = {
             id: variantType.id,

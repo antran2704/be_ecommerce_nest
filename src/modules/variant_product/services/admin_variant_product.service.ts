@@ -113,7 +113,11 @@ export class AdminVariantProductService implements IAdminVariantProductService {
     const isExited =
       await this.variantProductRepository.checkIsExited(formatData);
 
+    console.log("check is exited:::", isExited);
+
     if (!isExited) {
+      console.log("create new variant product:::");
+
       await this.variantProductRepository.create(formatData);
 
       // create inventory
