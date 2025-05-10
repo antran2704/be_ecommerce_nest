@@ -82,6 +82,15 @@ export class AdminVariantTypeValueRepository
     await this.entity.update({ id }, payload);
   }
 
+  async checkIsUsed(id: string): Promise<boolean> {
+    const data = await this.entity.findOne({
+      where: { id },
+      relations: ["variant_product_values"],
+    });
+
+    return data.variant_product_values.length > 0;
+  }
+
   async delete(id: string): Promise<void> {
     await this.entity.delete(id);
   }

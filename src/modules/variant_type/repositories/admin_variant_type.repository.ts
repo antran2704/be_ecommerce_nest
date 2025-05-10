@@ -73,6 +73,17 @@ export class AdminVariantTypeRepository implements IAdminVariantTypeRepository {
     await this.varianTypeEntity.update({ id }, payload);
   }
 
+  async checkIsUsed(id: string): Promise<boolean> {
+    const data = await this.varianTypeEntity.findOne({
+      where: { id },
+      relations: ["values", "values.variant_product_values"],
+    });
+
+    return data.values.some((value) => {
+      return value.variant_product_values.length > 0;
+    });
+  }
+
   async delete(id: string): Promise<void> {
     await this.varianTypeEntity.delete(id);
   }

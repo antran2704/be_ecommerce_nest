@@ -17,5 +17,6 @@ export interface IAdminVariantTypeValueRepository {
   ): Promise<VariantTypeValueEntity>;
   create(payload: CreateVariantTypeValueDto): Promise<void>;
   update(id: string, payload: UpdateVariantTypeValueDto): Promise<void>;
+  checkIsUsed(id: string): Promise<boolean>;
   delete(id: string): Promise<void>;
 }

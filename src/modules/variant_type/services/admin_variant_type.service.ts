@@ -121,6 +121,14 @@ export class AdminVariantTypeService implements IAdminVariantTypeService {
         VARIANT_TYPE_ERROR_MESSAGES.VARIANT_TYPE_NOT_FOUND,
       );
 
+    const isUsed = await this.variantTypeRepository.checkIsUsed(id);
+
+    if (isUsed) {
+      throw new BadRequestException(
+        VARIANT_TYPE_ERROR_MESSAGES.VARIANT_TYPE_IS_USED,
+      );
+    }
+
     await this.variantTypeRepository.delete(id);
   }
 }

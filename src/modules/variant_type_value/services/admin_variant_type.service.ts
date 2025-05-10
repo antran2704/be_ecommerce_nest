@@ -143,6 +143,14 @@ export class AdminVariantTypeValueService
         VARIANT_TYPE__VALUE_ERROR_MESSAGES.VARIANT_VALUE_NOT_FOUND,
       );
 
+    const isUsed = await this.variantValueRepository.checkIsUsed(id);
+
+    if (isUsed) {
+      throw new BadRequestException(
+        VARIANT_TYPE__VALUE_ERROR_MESSAGES.VARIANT_VALUE_IS_USED,
+      );
+    }
+
     await this.variantValueRepository.delete(id);
   }
 }

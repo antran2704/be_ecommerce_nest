@@ -16,6 +16,7 @@ const mockAdminVariantTypeValueRepository: IAdminVariantTypeValueRepository = {
 
   create: jest.fn().mockResolvedValue(null),
   update: jest.fn().mockResolvedValue(null),
+  checkIsUsed: jest.fn().mockResolvedValue(false),
   delete: jest.fn().mockResolvedValue(null),
 };
 
