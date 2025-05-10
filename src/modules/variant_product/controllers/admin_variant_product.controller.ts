@@ -128,10 +128,24 @@ export class AdminVariantProductController {
     status: 201,
     example: new DeletedSuccessResponse(),
   })
-  async deleteUser(
+  async delete(
     @Param("variant_product_id") id: string,
   ): Promise<DeletedSuccessResponse> {
     await this.service.deleteVariantProduct(id);
+    return new DeletedSuccessResponse();
+  }
+
+  @Delete("/:product_id/all")
+  @Permissions([ENUM_PERMISSION.ADMIN_VARIANT_PRODUCT_DELETE])
+  @UseGuards(PermissionGuard)
+  @ApiResponse({
+    status: 201,
+    example: new DeletedSuccessResponse(),
+  })
+  async deleteAll(
+    @Param("product_id") id: string,
+  ): Promise<DeletedSuccessResponse> {
+    await this.service.deleteAllVariantProduct(id);
     return new DeletedSuccessResponse();
   }
 }

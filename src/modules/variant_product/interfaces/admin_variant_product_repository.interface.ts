@@ -9,8 +9,12 @@ export interface IAdminVariantProductRepository {
   ): Promise<IEntitesAndPaginationReponse<VariantProductEntity>>;
   findById(id: string): Promise<VariantProductEntity>;
   create(payload: AdminCreateVariantProductDto): Promise<void>;
+  checkIsExited(
+    payload: AdminCreateVariantProductDto,
+  ): Promise<VariantProductEntity>;
   enable(id: string): Promise<void>;
   disable(id: string): Promise<void>;
   save(payload: VariantProductEntity): Promise<void>;
   delete(id: string): Promise<void>;
+  deleteAll(productId: string): Promise<void>;
 }

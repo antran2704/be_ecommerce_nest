@@ -109,13 +109,19 @@ export class AdminVariantProductService implements IAdminVariantProductService {
       formatData.variant_type_values = variantValues;
     }
 
-    await this.variantProductRepository.create(formatData);
+    // check if variant product is exited
+    const isExited =
+      await this.variantProductRepository.checkIsExited(formatData);
 
-    // create inventory
-    await this.inventoryService.createVariantProductInventory({
-      varaintProductId: newId,
-      stock: payload.stock,
-    });
+    if (!isExited) {
+      await this.variantProductRepository.create(formatData);
+
+      // create inventory
+      await this.inventoryService.createVariantProductInventory({
+        varaintProductId: newId,
+        stock: payload.stock,
+      });
+    }
   }
 
   async updateVariantProduct(
@@ -181,5 +187,11 @@ export class AdminVariantProductService implements IAdminVariantProductService {
       throw new BadRequestException(VARIANT_PRODUCT_ERROR_MESSAGES.NOT_FOUND);
 
     await this.variantProductRepository.delete(id);
+  }
+
+  async deleteAllVariantProduct(productId: string): Promise<void> {
+    await this.productService.getProductById(productId);
+
+    await this.variantProductRepository.deleteAll(productId);
   }
 }

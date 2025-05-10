@@ -16,8 +16,10 @@ const mockAdminVariantProductRepository: IAdminVariantProductRepository = {
     .fn()
     .mockResolvedValue(mockVariantProductEntity as VariantProductEntity),
   create: jest.fn().mockReturnValue(null),
+  checkIsExited: jest.fn().mockResolvedValue(null),
   save: jest.fn().mockReturnValue(null),
   delete: jest.fn().mockReturnValue(null),
+  deleteAll: jest.fn().mockReturnValue(null),
   disable: jest.fn().mockReturnValue(null),
   enable: jest.fn().mockReturnValue(null),
 };

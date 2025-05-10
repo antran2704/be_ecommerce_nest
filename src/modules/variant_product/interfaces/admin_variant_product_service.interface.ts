@@ -28,4 +28,5 @@ export interface IAdminVariantProductService {
   enableVariantProduct(id: string): Promise<void>;
   disableVariantProduct(id: string): Promise<void>;
   deleteVariantProduct(id: string): Promise<void>;
+  deleteAllVariantProduct(productId: string): Promise<void>;
 }

@@ -75,6 +75,23 @@ export class AdminVariantProductRepository
     await this.entity.save(newEntity);
   }
 
+  async checkIsExited(
+    payload: AdminCreateVariantProductDto,
+  ): Promise<VariantProductEntity> {
+    const { product, variant_type_values } = payload;
+
+    const inputIds = variant_type_values.map((item) => item.id);
+
+    const qb = this.entity
+      .createQueryBuilder("vp")
+      .leftJoin("vp.variant_type_values", "vtv")
+      .where("vp.product = :productId", { productId: product.id })
+      .andWhere("vtv.id IN (:...inputIds)", { inputIds });
+    const result = await qb.getOne();
+
+    return result;
+  }
+
   async enable(id: string): Promise<void> {
     await this.entity.update({ id }, { is_active: true });
   }
@@ -89,5 +106,9 @@ export class AdminVariantProductRepository
 
   async delete(id: string): Promise<void> {
     await this.entity.delete({ id });
+  }
+
+  async deleteAll(productId: string): Promise<void> {
+    await this.entity.delete({ product: { id: productId } });
   }
 }
